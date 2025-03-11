@@ -1,35 +1,39 @@
 package ca.mcmaster.se2aa4.island.team012;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
-interface FlightSystem{
-    public boolean fly(){
-        position=idk lol
+class FlightSystem{
+    private JSONObject flyCommand = new JSONObject();
+    private static final Logger logger = LogManager.getLogger();
+    FlightSystem(){
+        
     }
-    public Heading turnLeft(Heading heading){
-        if(heading==Heading.NORTH){
-            return Heading.WEST;
-        }
-        else if(heading==Heading.WEST){
-            return Heading.SOUTH;
-        }
-        else if(heading==Heading.SOUTH){
-            return Heading.EAST;
-        }
-        else{
-            return Heading.NORTH;
-        }
+    fly(){
+        flyCommand.put("action", "fly");
+        logger.info(flyCommand.toString());
     }
-    public Heading turnRight(Heading heading){
-        if(heading==Heading.NORTH){
-            return Heading.EAST;
-        }
-        else if(heading==Heading.EAST){
-            return Heading.SOUTH;
-        }
-        else if(heading==Heading.SOUTH){
-            return Heading.WEST;
-        }
-        else{
-            return Heading.NORTH;
-        }
+    stop(){
+        flyCommand.put("action", "stop");
+        ogger.info(flyCommand.toString());
+    }
+    turnNorth(){
+        flyCommand.put("action", "heading");
+        flyCommand.put("parameters", new JSONObject().put("direction", "N"));
+        logger.info(flyCommand.toString());
+    }
+    turnEast(){
+        flyCommand.put("action", "heading");
+        flyCommand.put("parameters", new JSONObject().put("direction", "E"));
+        logger.info(flyCommand.toString());
+    }
+    turnSouth(){
+        flyCommand.put("action", "heading");
+        flyCommand.put("parameters", new JSONObject().put("direction", "S"));
+        logger.info(flyCommand.toString());
+    }
+    turnWest(){
+        flyCommand.put("action", "heading");
+        flyCommand.put("parameters", new JSONObject().put("direction", "W"));
+        logger.info(flyCommand.toString());
     }
 }
