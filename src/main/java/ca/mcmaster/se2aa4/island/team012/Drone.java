@@ -10,8 +10,8 @@ import org.json.JSONTokener;
 
 public class Drone{//reduce the amount of times that the dron changes heading, rarely use scan. 
 //use echo to guide the drone. 
-    private Heading heading=Heading.E;//might switch to a string instead of enum
-    private Battery battery=new Battery(100);
+    private Heading heading=new Heading(Direction.E);//might switch to a string instead of enum
+    private Battery battery=new Battery(100);//will need to get the correct values
     private FlightSystem flightSystem=new FlightSystem(battery, heading);
     private Photoscanner photoscanner=new Photoscanner();
     private final Logger logger = LogManager.getLogger();

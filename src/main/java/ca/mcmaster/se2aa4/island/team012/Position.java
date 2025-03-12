@@ -1,6 +1,6 @@
 package ca.mcmaster.se2aa4.island.team012;
 
-public class Position extends Subject{ // Class for storing (row, col) coordinates
+public class Position implements Subject{ // Class for storing (row, col) coordinates
     private int row;
     private int col;
 

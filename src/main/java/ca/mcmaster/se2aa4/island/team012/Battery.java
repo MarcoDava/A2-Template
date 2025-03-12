@@ -1,7 +1,28 @@
 package ca.mcmaster.se2aa4.island.team012;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Battery extends Subject{
+public class Battery implements Subject{
     private int batteryLevel;
+    private List<Observer> observers = new ArrayList<>();
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(batteryLevel);
+        }
+    }
+
     public Battery(int initialBattery){
         batteryLevel=initialBattery;
     }
@@ -10,6 +31,6 @@ public class Battery extends Subject{
     }
     public void useBattery(int usedBattery){
         batteryLevel-=usedBattery;
-        notifyObservers("Battery",batteryLevel);
+        notifyObservers();
     }
 }

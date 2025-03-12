@@ -1,5 +1,5 @@
 package ca.mcmaster.se2aa4.island.team012;
 
-public class Observer {
-    void update(String property, Object value){}
+public interface Observer {
+    public void update(Position position);
 }

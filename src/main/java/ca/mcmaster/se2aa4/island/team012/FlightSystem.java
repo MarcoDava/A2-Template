@@ -4,7 +4,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 
-class FlightSystem extends Subject{
+class FlightSystem{
     private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();
     private Battery battery;
@@ -30,16 +30,14 @@ class FlightSystem extends Subject{
         heading=Heading.N;
         logger.info(decision.toString());
         battery.useBattery(4);
-        notifyObservers("heading", heading);
         return true;
     }
     public boolean turnEast(){
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "E"));
-        heading=Heading.E;
+        heading.changeHeading(Direction.E);
         logger.info(decision.toString());
         battery.useBattery(4);
-        notifyObservers("heading", heading);
         return true;
     }
     public boolean turnSouth(){
@@ -48,7 +46,6 @@ class FlightSystem extends Subject{
         heading=Heading.S;
         logger.info(decision.toString());
         battery.useBattery(4);
-        notifyObservers("heading", heading);
         return true;
     }
     public boolean turnWest(){
