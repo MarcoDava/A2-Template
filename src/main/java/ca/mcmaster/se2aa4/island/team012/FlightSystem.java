@@ -1,6 +1,8 @@
 package ca.mcmaster.se2aa4.island.team012;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+
 
 class FlightSystem{
     private JSONObject flyCommand = new JSONObject();
@@ -20,6 +22,7 @@ class FlightSystem{
     public boolean stop(){
         flyCommand.put("action", "stop");
         logger.info(flyCommand.toString());
+        return true;
     }
     public boolean turnNorth(){
         flyCommand.put("action", "heading");
@@ -27,6 +30,7 @@ class FlightSystem{
         heading=Heading.N;
         logger.info(flyCommand.toString());
         battery.useBattery(4);
+        return true;
     }
     public boolean turnEast(){
         flyCommand.put("action", "heading");
@@ -34,6 +38,7 @@ class FlightSystem{
         heading=Heading.E;
         logger.info(flyCommand.toString());
         battery.useBattery(4);
+        return true;
     }
     public boolean turnSouth(){
         flyCommand.put("action", "heading");
@@ -41,6 +46,7 @@ class FlightSystem{
         heading=Heading.S;
         logger.info(flyCommand.toString());
         battery.useBattery(4);
+        return true;
     }
     public boolean turnWest(){
         flyCommand.put("action", "heading");
@@ -48,5 +54,6 @@ class FlightSystem{
         heading=Heading.W;
         logger.info(flyCommand.toString());
         battery.useBattery(4);
+        return true;
     }
 }

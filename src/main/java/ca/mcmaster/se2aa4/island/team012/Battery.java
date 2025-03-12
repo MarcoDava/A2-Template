@@ -1,8 +1,8 @@
 package ca.mcmaster.se2aa4.island.team012;
 
 public class Battery{
-    private batteryLevel;
-    public Battery(initialBatttery){
+    private int batteryLevel;
+    public Battery(int initialBattery){
         batteryLevel=initialBattery;
     }
     public int getBattery(){

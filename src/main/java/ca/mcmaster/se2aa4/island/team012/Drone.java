@@ -11,16 +11,15 @@ import org.json.JSONTokener;
 public class Drone{//reduce the amount of times that the dron changes heading, rarely use scan. 
 //use echo to guide the drone. 
     private Heading heading=Heading.E;//might switch to a string instead of enum
-    private Battery battery=newBattery();
-
-    }
+    private Battery battery=new Battery(100);
     public Drone(){
 
     }
-    public gridSearch(){
-        while(battery.getBattery>=10){
+    public boolean gridSearch(){
+        while(battery.getBattery()>=10){
 
         }
+        return true;
     }
     
 }
