@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 
 class FlightSystem{
-    private JSONObject flyCommand = new JSONObject();
+    private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();
     private Battery battery;
     private Heading heading;
@@ -14,45 +14,45 @@ class FlightSystem{
         heading=initialHeading;
     }
     public boolean fly(){
-        flyCommand.put("action", "fly");
-        logger.info(flyCommand.toString());
+        decision.put("action", "fly");
+        logger.info(decision.toString());
         battery.useBattery(2);
         return true;
     }
     public boolean stop(){
-        flyCommand.put("action", "stop");
-        logger.info(flyCommand.toString());
+        decision.put("action", "stop");
+        logger.info(decision.toString());
         return true;
     }
     public boolean turnNorth(){
-        flyCommand.put("action", "heading");
-        flyCommand.put("parameters", new JSONObject().put("direction", "N"));
+        decision.put("action", "heading");
+        decision.put("parameters", new JSONObject().put("direction", "N"));
         heading=Heading.N;
-        logger.info(flyCommand.toString());
+        logger.info(decision.toString());
         battery.useBattery(4);
         return true;
     }
     public boolean turnEast(){
-        flyCommand.put("action", "heading");
-        flyCommand.put("parameters", new JSONObject().put("direction", "E"));
+        decision.put("action", "heading");
+        decision.put("parameters", new JSONObject().put("direction", "E"));
         heading=Heading.E;
-        logger.info(flyCommand.toString());
+        logger.info(decision.toString());
         battery.useBattery(4);
         return true;
     }
     public boolean turnSouth(){
-        flyCommand.put("action", "heading");
-        flyCommand.put("parameters", new JSONObject().put("direction", "S"));
+        decision.put("action", "heading");
+        decision.put("parameters", new JSONObject().put("direction", "S"));
         heading=Heading.S;
-        logger.info(flyCommand.toString());
+        logger.info(decision.toString());
         battery.useBattery(4);
         return true;
     }
     public boolean turnWest(){
-        flyCommand.put("action", "heading");
-        flyCommand.put("parameters", new JSONObject().put("direction", "W"));
+        decision.put("action", "heading");
+        decision.put("parameters", new JSONObject().put("direction", "W"));
         heading=Heading.W;
-        logger.info(flyCommand.toString());
+        logger.info(decision.toString());
         battery.useBattery(4);
         return true;
     }

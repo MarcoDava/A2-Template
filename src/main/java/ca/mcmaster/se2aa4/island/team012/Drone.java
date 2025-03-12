@@ -12,13 +12,34 @@ public class Drone{//reduce the amount of times that the dron changes heading, r
 //use echo to guide the drone. 
     private Heading heading=Heading.E;//might switch to a string instead of enum
     private Battery battery=new Battery(100);
+    private FlightSystem flightSystem=new FlightSystem(battery, heading);
+    private Photoscanner photoscanner=new Photoscanner();
+    private final Logger logger = LogManager.getLogger();
     public Drone(){
 
     }
     public boolean gridSearch(){
-        while(battery.getBattery()>=10){
-
+        for(int i=0;i<10;i++){
+            flightSystem.fly();
+            photoscanner.scanBelow();
         }
+        flightSystem.turnNorth();
+        flightSystem.fly();
+        photoscanner.scanBelow();
+        flightSystem.turnWest();
+        for(int i=0;i<10;i++){
+            flightSystem.fly();
+            photoscanner.scanBelow();
+        }
+        flightSystem.turnSouth();
+        flightSystem.fly();
+        photoscanner.scanBelow();
+        flightSystem.turnEast();
+        for(int i=0;i<10;i++){
+            flightSystem.fly();
+            photoscanner.scanBelow();
+        }
+        flightSystem.stop();
         return true;
     }
     
