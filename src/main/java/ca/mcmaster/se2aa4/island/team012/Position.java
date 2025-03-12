@@ -1,24 +1,21 @@
 package ca.mcmaster.se2aa4.island.team012;
 
-public class Position { // Class for storing (row, col) coordinates
-
-    private int[] position = new int[2];
-    Position() {
-        this.position[0] = 0;
-        this.position[1] = 0;
-    }
+public class Position extends Subject{ // Class for storing (row, col) coordinates
+    private int row;
+    private int col;
 
     public Position(int row, int col) {
-        this.position[0] = row;
-        this.position[1] = col;
+        this.row = row;
+        this.col = col;
     }
 
     public int[] getPosition() {
-        return position;
+        return new int[]{row, col};
     }
 
     public void setPosition(int row, int col) {
-        this.position[0] = row;
-        this.position[1] = col;
+        this.row = row;
+        this.col = col;
+        notifyObservers("position",getPosition());
     }
 }
