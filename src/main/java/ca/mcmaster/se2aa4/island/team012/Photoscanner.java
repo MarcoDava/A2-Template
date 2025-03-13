@@ -14,6 +14,7 @@ class Photoscanner{
     public boolean scanBelow(){//might need position as a parameter depending on how the scanBelow function works
         decision.put("action", "scan");
         logger.info(decision.toString());
+        extractInformation(decision.toString());
         return true;
     }
     public void extractInformation(String jsonResponse){

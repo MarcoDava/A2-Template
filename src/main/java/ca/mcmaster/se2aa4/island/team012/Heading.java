@@ -17,6 +17,9 @@ public class Heading implements Subject{
         this.heading=heading;
         notifyObservers();
     }
+    public boolean compareHeading(Direction heading){
+        return this.heading==heading;
+    }
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);

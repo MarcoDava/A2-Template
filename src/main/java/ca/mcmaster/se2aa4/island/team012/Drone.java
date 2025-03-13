@@ -78,5 +78,12 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     public String deliverFinalReport() {
         return "no creek found";
     }
+
+    public static void main(String[] args) {
+        Drone drone = new Drone();
+        if(drone.photoscanner.scanBelow()){
+            drone.logger.info("Scanned below");
+        }
+    }
     
 }
