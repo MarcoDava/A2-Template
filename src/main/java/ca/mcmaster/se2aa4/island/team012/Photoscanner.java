@@ -17,7 +17,7 @@ class Photoscanner{
         extractInformation(decision.toString());
         return true;
     }
-    public void extractInformation(String jsonResponse){
+    public boolean extractInformation(String jsonResponse){
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(jsonResponse)));
 
         battery.useBattery(response.getInt("cost"));
@@ -25,6 +25,7 @@ class Photoscanner{
         JSONObject headings=response.getJSONObject("extras");
         JSONArray sites=headings.getJSONArray("sites");
         JSONArray creeks=headings.getJSONArray("creeks");
+        return true;
     }
 
 }

@@ -21,7 +21,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     public boolean gridSearch(){
         for(int i=0;i<10;i++){
             flightSystem.fly();
-            photoscanner.scanBelow();
+            //photoscanner.scanBelow();
         }
         flightSystem.turnNorth();
         flightSystem.fly();
@@ -29,15 +29,15 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         flightSystem.turnWest();
         for(int i=0;i<10;i++){
             flightSystem.fly();
-            photoscanner.scanBelow();
+            //photoscanner.scanBelow();
         }
         flightSystem.turnSouth();
         flightSystem.fly();
-        photoscanner.scanBelow();
+        //photoscanner.scanBelow();
         flightSystem.turnEast();
         for(int i=0;i<10;i++){
             flightSystem.fly();
-            photoscanner.scanBelow();
+            //photoscanner.scanBelow();
         }
         flightSystem.stop();
         return true;
@@ -47,7 +47,6 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     }
     public boolean approachIsland(int[] locationPosition){
 
-        while(position!=)
     }
 
     @Override
