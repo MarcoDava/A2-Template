@@ -64,7 +64,13 @@ class Radar{
         battery.useBattery(response.getInt("cost"));
         JSONObject extras=response.getJSONObject("extras");
         JSONArray ground=extras.getJSONArray("sites");
+        String groundString=ground.toString();
+        boolean foundGround=false;
+        if(groundString.equals("GROUND")){
+            foundGround=true;
+        }
         JSONArray range=extras.getJSONArray("range");
+        int rangeInt= range.getInt(0);
     }
 
 }

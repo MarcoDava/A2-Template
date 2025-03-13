@@ -42,6 +42,13 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         flightSystem.stop();
         return true;
     }
+    public boolean locateIsland(){
+
+    }
+    public boolean approachIsland(int[] locationPosition){
+
+        while(position!=)
+    }
 
     @Override
     public void initialize(String s) {
