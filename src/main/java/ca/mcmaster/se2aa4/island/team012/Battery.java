@@ -19,7 +19,7 @@ public class Battery implements Subject{
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update(batteryLevel);
+            observer.update("battery",batteryLevel);
         }
     }
 

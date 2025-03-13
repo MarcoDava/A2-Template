@@ -15,6 +15,7 @@ public class Heading implements Subject{
     }
     public void changeHeading(Direction heading){
         this.heading=heading;
+        notifyObservers();
     }
     @Override
     public void addObserver(Observer observer) {
@@ -29,7 +30,7 @@ public class Heading implements Subject{
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update(heading);
+            observer.update("heading",heading);
         }
     }
 }

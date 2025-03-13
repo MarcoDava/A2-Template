@@ -9,7 +9,7 @@ public class Runner {
     public static void main(String[] args) {
         String filename = args[0];
         try {
-            run(Explorer.class)
+            run(Drone.class)
                     .exploring(new File(filename))
                     .withSeed(42L)
                     .startingAt(1, 1, "EAST")

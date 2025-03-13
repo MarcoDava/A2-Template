@@ -6,9 +6,8 @@ public class DroneObserver implements Observer {
     private Heading heading;
 
     @Override
-    public void update(String weather) {
-        this.weather = weather;
-        display();
+    public void update(String property, Object value) {
+        System.out.println("Property " + property + " changed to " + value);
     }
 
 }
