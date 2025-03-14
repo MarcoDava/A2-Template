@@ -21,7 +21,7 @@ public class Heading implements Subject{
         return heading;
     }
     public boolean changeHeading(Direction heading){
-        if(this.heading==Direction.N && heading==Direction.S){
+        if(this.heading==Direction.N && heading==Direction.S){//checks if it is asking to turn backwards, if so return false. I might change this to just turn to west first then south to turn around.
             logger.info("Cannot turn backwards");
             return false;
         }
