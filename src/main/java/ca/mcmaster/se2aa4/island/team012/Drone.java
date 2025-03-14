@@ -40,12 +40,14 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
             //photoscanner.scanBelow();
         }
         flightSystem.stop();
-        return true;
+        return true;//need to change return value to a proper value. The reason why it returns is
     }
     public boolean locateIsland(){
-
+        return true;
     }
     public boolean approachIsland(int[] locationPosition){
+
+        return true;
 
     }
 
