@@ -1,4 +1,4 @@
-package ca.mcmaster.se2aa4.island.team012;
+package ca.mcmaster.se2aa4.island.team012.Positions;
 
 public class DronePosition extends Position{
     private Position dronePosition;

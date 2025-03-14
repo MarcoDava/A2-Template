@@ -1,4 +1,4 @@
-package ca.mcmaster.se2aa4.island.team012;
+package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
 import java.io.StringReader;
 import org.apache.logging.log4j.LogManager;
@@ -7,6 +7,9 @@ import org.apache.logging.log4j.Logger;
 import eu.ace_design.island.bot.IExplorerRaid;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import ca.mcmaster.se2aa4.island.team012.Direction;
+import ca.mcmaster.se2aa4.island.team012.Heading;
 
 public class Drone implements IExplorerRaid{//reduce the amount of times that the dron changes heading, rarely use scan. 
 //use echo to guide the drone. 

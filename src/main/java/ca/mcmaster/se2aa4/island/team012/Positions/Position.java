@@ -1,7 +1,10 @@
-package ca.mcmaster.se2aa4.island.team012;
+package ca.mcmaster.se2aa4.island.team012.Positions;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.mcmaster.se2aa4.island.team012.Observer;
+import ca.mcmaster.se2aa4.island.team012.Subject;
 
 public class Position implements Subject{ // Class for storing (row, col) coordinates
     private int row;

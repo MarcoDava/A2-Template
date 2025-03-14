@@ -1,6 +1,9 @@
-package ca.mcmaster.se2aa4.island.team012;
+package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.mcmaster.se2aa4.island.team012.Observer;
+import ca.mcmaster.se2aa4.island.team012.Subject;
 
 public class Battery implements Subject{
     private int batteryLevel;

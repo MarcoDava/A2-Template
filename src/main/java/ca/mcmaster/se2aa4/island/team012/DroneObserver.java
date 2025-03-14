@@ -3,6 +3,9 @@ package ca.mcmaster.se2aa4.island.team012;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ca.mcmaster.se2aa4.island.team012.DroneComponents.Battery;
+import ca.mcmaster.se2aa4.island.team012.Positions.Position;
+
 public class DroneObserver implements Observer {
     private Battery batteryLevel;
     private Direction currentHeading;
