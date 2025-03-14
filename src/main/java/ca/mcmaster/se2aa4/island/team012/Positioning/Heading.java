@@ -1,10 +1,13 @@
-package ca.mcmaster.se2aa4.island.team012;
+package ca.mcmaster.se2aa4.island.team012.Positioning;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import ca.mcmaster.se2aa4.island.team012.Observer;
+import ca.mcmaster.se2aa4.island.team012.Subject;
 
 public class Heading implements Subject{
     private List<Observer> observers = new ArrayList<>();
