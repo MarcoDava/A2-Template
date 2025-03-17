@@ -1,4 +1,4 @@
-package ca.mcmaster.se2aa4.island.team012.DroneComponents;
+package ca.mcmaster.se2aa4.island.team012.Positioning;
 
 public class MapArea {
     private int[] mapArea;
@@ -8,7 +8,7 @@ public class MapArea {
     public int[] getMapArea(){
         return mapArea;
     }
-    public void setMapArea(int[]){
+    public void setMapArea(int[] mapArea){
         this.mapArea=mapArea;
     }
 }

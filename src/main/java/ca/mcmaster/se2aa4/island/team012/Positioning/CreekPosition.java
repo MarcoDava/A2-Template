@@ -11,7 +11,7 @@ public class CreekPosition extends Position{
     public List<Position> getCreekPositions() {
         return creekPositions;
     }
-    public void addCreekPosition(int row, int col) {
-        creekPositions.add(new Position(row, col));
+    public void addCreekPosition(Position position) {
+        creekPositions.add(position);
     }
 }

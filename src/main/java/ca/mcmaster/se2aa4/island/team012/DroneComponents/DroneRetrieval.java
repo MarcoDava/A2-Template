@@ -1,9 +1,7 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
-import ca.mcmaster.se2aa4.island.team012.Positioning.EmergencyPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.Drone;
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.MapArea;
+import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import java.util.logging.Logger;
 
 

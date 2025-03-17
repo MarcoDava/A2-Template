@@ -30,7 +30,7 @@ class FlightSystem{
     public boolean turnNorth(){
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "N"));
-        heading.changeHeading(Direction.N);
+        heading.updateValue(Direction.N);
         logger.info(decision.toString());
         battery.useBattery(4);
         return true;
@@ -38,7 +38,7 @@ class FlightSystem{
     public boolean turnEast(){
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "E"));
-        heading.changeHeading(Direction.E);
+        heading.updateValue(Direction.E);
         logger.info(decision.toString());
         battery.useBattery(4);
         return true;
@@ -46,7 +46,7 @@ class FlightSystem{
     public boolean turnSouth(){
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "S"));
-        heading.changeHeading(Direction.S);
+        heading.updateValue(Direction.S);
         logger.info(decision.toString());
         battery.useBattery(4);
         return true;
@@ -54,7 +54,7 @@ class FlightSystem{
     public boolean turnWest(){
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "W"));
-        heading.changeHeading(Direction.W);
+        heading.updateValue(Direction.W);
         logger.info(decision.toString());
         battery.useBattery(4);
         return true;

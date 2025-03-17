@@ -10,6 +10,7 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.DroneDetails;
 public class Position extends DroneDetails implements Subject{ // Class for storing (row, col) coordinates
     private int row;
     private int col;
+    private int[] position;
     private String stringPosition;
 
     private List<Observer> observers = new ArrayList<>();
