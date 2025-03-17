@@ -5,8 +5,9 @@ import java.util.List;
 
 import ca.mcmaster.se2aa4.island.team012.Observer;
 import ca.mcmaster.se2aa4.island.team012.Subject;
+import ca.mcmaster.se2aa4.island.team012.DroneComponents.DroneDetails;
 
-public class Position implements Subject{ // Class for storing (row, col) coordinates
+public class Position extends DroneDetails implements Subject{ // Class for storing (row, col) coordinates
     private int row;
     private int col;
 
@@ -17,13 +18,12 @@ public class Position implements Subject{ // Class for storing (row, col) coordi
         this.col = col;
     }
 
-    public int[] getPosition() {
+    public int[] getValue() {
         return new int[]{row, col};
     }
 
-    public void setPosition(int row, int col) {
-        this.row = row;
-        this.col = col;
+    public void updateValue(Object value) {
+        
         //notifyObservers("position",new int[]{row,col});
     }
 

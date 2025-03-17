@@ -1,12 +1,12 @@
-// package ca.mcmaster.se2aa4.island.team012.States;
+package ca.mcmaster.se2aa4.island.team012.States;
 
-// import org.json.JSONObject;
+import org.json.JSONObject;
 
-// import ca.mcmaster.se2aa4.island.team012.DroneComponents.Drone;
+import ca.mcmaster.se2aa4.island.team012.DroneComponents.Drone;
 
-// public class SpiralSearchState implements State{
-//     @Override
-//     public void handle(Drone drone,JSONObject decision,JSONObject parameters){
+public class SpiralSearchState implements State{
+    @Override
+    public void handle(Drone drone,JSONObject decision,JSONObject parameters){
 
-//     }
-// }
+    }
+}
