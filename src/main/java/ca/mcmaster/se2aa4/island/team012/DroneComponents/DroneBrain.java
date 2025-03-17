@@ -23,7 +23,7 @@ public class DroneBrain  {
     private State spiralSearch;
     private State locatingIsland;
     private final Logger logger = LogManager.getLogger();
-    public Drone(){
+    public DroneBrain(){
         currentStatus = Status.LOCATING_ISLAND_STATE;
         approachIsland=new ApproachIslandState();
         creekFinding=new CreekFindingState();
@@ -32,8 +32,7 @@ public class DroneBrain  {
         currentState = locatingIsland;
     }
 
-    @Override
-    public String deliverFinalReport() {
-        return "no creek found";
+    public void makeDecision(JSONObject parameters, JSONObject decision) {
+        
     }
 }

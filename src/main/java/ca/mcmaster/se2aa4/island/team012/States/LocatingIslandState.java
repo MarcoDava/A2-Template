@@ -19,7 +19,7 @@ public class LocatingIslandState implements State{
      * //From the doc://
      * This state is to search the first occurrence of land. If the initial scan 
      * doesn't find land, the drone turns right and scans the left side until it 
-     * finds land. 
+     * finds land.
      * 
      */
     @Override

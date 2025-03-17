@@ -30,6 +30,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private State creekFinding;
     private State spiralSearch;
     private State locatingIsland;
+    private DroneBrain droneBrain;
     private Drone drone;
     private Position dronePosition;
     private Heading heading;

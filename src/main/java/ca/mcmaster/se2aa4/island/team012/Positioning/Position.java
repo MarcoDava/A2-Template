@@ -10,6 +10,7 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.DroneDetails;
 public class Position extends DroneDetails implements Subject{ // Class for storing (row, col) coordinates
     private int row;
     private int col;
+    private String stringPosition;
 
     private List<Observer> observers = new ArrayList<>();
 
@@ -18,14 +19,24 @@ public class Position extends DroneDetails implements Subject{ // Class for stor
         this.col = col;
     }
 
-    public int[] getValue() {
+    @Override
+    public Object getValue() {
+        return row+","+col;
+    }
+
+    @Override
+    public void updateValue(Object value) {
+        this.stringPosition = (String) value;
+        String[] values = ((String) value).split(",");
+        this.row = Integer.parseInt(values[0]);
+        this.col = Integer.parseInt(values[1]);
+        notifyObservers();
+    }
+
+    public int[] getPosition(){
         return new int[]{row, col};
     }
 
-    public void updateValue(Object value) {
-        
-        //notifyObservers("position",new int[]{row,col});
-    }
 
     @Override
     public void addObserver(Observer observer) {
@@ -40,7 +51,7 @@ public class Position extends DroneDetails implements Subject{ // Class for stor
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update("position",new int[]{row,col});
+            observer.update("position", stringPosition);
         }
     }
 }
