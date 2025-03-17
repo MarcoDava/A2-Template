@@ -22,9 +22,14 @@ public class DroneBrain  {
     private State creekFinding;
     private State spiralSearch;
     private State locatingIsland;
+    private State findAreaState;
     private final Logger logger = LogManager.getLogger();
-    public DroneBrain(){
-        currentStatus = Status.LOCATING_ISLAND_STATE;
+    private Drone drone;
+    private DroneRetrieval droneRetriever=new DroneRetrieval();
+
+    public DroneBrain(Drone drone){
+        this.drone=drone;
+        findAreaState=new FindAreaState();
         approachIsland=new ApproachIslandState();
         creekFinding=new CreekFindingState();
         spiralSearch=new SpiralSearchState();
@@ -33,6 +38,18 @@ public class DroneBrain  {
     }
 
     public void makeDecision(JSONObject parameters, JSONObject decision) {
-        //will have swtich case here to use the different states
+        if (this.droneRetriever.dangerAssesment()) {
+            this.droneRetriever.handleDanger(decision, parameters);
+        } else {
+            switch (drone.getStatus())
+            {
+                case FIND_AREA_STATE:
+                    logger.info("STATE STATUS " + Status.GROUND_FINDER_STATE);
+                    logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
+                    this.currentState = this.groundFinderState; 
+                    break;
+            }
+            this.currentState.handle(drone, decision, parameters);
+        }
     }
 }

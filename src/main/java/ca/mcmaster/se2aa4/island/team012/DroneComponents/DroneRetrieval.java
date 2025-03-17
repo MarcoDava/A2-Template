@@ -31,6 +31,10 @@ public class DroneRetrieval {
         }
     }
 
+    public void handleDanger(){
+
+    }
+
     public boolean setBatteryDanger(){
         if(dronePosition.getValue()){
             return false;

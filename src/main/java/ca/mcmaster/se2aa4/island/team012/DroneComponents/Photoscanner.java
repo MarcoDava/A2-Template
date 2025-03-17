@@ -11,6 +11,7 @@ class Photoscanner{
     private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();
     private Battery battery;
+    private CreekPosition creekPosition;
     public boolean scanBelow(){//might need position as a parameter depending on how the scanBelow function works
         decision.put("action", "scan");
         logger.info(decision.toString());
@@ -25,6 +26,7 @@ class Photoscanner{
         JSONObject headings=response.getJSONObject("extras");
         JSONArray sites=headings.getJSONArray("sites");
         JSONArray creeks=headings.getJSONArray("creeks");
+        creekPosition.addCreek(dronePosition);
         return true;
     }
 

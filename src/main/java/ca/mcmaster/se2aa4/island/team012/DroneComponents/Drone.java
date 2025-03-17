@@ -25,11 +25,6 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Position;
 public class Drone implements IExplorerRaid{//reduce the amount of times that the dron changes heading, rarely use scan. 
 //use echo to guide the drone. 
     private Status currentStatus;
-    private State currentState;//we might need to make a seperate class called decision maker to split up methods. 
-    private State approachIsland;
-    private State creekFinding;
-    private State spiralSearch;
-    private State locatingIsland;
     private DroneBrain droneBrain;
     private Drone drone;
     private Position dronePosition;
@@ -40,6 +35,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private final Logger logger = LogManager.getLogger();
     public Drone(){
         currentStatus = Status.LOCATING_ISLAND_STATE;
+        private DroneBrain droneBrain(this.drone);
         approachIsland=new ApproachIslandState();
         creekFinding=new CreekFindingState();
         spiralSearch=new SpiralSearchState();
@@ -97,9 +93,8 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     public String deliverFinalReport() {
         return "no creek found";
     }
-
-    public static void main(String[] args) {
-        Drone drone = new Drone();
+    public Status getStatus(){
+        return currentStatus;
     }
     
 }
