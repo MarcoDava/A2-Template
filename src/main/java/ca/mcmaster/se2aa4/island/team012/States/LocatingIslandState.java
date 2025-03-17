@@ -16,7 +16,10 @@ public class LocatingIslandState implements State{
      * The state should scan and find the drones initial coordinates. It will then find where the island is. If it is found in the initial scan, move on to the next state.
      * If it is not found, it will turn and scan again until land is found. If it is not found, it will turn around and scan again past the original position to check both sides. 
      * 
-     * 
+     * //From the doc://
+     * This state is to search the first occurrence of land. If the initial scan 
+     * doesn't find land, the drone turns right and scans the left side until it 
+     * finds land. 
      * 
      */
     @Override
