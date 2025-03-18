@@ -1,20 +1,21 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
+
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import java.util.logging.Logger;
 
-
 public class DroneRetrieval {
+
     private boolean rangeDanger;
     private boolean batteryDanger;
 
     private Drone drone;
     private MapArea mapArea;
     private DronePosition dronePosition;
-    
+
     private final int RANGE_BORDER = 1;
-    
+
     public DroneRetrieval(Drone drone, MapArea mapArea) {
         this.drone = drone;
         this.mapArea = mapArea;
@@ -29,12 +30,12 @@ public class DroneRetrieval {
         }
     }
 
-    public void handleDanger(){
+    public void handleDanger() {
 
     }
 
-    public boolean setBatteryDanger(){
-        if(dronePosition.getValue()){
+    public boolean setBatteryDanger() {
+        if (dronePosition.getValue()) {
             return false;
         }
         return true;

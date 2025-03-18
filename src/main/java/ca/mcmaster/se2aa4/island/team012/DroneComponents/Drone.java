@@ -1,3 +1,4 @@
+
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
 import ca.mcmaster.se2aa4.island.team012.States.Status;
@@ -21,6 +22,7 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Position;
+
 
 public class Drone implements IExplorerRaid{//reduce the amount of times that the dron changes heading, rarely use scan. 
 //use echo to guide the drone. 

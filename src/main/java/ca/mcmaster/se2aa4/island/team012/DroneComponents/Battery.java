@@ -1,24 +1,27 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcmaster.se2aa4.island.team012.Observer;
 import ca.mcmaster.se2aa4.island.team012.Subject;
 
-public class Battery extends DroneDetails implements Subject{
+public class Battery extends DroneDetails implements Subject {
+
     private int batteryLevel;
     private List<Observer> observers = new ArrayList<>();
 
-    public Battery(int initialBattery){
-        batteryLevel=initialBattery;
+    public Battery(int initialBattery) {
+        batteryLevel = initialBattery;
     }
 
     @Override
-    public Object getValue(){
+    public Object getValue() {
         return batteryLevel;
     }
-    public void useBattery(int usedBattery){
-        batteryLevel-=usedBattery;
+
+    public void useBattery(int usedBattery) {
+        batteryLevel -= usedBattery;
         notifyObservers();
     }
 
@@ -35,7 +38,7 @@ public class Battery extends DroneDetails implements Subject{
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update("battery",batteryLevel);
+            observer.update("battery", batteryLevel);
         }
     }
 

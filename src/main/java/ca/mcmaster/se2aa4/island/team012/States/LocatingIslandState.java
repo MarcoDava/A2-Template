@@ -6,11 +6,14 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.Drone;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Position;
 
-public class LocatingIslandState implements State{
+public class LocatingIslandState implements State {
+
     Position dronePosition;
-    public LocatingIslandState(){
+
+    public LocatingIslandState() {
         dronePosition = new DronePosition();
     }
+
     /*
      * Basics of state:
      * The state should scan and find the drones initial coordinates. It will then find where the island is. If it is found in the initial scan, move on to the next state.
@@ -23,12 +26,12 @@ public class LocatingIslandState implements State{
      * 
      */
     @Override
-    public void handle(Drone drone,JSONObject decision,JSONObject parameters){
+    public void handle(Drone drone, JSONObject decision, JSONObject parameters) {
         this.locateIsland(drone, decision, parameters);
     }
 
-    public void locateIsland(Drone drone,JSONObject decision,JSONObject parameters){
-        
+    public void locateIsland(Drone drone, JSONObject decision, JSONObject parameters) {
+
         //scan for island
         //if found, move to next state
         //if not found, turn and scan again

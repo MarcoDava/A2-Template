@@ -3,11 +3,12 @@ package ca.mcmaster.se2aa4.island.team012.Positioning;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.mcmaster.se2aa4.island.team012.DroneComponents.DroneDetails;
 import ca.mcmaster.se2aa4.island.team012.Observer;
 import ca.mcmaster.se2aa4.island.team012.Subject;
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.DroneDetails;
 
-public class Position extends DroneDetails implements Subject{ // Class for storing (row, col) coordinates
+public class Position extends DroneDetails implements Subject { // Class for storing (row, col) coordinates
+
     private int row;
     private int col;
     private int[] position;
@@ -22,7 +23,7 @@ public class Position extends DroneDetails implements Subject{ // Class for stor
 
     @Override
     public Object getValue() {
-        return row+","+col;
+        return row + "," + col;
     }
 
     @Override
@@ -34,10 +35,9 @@ public class Position extends DroneDetails implements Subject{ // Class for stor
         notifyObservers();
     }
 
-    public int[] getPosition(){
+    public int[] getPosition() {
         return new int[]{row, col};
     }
-
 
     @Override
     public void addObserver(Observer observer) {

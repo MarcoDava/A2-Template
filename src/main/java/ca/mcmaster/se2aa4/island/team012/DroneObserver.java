@@ -8,22 +8,21 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Position;
 
 public class DroneObserver implements Observer {
+
     private Battery batteryLevel;
     private Direction currentHeading;
     private Position position;
     private final Logger logger = LogManager.getLogger();
+
     @Override
     public void update(String property, Object value) {
         if (property.equals("battery")) {
             this.batteryLevel = (Battery) value;
-        }
-        else if(property.equals( "heading")){
+        } else if (property.equals("heading")) {
             this.currentHeading = (Direction) value;
-        }
-        else if(property.equals("position")){
+        } else if (property.equals("position")) {
             this.position = (Position) value;
-        }
-        else{
+        } else {
             logger.info("Unknown property: " + property);
         }
         logger.info("Property %s updated to %s%n", property, value);
