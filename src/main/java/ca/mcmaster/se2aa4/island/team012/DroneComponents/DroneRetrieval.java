@@ -30,6 +30,10 @@ public class DroneRetrieval {
         }
     }
 
+    public boolean dangerAssesment(){
+        
+    }
+
     public void handleDanger() {
 
     }

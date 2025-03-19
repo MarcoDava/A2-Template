@@ -20,6 +20,11 @@ public class Battery extends DroneDetails implements Subject {
         return batteryLevel;
     }
 
+    @Override 
+    public void updateValue(Object value){
+        batteryLevel=(int)value;
+    }
+
     public void useBattery(int usedBattery) {
         batteryLevel -= usedBattery;
         notifyObservers();

@@ -38,11 +38,6 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     public Drone(){
         currentStatus = Status.LOCATING_ISLAND_STATE;
         private DroneBrain droneBrain(this.drone);
-        approachIsland=new ApproachIslandState();
-        creekFinding=new CreekFindingState();
-        spiralSearch=new SpiralSearchState();
-        locatingIsland=new LocatingIslandState();
-        currentState = locatingIsland;
     }
 
 
