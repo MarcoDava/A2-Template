@@ -37,7 +37,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private final Logger logger = LogManager.getLogger();
     public Drone(){
         currentStatus = Status.LOCATING_ISLAND_STATE;
-        private DroneBrain droneBrain(this.drone);
+        DroneBrain droneBrain = new DroneBrain(this.drone);
     }
 
 
@@ -71,7 +71,8 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         JSONObject decision = new JSONObject(); 
         JSONObject parameters = new JSONObject();
 
-        droneBrain.makeDecisions(parameters, decision);
+        droneBrain.makeDecision(parameters, decision);
+        return decision.toString();
     }
 
     @Override

@@ -11,7 +11,6 @@ public class LocatingIslandState implements State {
     Position dronePosition;
 
     public LocatingIslandState() {
-        dronePosition = new DronePosition();
     }
 
     /*

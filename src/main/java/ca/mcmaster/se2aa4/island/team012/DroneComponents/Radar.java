@@ -11,7 +11,7 @@ import org.json.JSONTokener;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 
-class Radar {
+public class Radar {
 
     private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();

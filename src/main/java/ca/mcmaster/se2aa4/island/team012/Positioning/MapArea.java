@@ -12,7 +12,7 @@ public class MapArea {
         return mapArea;
     }
 
-    public void setMapArea(int[] mapArea) {
-        this.mapArea = mapArea;
+    public void setMapArea(int row, int col) {
+        mapArea = new int[]{row, col};
     }
 }

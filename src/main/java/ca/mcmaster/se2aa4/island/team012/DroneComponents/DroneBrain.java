@@ -7,13 +7,14 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import ca.mcmaster.se2aa4.island.team012.States.FindAreaState;
 import ca.mcmaster.se2aa4.island.team012.States.ApproachIslandState;
 import ca.mcmaster.se2aa4.island.team012.States.CreekFindingState;
 import ca.mcmaster.se2aa4.island.team012.States.LocatingIslandState;
 import ca.mcmaster.se2aa4.island.team012.States.SpiralSearchState;
 import ca.mcmaster.se2aa4.island.team012.States.State;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
-import eu.ace_design.island.bot.IExplorerRaid;
+import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 
 public class DroneBrain {
 
@@ -26,11 +27,12 @@ public class DroneBrain {
     private State findAreaState;
     private final Logger logger = LogManager.getLogger();
     private Drone drone;
-    private DroneRetrieval droneRetriever = new DroneRetrieval();
+    private MapArea mapArea;
+    private DroneRetrieval droneRetriever = new DroneRetrieval(drone,mapArea);
 
     public DroneBrain(Drone drone) {
         this.drone = drone;
-        findAreaState = new FindAreaState();
+        findAreaState = new FindAreaState(mapArea);
         approachIsland = new ApproachIslandState();
         creekFinding = new CreekFindingState();
         spiralSearch = new SpiralSearchState();
@@ -44,9 +46,8 @@ public class DroneBrain {
         } else {
             switch (drone.getStatus()) {
                 case FIND_AREA_STATE:
-                    logger.info("STATE STATUS " + Status.GROUND_FINDER_STATE);
-                    logger.info("DRONE INFORMATION HEADING:  " + mapArea.getHeading());
-                    this.currentState = this.groundFinderState;
+                    logger.info("STATE STATUS " + Status.FIND_AREA_STATE);
+                    this.currentState = this.findAreaState;
                     break;
             }
             this.currentState.handle(drone, decision, parameters);
