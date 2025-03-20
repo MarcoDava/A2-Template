@@ -1,16 +1,13 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
-import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
-import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
-import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
-import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
-
-import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.json.JSONObject;
+
+import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
+import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
+import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 
 public class DroneRetrieval {
 
@@ -22,14 +19,17 @@ public class DroneRetrieval {
     private Drone drone;
     private MapArea mapArea;
     private DronePosition dronePosition;
+    private Battery battery;
 
    
 
     private final int RANGE_BORDER = 1;
 
-    public DroneRetrieval(Drone drone, MapArea mapArea) {
+    public DroneRetrieval(Drone drone, MapArea mapArea, Battery battery,DronePosition dronePosition) {
         this.drone = drone;
         this.mapArea = mapArea;
+        this.battery=battery;
+        this.dronePosition = dronePosition;
     }
 
     public DangerType dangerAssesment(){
@@ -67,7 +67,7 @@ public class DroneRetrieval {
     }
 
     public boolean batteryDanger() {
-        if ((int)dronePosition.getValue()<20) {
+        if ((int)battery.getValue()<20) {
             return false;
         }
         return true;

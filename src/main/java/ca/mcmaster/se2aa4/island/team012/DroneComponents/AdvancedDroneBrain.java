@@ -1,20 +1,18 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
-import java.io.StringReader;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
-import ca.mcmaster.se2aa4.island.team012.States.FindAreaState;
+import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.States.ApproachIslandState;
 import ca.mcmaster.se2aa4.island.team012.States.CreekFindingState;
+import ca.mcmaster.se2aa4.island.team012.States.FindAreaState;
 import ca.mcmaster.se2aa4.island.team012.States.LocatingIslandState;
 import ca.mcmaster.se2aa4.island.team012.States.SpiralSearchState;
 import ca.mcmaster.se2aa4.island.team012.States.State;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
-import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 
 public class AdvancedDroneBrain extends DroneBrain {
 
@@ -27,16 +25,21 @@ public class AdvancedDroneBrain extends DroneBrain {
     private final Logger logger = LogManager.getLogger();
     private Drone drone;
     private MapArea mapArea;
-    private DroneRetrieval droneRetriever = new DroneRetrieval(drone,mapArea);
+    private DroneRetrieval droneRetriever; 
+    private Battery battery;
+    private DronePosition dronePosition;
 
-    public AdvancedDroneBrain(Drone drone) {
+    public AdvancedDroneBrain(Drone drone,Battery battery,DronePosition dronePosition) {
         this.drone = drone;
+        this.battery=battery;
+        this.dronePosition=dronePosition;
         findAreaState = new FindAreaState(mapArea);
         approachIsland = new ApproachIslandState(mapArea);
         creekFinding = new CreekFindingState(mapArea);
         spiralSearch = new SpiralSearchState(mapArea);
         locatingIsland = new LocatingIslandState(mapArea);
         currentState = locatingIsland;
+        droneRetriever= new DroneRetrieval(drone,mapArea,this.battery,this.dronePosition);
     }
     @Override
     public void makeDecision(JSONObject parameters, JSONObject decision) {

@@ -33,11 +33,27 @@ public class FlightSystem {
     }
 
     public void turnRight(){
-
+        if(heading.getValue().equals(Direction.N)){
+            turnEast();
+        } else if(heading.getValue().equals(Direction.E)){
+            turnSouth();
+        } else if(heading.getValue().equals(Direction.S)){
+            turnWest();
+        } else if(heading.getValue().equals(Direction.W)){
+            turnNorth();
+        }
     }
 
     public void turnLeft(){
-
+        if(heading.getValue().equals(Direction.N)){
+            turnWest();
+        } else if(heading.getValue().equals(Direction.W)){
+            turnSouth();
+        } else if(heading.getValue().equals(Direction.S)){
+            turnEast();
+        } else if(heading.getValue().equals(Direction.E)){
+            turnNorth();
+        }
     }
 
     public boolean turnNorth() {

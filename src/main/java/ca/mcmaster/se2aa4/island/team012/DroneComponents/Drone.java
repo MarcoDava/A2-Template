@@ -1,19 +1,10 @@
 
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
-import ca.mcmaster.se2aa4.island.team012.States.Status;
-import ca.mcmaster.se2aa4.island.team012.States.State;
-import ca.mcmaster.se2aa4.island.team012.States.ApproachIslandState;
-import ca.mcmaster.se2aa4.island.team012.States.CreekFindingState;
-import ca.mcmaster.se2aa4.island.team012.States.SpiralSearchState;
-import ca.mcmaster.se2aa4.island.team012.States.LocatingIslandState;
-
 import java.io.StringReader;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import eu.ace_design.island.bot.IExplorerRaid;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -22,6 +13,8 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Position;
+import ca.mcmaster.se2aa4.island.team012.States.Status;
+import eu.ace_design.island.bot.IExplorerRaid;
 
 
 public class Drone implements IExplorerRaid{//reduce the amount of times that the dron changes heading, rarely use scan. 
@@ -78,13 +71,14 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     @Override
     public void acknowledgeResults(String s) {
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
-        logger.info("** Response received:\n"+response.toString(2));
-        Integer cost = response.getInt("cost");
-        logger.info("The cost of the action was {}", cost);
-        String status = response.getString("status");
-        logger.info("The status of the drone is {}", status);
-        JSONObject extraInfo = response.getJSONObject("extras");
-        logger.info("Additional information received: {}", extraInfo);
+        
+        // logger.info("** Response received:\n"+response.toString(2));
+        // Integer cost = response.getInt("cost");
+        // logger.info("The cost of the action was {}", cost);
+        // String status = response.getString("status");
+        // logger.info("The status of the drone is {}", status);
+        // JSONObject extraInfo = response.getJSONObject("extras");
+        // logger.info("Additional information received: {}", extraInfo);
     }
 
     @Override
