@@ -10,7 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.json.JSONObject;
 
 public class DroneRetrieval {
-
+    
+    private static final Logger logger = LogManager.getLogger();
     private boolean rangeDanger;
     private boolean batteryDanger;
     private Heading heading;
@@ -19,7 +20,7 @@ public class DroneRetrieval {
     private MapArea mapArea;
     private DronePosition dronePosition;
 
-    private static final Logger logger = LogManager.getLogger();
+   
 
     private final int RANGE_BORDER = 1;
 
