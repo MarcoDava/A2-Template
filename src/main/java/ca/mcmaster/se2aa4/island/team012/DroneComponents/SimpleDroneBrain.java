@@ -22,7 +22,7 @@ public class SimpleDroneBrain extends DroneBrain {
     private DronePosition dronePosition;
     private static final Logger logger = LogManager.getLogger();
 
-    public SimpleDroneBrain(Drone drone) {
+    public SimpleDroneBrain(Drone drone,Battery battery,DronePosition dronePosition) {
         this.drone=drone;
         this.battery=battery;
         this.dronePosition=dronePosition;

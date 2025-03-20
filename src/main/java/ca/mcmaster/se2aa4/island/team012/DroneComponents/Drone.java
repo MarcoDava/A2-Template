@@ -12,7 +12,6 @@ import ca.mcmaster.se2aa4.island.team012.DroneObserver;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
-import ca.mcmaster.se2aa4.island.team012.Positioning.Position;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
 import eu.ace_design.island.bot.IExplorerRaid;
 
@@ -22,7 +21,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private Status currentStatus;
     private DroneBrain droneBrain;
     private Drone drone;
-    private Position dronePosition;
+    private DronePosition dronePosition;
     private Heading heading;
     private Battery batteryLevel;
     private FlightSystem flightSystem=new FlightSystem(batteryLevel, heading);
@@ -30,7 +29,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private final Logger logger = LogManager.getLogger();
     public Drone(){
         currentStatus = Status.LOCATING_ISLAND_STATE;
-        DroneBrain droneBrain = new SimpleDroneBrain(this.drone);
+        DroneBrain droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition);
     }
 
 
