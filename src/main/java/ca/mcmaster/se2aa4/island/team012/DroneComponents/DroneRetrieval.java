@@ -4,6 +4,9 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
+
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +18,7 @@ public class DroneRetrieval {
     private boolean rangeDanger;
     private boolean batteryDanger;
     private Heading heading;
-
+    private FlightSystem flightSystem;
     private Drone drone;
     private MapArea mapArea;
     private DronePosition dronePosition;
@@ -29,28 +32,38 @@ public class DroneRetrieval {
         this.mapArea = mapArea;
     }
 
-    public boolean dangerAssesment(){
-        if(rangeDanger()){
-
+    public DangerType dangerAssesment(){
+        if(rangeDanger()!=Direction.NEUTRAL){
+            return DangerType.OUTOFRANGE;
         }
         else if(batteryDanger()){
-
+            return DangerType.BATTERYLOW;
         }
-        return true;
+        return DangerType.NEUTRAL;
     }
 
-    public void handleDanger(JSONObject parameters, JSONObject decision) {
-
+    public void handleDanger(JSONObject parameters, JSONObject decision, DangerType dangerType) {
     }
 
 
-    private boolean rangeDanger() {
-        if (dronePosition.getDronePosition()[0]==2 || dronePosition.getDronePosition()[1]==2
-        ||dronePosition.getDronePosition()[0]==mapArea.getRows()-2||dronePosition.getDronePosition()[1]==mapArea.getCols()-2) {
-            logger.info("Approaching OUT OF RANGE area changing direction");
-            return true;
+    private Direction rangeDanger() {
+        if (dronePosition.getDronePosition()[0]==2
+        ||dronePosition.getDronePosition()[0]==mapArea.getRows()-2) {
+            if(dronePosition.getDronePosition()[0]>mapArea.getRows()/2){
+                return Direction.S;
+            }
+            else{
+                return Direction.N;
+            } 
+        }else if(dronePosition.getDronePosition()[1]==2||dronePosition.getDronePosition()[1]==mapArea.getCols()-2){
+            if(dronePosition.getDronePosition()[1]>mapArea.getCols()/2){
+                return Direction.W;
+            }
+            else{
+                return Direction.E;
+            }
         }
-        return false;
+        return Direction.NEUTRAL;
     }
 
     public boolean batteryDanger() {

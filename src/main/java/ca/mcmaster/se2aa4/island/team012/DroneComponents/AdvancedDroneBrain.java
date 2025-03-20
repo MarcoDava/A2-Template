@@ -40,8 +40,8 @@ public class AdvancedDroneBrain extends DroneBrain {
     }
     @Override
     public void makeDecision(JSONObject parameters, JSONObject decision) {
-        if (this.droneRetriever.dangerAssesment()) {
-            this.droneRetriever.handleDanger(decision, parameters);
+        if (this.droneRetriever.dangerAssesment()!=DangerType.NEUTRAL) {
+            this.droneRetriever.handleDanger(decision, parameters,droneRetriever.dangerAssesment());
         } else {
             switch (drone.getStatus()) {
                 case FIND_AREA_STATE:
