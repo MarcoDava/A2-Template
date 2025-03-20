@@ -9,7 +9,7 @@ import org.json.JSONTokener;
 
 import eu.ace_design.island.bot.IExplorerRaid;
 
-public class Explorer implements IExplorerRaid {
+public class TemplateExplorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
 

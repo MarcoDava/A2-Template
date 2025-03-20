@@ -79,7 +79,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         JSONObject parameters = new JSONObject();
         // unsure if these need to be created because
 
-        String catchDecision = droneBrain.makeDecisions(parameters, decision); // should take state as well
+        String catchDecision = droneBrain.makeDecision(parameters, decision); // should take state as well
         return catchDecision; // or something like this because I dont think we can 
     }
 
