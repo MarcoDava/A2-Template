@@ -32,10 +32,10 @@ public class AdvancedDroneBrain extends DroneBrain {
     public AdvancedDroneBrain(Drone drone) {
         this.drone = drone;
         findAreaState = new FindAreaState(mapArea);
-        approachIsland = new ApproachIslandState();
-        creekFinding = new CreekFindingState();
-        spiralSearch = new SpiralSearchState();
-        locatingIsland = new LocatingIslandState();
+        approachIsland = new ApproachIslandState(mapArea);
+        creekFinding = new CreekFindingState(mapArea);
+        spiralSearch = new SpiralSearchState(mapArea);
+        locatingIsland = new LocatingIslandState(mapArea);
         currentState = locatingIsland;
     }
     @Override
