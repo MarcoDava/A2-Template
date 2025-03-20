@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 
-class FlightSystem {
+public class FlightSystem {
 
     private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();
@@ -30,6 +30,14 @@ class FlightSystem {
         decision.put("action", "stop");
         logger.info(decision.toString());
         return true;
+    }
+
+    public void turnRight(){
+
+    }
+
+    public void turnLeft(){
+
     }
 
     public boolean turnNorth() {

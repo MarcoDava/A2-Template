@@ -11,7 +11,7 @@ import org.json.JSONTokener;
 import ca.mcmaster.se2aa4.island.team012.Positioning.CreekPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 
-class Photoscanner {
+public class Photoscanner {
 
     private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();
