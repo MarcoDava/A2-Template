@@ -34,6 +34,14 @@ class Photoscanner {
         JSONObject headings = response.getJSONObject("extras");
         JSONArray sites = headings.getJSONArray("sites");
         JSONArray creeks = headings.getJSONArray("creeks");
+
+
+        // extract sites and creeks from the JSON arrays
+
+        // if there is a creek ??and it is not in the list of creeks??
+        //      add the creek to the list
+        // if there is an emergency site ??and it is not in the list of emergency sites??
+        //      add the site to the list
         creekPosition.addCreekPosition(dronePosition);
         return true;
     }
