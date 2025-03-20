@@ -16,53 +16,60 @@ public class Radar {
     private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();
     private Battery battery;
+    private Direction previousScanHeading;
 
     public Radar() {
 
     }
 
-    public int scanForward(Heading direction) {
+    public void scanForward(Heading direction) {
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", direction));
         logger.info(decision.toString());
         int range = extractRange(decision.toString());
-        return range;
     }
 
-    public int scanLeft(Heading direction) {//resembles the heading the drone is currently headed
+    public void scanLeft(Heading direction) {//resembles the heading the drone is currently headed
         Direction leftHeading = null;
         if (direction.compareHeading(Direction.N)) {
-            leftHeading = Direction.W;
+            scanWest();
         } else if (direction.compareHeading(Direction.W)) {
-            leftHeading = Direction.S;
+           scanSouth();
         } else if (direction.compareHeading(Direction.S)) {
-            leftHeading = Direction.E;
+            scanEast();
         } else {
-            leftHeading = Direction.N;
+            scanNorth();
         }
-        decision.put("action", "echo");
-        decision.put("parameters", new JSONObject().put("direction", leftHeading));//need a way to keep track of directions
-        int range = extractRange(decision.toString());
-        logger.info(decision.toString());
-        return range;
     }
 
-    public int scanRight(Heading direction) {
+    public void scanRight(Heading direction) {
         Direction rightHeading = null;
         if (direction.compareHeading(Direction.N)) {
-            rightHeading = Direction.E;
+            scanEast();
         } else if (direction.compareHeading(Direction.E)) {
-            rightHeading = Direction.S;
+            scanSouth();
         } else if (direction.compareHeading(Direction.S)) {
-            rightHeading = Direction.W;
+            scanWest();
         } else {
-            rightHeading = Direction.N;
+            scanNorth();
         }
+    }
+
+    private void scanNorth(){
         decision.put("action", "echo");
-        decision.put("parameters", new JSONObject().put("direction", rightHeading));
-        int range = extractRange(decision.toString());
-        logger.info(decision.toString());
-        return range;
+        decision.put("parameters", new JSONObject().put("direction", Direction.N));
+    }
+    private void scanSouth(){
+        decision.put("action", "echo");
+        decision.put("parameters", new JSONObject().put("direction", Direction.S));
+    }
+    private void scanEast(){
+        decision.put("action", "echo");
+        decision.put("parameters", new JSONObject().put("direction", Direction.E));
+    }
+    private void scanWest(){
+        decision.put("action", "echo");
+        decision.put("parameters", new JSONObject().put("direction", Direction.W));
     }
 
     private int extractRange(String jsonResponse) {

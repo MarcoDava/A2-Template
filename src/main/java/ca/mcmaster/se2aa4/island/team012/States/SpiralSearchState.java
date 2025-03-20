@@ -3,10 +3,10 @@ package ca.mcmaster.se2aa4.island.team012.States;
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Drone;
-import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Photoscanner;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 
 /**
  * This state is to find the emergency site. It will fly towards the center of
@@ -20,8 +20,8 @@ public class SpiralSearchState implements State {
     private MapArea mapArea;
     private int counter=0;
     private int numberOfTurns=0;
-    private int startRow=1;
-    private int startCol=1;
+    private int startRow;
+    private int startCol;
     private int endRow;
     private int endCol;
     private FlightSystem flightSystem;
@@ -30,6 +30,9 @@ public class SpiralSearchState implements State {
 
     public SpiralSearchState(MapArea mapArea) {
         this.mapArea = mapArea;
+
+        endRow=mapArea.getRows()-1;
+        endCol=mapArea.getCols()-1;
     }
     @Override
     public void handle(Drone drone, JSONObject decision, JSONObject parameters) {
@@ -38,7 +41,7 @@ public class SpiralSearchState implements State {
             photoScanner.scanBelow();
         }
         else{
-            if(dronePosition.getDronePosition()[0]==startRow||dronePosition.getDronePosition()[0]==endRow||dronePosition.getDronePosition()[1]==startCol||dronePosition.getDronePosition()[1]==endCol){
+            if(dronePosition.getDronePosition()[0]==startRow+1||dronePosition.getDronePosition()[0]==endRow-1||dronePosition.getDronePosition()[1]==startCol+1||dronePosition.getDronePosition()[1]==endCol-1){
                 flightSystem.turnRight();
                 numberOfTurns=(numberOfTurns+1)%4;
                 if(numberOfTurns==3){
@@ -46,7 +49,9 @@ public class SpiralSearchState implements State {
                     numberOfTurns=0;
                 }
             }
-            flightSystem.fly();
+            else{
+                flightSystem.fly();
+            }
         }
         counter=(counter+1)%2;
     }

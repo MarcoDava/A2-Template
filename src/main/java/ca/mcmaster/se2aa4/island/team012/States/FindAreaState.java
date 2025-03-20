@@ -28,10 +28,10 @@ public class FindAreaState implements State {
     @Override
     public void handle(Drone drone, JSONObject decision, JSONObject parameters) {
         if(counter==0){
-            mapX=radar.scanForward((Heading)heading.getValue());
+            radar.scanForward((Heading)heading.getValue());
         }
         else if(counter==1){
-            mapY=radar.scanRight((Heading)heading.getValue());
+            radar.scanRight((Heading)heading.getValue());
         }
         else{
             mapArea.setMapArea(mapX,mapY);

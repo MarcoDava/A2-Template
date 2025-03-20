@@ -12,4 +12,6 @@ public class ResultsAcknowledger{
         battery.updateValue((Object)decision.getInt("battery"));
     }
 
+    //need a function that gets the mapX and mapY to determine the size of the map
+
 }
