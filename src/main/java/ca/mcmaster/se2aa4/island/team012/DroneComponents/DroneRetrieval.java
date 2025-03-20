@@ -6,6 +6,9 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+import org.json.JSONObject;
+
 public class DroneRetrieval {
 
     private boolean rangeDanger;
@@ -16,6 +19,8 @@ public class DroneRetrieval {
     private MapArea mapArea;
     private DronePosition dronePosition;
 
+    private static final Logger logger = LogManager.getLogger();
+
     private final int RANGE_BORDER = 1;
 
     public DroneRetrieval(Drone drone, MapArea mapArea) {
@@ -24,7 +29,7 @@ public class DroneRetrieval {
     }
 
     public boolean dangerAssesment(){
-        if(outOfRange()){
+        if(rangeDanger()){
 
         }
         else if(batteryDanger()){
@@ -33,14 +38,15 @@ public class DroneRetrieval {
         return true;
     }
 
-    public void handleDanger() {
+    public void handleDanger(JSONObject parameters, JSONObject decision) {
 
     }
 
 
-    private void rangeDanger(int range) {
-        if (range <= RANGE_BORDER && heading.getValue() == mapArea.getPrevEchoDirection()) {
-            this.rangeDanger = true;
+    private boolean rangeDanger() {
+        if (dronePosition.getDronePosition()[0]==2 || dronePosition.getDronePosition()[1]==2
+        ||dronePosition.getDronePosition()[0]==mapArea.getRows()-2||dronePosition.getDronePosition()[1]==mapArea.getCols()-2) {
+            return false;
             logger.info("Approaching OUT OF RANGE area changing direction");
         } else {
             this.rangeDanger = false;
@@ -48,7 +54,7 @@ public class DroneRetrieval {
     }
 
     public boolean batteryDanger() {
-        if (dronePosition.getValue()) {
+        if ((int)dronePosition.getValue()<20) {
             return false;
         }
         return true;

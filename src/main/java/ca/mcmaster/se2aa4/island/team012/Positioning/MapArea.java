@@ -12,6 +12,14 @@ public class MapArea {
         return mapArea;
     }
 
+    public int getRows(){
+        return mapArea[0];
+    }
+
+    public int getCols(){
+        return mapArea[1];
+    }
+
     public void setMapArea(int row, int col) {
         mapArea = new int[]{row, col};
     }

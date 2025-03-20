@@ -8,8 +8,14 @@ public class DronePosition extends Position {
         super(row, col);
     }
 
-    public Position getDronePosition() {
-        return dronePosition;
+    public int[] getDronePosition() {
+        String dronePositionString = (String)dronePosition.getValue();
+        String[] dronePositionArrayString = dronePositionString.split(",");
+        int[] dronePositionArray = new int[dronePositionArrayString.length];
+        for (int i = 0; i < dronePositionArrayString.length; i++) {
+            dronePositionArray[i] = Integer.parseInt(dronePositionArrayString[i]);
+        }
+        return dronePositionArray;
     }
 
     public void setDronePosition(int row, int col) {
