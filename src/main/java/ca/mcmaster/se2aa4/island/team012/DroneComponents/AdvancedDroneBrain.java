@@ -42,7 +42,7 @@ public class AdvancedDroneBrain extends DroneBrain {
         droneRetriever= new DroneRetrieval(drone,mapArea,this.battery,this.dronePosition);
     }
     @Override
-    public void makeDecision(JSONObject parameters, JSONObject decision) {
+    public String makeDecision(JSONObject parameters, JSONObject decision) {
         if (this.droneRetriever.dangerAssesment()!=DangerType.NEUTRAL) {
             this.droneRetriever.handleDanger(decision, parameters,droneRetriever.dangerAssesment());
         } else {
@@ -72,5 +72,6 @@ public class AdvancedDroneBrain extends DroneBrain {
             }
             this.currentState.handle(drone, decision, parameters);
         }
+        return decision.toString();
     }
 }

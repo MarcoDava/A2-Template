@@ -5,6 +5,6 @@ import org.json.JSONObject;
 
 
 public abstract class DroneBrain {
-    public abstract void makeDecision(JSONObject parameters, JSONObject decision);
+    public abstract String makeDecision(JSONObject parameters, JSONObject decision);
    
 }

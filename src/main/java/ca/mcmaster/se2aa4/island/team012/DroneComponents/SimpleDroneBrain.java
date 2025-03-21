@@ -33,7 +33,7 @@ public class SimpleDroneBrain extends DroneBrain {
 
     @Override
 
-    public void makeDecision(JSONObject parameters, JSONObject decision) {
+    public String makeDecision(JSONObject parameters, JSONObject decision) {
         if (this.droneRetriever.dangerAssesment() != DangerType.NEUTRAL) {
             this.droneRetriever.handleDanger(decision, parameters,droneRetriever.dangerAssesment());
         } else {
@@ -43,14 +43,15 @@ public class SimpleDroneBrain extends DroneBrain {
                     this.currentState = this.findAreaState;
                     break;
                 case SPIRAL_SEARCH_STATE:
-                    logger.info("STATE STATUS " + Status.FIND_AREA_STATE);
-                    this.currentState = this.findAreaState;
+                    logger.info("STATE STATUS " + Status.SPIRAL_SEARCH_STATE);
+                    this.currentState = this.spiralSearchState;
                     break;
                 default:
                     break;
             }
             this.currentState.handle(drone, decision, parameters);
         }
+        return decision.toString();
     }
 
 

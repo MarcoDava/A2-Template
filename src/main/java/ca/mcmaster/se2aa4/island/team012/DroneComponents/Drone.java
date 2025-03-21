@@ -29,7 +29,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private Status currentStatus;
     private DroneBrain droneBrain;
     private Drone drone;
-    private Position dronePosition;
+    private DronePosition dronePosition;
     private Heading heading;
     private Battery batteryLevel;
 

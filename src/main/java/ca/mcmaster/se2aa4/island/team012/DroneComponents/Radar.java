@@ -26,7 +26,6 @@ public class Radar {
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", direction));
         logger.info(decision.toString());
-        int range = extractRange(decision.toString());
     }
 
     public void scanLeft(Heading direction) {//resembles the heading the drone is currently headed
@@ -72,25 +71,25 @@ public class Radar {
         decision.put("parameters", new JSONObject().put("direction", Direction.W));
     }
 
-    private int extractRange(String jsonResponse) {
-        JSONObject response = new JSONObject(new JSONTokener(new StringReader(jsonResponse)));
-        battery.useBattery(response.getInt("cost"));
-        JSONObject extras = response.getJSONObject("extras");
-        JSONArray range = extras.getJSONArray("range");
-        int rangeInt = range.getInt(0);
-        return rangeInt;
-    }
+    // private int extractRange(String jsonResponse) {
+    //     JSONObject response = new JSONObject(new JSONTokener(new StringReader(jsonResponse)));
+    //     battery.useBattery(response.getInt("cost"));
+    //     JSONObject extras = response.getJSONObject("extras");
+    //     JSONArray range = extras.getJSONArray("range");
+    //     int rangeInt = range.getInt(0);
+    //     return rangeInt;
+    // }
 
-    private boolean extractGround(String jsonResponse) {
-        JSONObject response = new JSONObject(new JSONTokener(new StringReader(jsonResponse)));
-        JSONObject extras = response.getJSONObject("extras");
-        JSONArray ground = extras.getJSONArray("sites");
-        String groundString = ground.toString();
-        boolean foundGround = false;
-        if (groundString.equals("GROUND")) {
-            foundGround = true;
-        }
-        return foundGround;
-    }
+    // private boolean extractGround(String jsonResponse) {
+    //     JSONObject response = new JSONObject(new JSONTokener(new StringReader(jsonResponse)));
+    //     JSONObject extras = response.getJSONObject("extras");
+    //     JSONArray ground = extras.getJSONArray("sites");
+    //     String groundString = ground.toString();
+    //     boolean foundGround = false;
+    //     if (groundString.equals("GROUND")) {
+    //         foundGround = true;
+    //     }
+    //     return foundGround;
+    // }
 
 }
