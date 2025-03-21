@@ -9,6 +9,7 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.CreekPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.EmergencyPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
+import ca.mcmaster.se2aa4.island.team012.States.Status;
 
 public class ResultsAcknowledger{
     private Battery battery;
@@ -17,6 +18,8 @@ public class ResultsAcknowledger{
     private CreekPosition creekPosition;
     private EmergencyPosition emergencyPosition;
     private DronePosition dronePosition;
+    private boolean groundFound;
+    private int range;
 
     public ResultsAcknowledger(Battery battery, MapArea mapArea, Drone drone,DronePosition dronePosition,CreekPosition creekPosition,EmergencyPosition emergencyPosition){
         this.battery = battery;
@@ -25,6 +28,10 @@ public class ResultsAcknowledger{
         this.dronePosition = dronePosition;
         this.creekPosition = creekPosition;
         this.emergencyPosition = emergencyPosition;
+    }
+
+    public int returnRange(){
+        return range;
     }
 
     public void extractBattery(JSONObject response){
@@ -44,7 +51,7 @@ public class ResultsAcknowledger{
         return range;
     }
 
-    public boolean extractSites(JSONObject extraInfo){
+    private boolean extractSites(JSONObject extraInfo){
         JSONObject creek = extraInfo.getJSONObject("creeks");
         if(creek.toString().isEmpty()){
             return false;
@@ -53,7 +60,7 @@ public class ResultsAcknowledger{
         
     }
 
-    public boolean extractCreeks(JSONObject extraInfo){
+    private boolean extractCreeks(JSONObject extraInfo){
         JSONObject emergencySite = extraInfo.getJSONObject("sites");
         if(emergencySite.toString().isEmpty()){
             return false;
@@ -66,7 +73,8 @@ public class ResultsAcknowledger{
         JSONObject extraInfo = response.getJSONObject("extras");
         extractBattery(response);
         if(drone.getCommand()==Command.ECHO){
-            
+            range=extractRange(extraInfo);
+            groundFound=extractGround(extraInfo);
         }
         else if (drone.getCommand()==Command.SCAN||drone.getCommand()==Command.SCAN_AROUND){
             if(extractCreeks(extraInfo)){
@@ -79,7 +87,24 @@ public class ResultsAcknowledger{
         else{
 
         }
+        switch (drone.getStatus()) {
+                case FIND_LENGTH_STATE:
+                    findLengthStateHandler();
+                case FIND_WIDTH_STATE:
+                    findWidthStateHandler();
+                default:
+                    break;
+            }
     }
+
+    private void findLengthStateHandler(){
+        mapArea.setMapX(range);
+    }
+
+    private void findWidthStateHandler(){
+        mapArea.setMapX(range);
+    }
+
 
 
 

@@ -8,7 +8,7 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.States.ApproachIslandState;
 import ca.mcmaster.se2aa4.island.team012.States.CreekFindingState;
-import ca.mcmaster.se2aa4.island.team012.States.FindAreaState;
+import ca.mcmaster.se2aa4.island.team012.States.FindLengthState;
 import ca.mcmaster.se2aa4.island.team012.States.LocatingIslandState;
 import ca.mcmaster.se2aa4.island.team012.States.SpiralSearchState;
 import ca.mcmaster.se2aa4.island.team012.States.State;
@@ -33,7 +33,7 @@ public class AdvancedDroneBrain extends DroneBrain {
         this.drone = drone;
         this.battery=battery;
         this.dronePosition=dronePosition;
-        findAreaState = new FindAreaState(mapArea,drone);
+        findAreaState = new FindLengthState(mapArea,drone);
         approachIsland = new ApproachIslandState(mapArea);
         creekFinding = new CreekFindingState(mapArea);
         spiralSearch = new SpiralSearchState(mapArea);
@@ -47,8 +47,12 @@ public class AdvancedDroneBrain extends DroneBrain {
             this.droneRetriever.handleDanger(decision, droneRetriever.dangerAssesment());
         } else {
             switch (drone.getStatus()) {
-                case FIND_AREA_STATE:
-                    logger.info("STATE STATUS " + Status.FIND_AREA_STATE);
+                case FIND_LENGTH_STATE:
+                    logger.info("STATE STATUS " + Status.FIND_LENGTH_STATE);
+                    this.currentState = this.findAreaState;
+                    break;
+                case FIND_WIDTH_STATE:
+                    logger.info("STATE STATUS " + Status.FIND_WIDTH_STATE);
                     this.currentState = this.findAreaState;
                     break;
                 case LOCATING_ISLAND_STATE:

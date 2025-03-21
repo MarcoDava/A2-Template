@@ -12,12 +12,7 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.CreekPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 
 public class Photoscanner {
-
-    private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();
-    private Battery battery;
-    private CreekPosition creekPosition;
-    private DronePosition dronePosition;
 
     public void scanBelow(JSONObject decision) {//might need position as a parameter depending on how the scanBelow function works
         decision.put("action", "scan");

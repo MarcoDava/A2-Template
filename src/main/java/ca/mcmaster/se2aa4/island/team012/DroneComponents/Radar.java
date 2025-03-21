@@ -1,77 +1,71 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
-import java.io.StringReader;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 
 public class Radar {
-
-    private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();
 
     public Radar() {
 
     }
 
-    public void scanForward(Heading direction) {
+    public void scanForward(Heading direction,JSONObject decision) {
         if (direction.compareHeading(Direction.N)) {
-            scanNorth();
+            scanNorth(decision);
         } else if (direction.compareHeading(Direction.W)) {
-           scanWest();
+           scanWest(decision);
         } else if (direction.compareHeading(Direction.S)) {
-            scanSouth();
+            scanSouth(decision);
         } else {
-            scanEast();
+            scanEast(decision);
         }
     }
 
-    public void scanLeft(Heading direction) {//resembles the heading the drone is currently headed
+    public void scanLeft(Heading direction,JSONObject decision) {//resembles the heading the drone is currently headed
         if (direction.compareHeading(Direction.N)) {
-            scanWest();
+            scanWest(decision);
         } else if (direction.compareHeading(Direction.W)) {
-           scanSouth();
+           scanSouth(decision);
         } else if (direction.compareHeading(Direction.S)) {
-            scanEast();
+            scanEast(decision);
         } else {
-            scanNorth();
+            scanNorth(decision);
         }
     }
 
-    public void scanRight(Heading direction) {
+    public void scanRight(Heading direction,JSONObject decision) {
         if (direction.compareHeading(Direction.N)) {
-            scanEast();
+            scanEast(decision);
         } else if (direction.compareHeading(Direction.E)) {
-            scanSouth();
+            scanSouth(decision);
         } else if (direction.compareHeading(Direction.S)) {
-            scanWest();
+            scanWest(decision);
         } else {
-            scanNorth();
+            scanNorth(decision);
         }
     }
 
-    private void scanNorth(){
+    private void scanNorth(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.N));
         logger.info("Scanning North");
     }
-    private void scanSouth(){
+    private void scanSouth(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.S));
         logger.info("Scanning South");
     }
-    private void scanEast(){
+    private void scanEast(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.E));
         logger.info("Scanning East");
     }
-    private void scanWest(){
+    private void scanWest(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.W));
         logger.info("Scanning West");
