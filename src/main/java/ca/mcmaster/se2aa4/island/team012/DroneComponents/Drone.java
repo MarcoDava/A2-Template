@@ -28,7 +28,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private Battery batteryLevel;
     private Command action;
 
-    private FlightSystem flightSystem=new FlightSystem(batteryLevel, heading);
+    private FlightSystem flightSystem=new FlightSystem(heading);
     private Photoscanner photoscanner=new Photoscanner();
     private final Logger logger = LogManager.getLogger();
 

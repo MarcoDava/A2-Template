@@ -42,7 +42,7 @@ public class SpiralSearchState implements State {
         }
         else{
             if(dronePosition.getRow()==startRow+1||dronePosition.getRow()==endRow-1||dronePosition.getCol()==startCol+1||dronePosition.getCol()==endCol-1){
-                flightSystem.turnRight();
+                flightSystem.turnRight(decision);
                 numberOfTurns=(numberOfTurns+1)%4;
                 if(numberOfTurns==3){
                     shrinkSearchArea();
@@ -50,7 +50,7 @@ public class SpiralSearchState implements State {
                 }
             }
             else{
-                flightSystem.fly();
+                flightSystem.fly(decision);
             }
         }
         counter=(counter+1)%2;

@@ -15,8 +15,6 @@ public class Radar {
 
     private JSONObject decision = new JSONObject();
     private static final Logger logger = LogManager.getLogger();
-    private Battery battery;
-    private Direction previousScanHeading;
 
     public Radar() {
 
@@ -61,18 +59,22 @@ public class Radar {
     private void scanNorth(){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.N));
+        logger.info("Scanning North");
     }
     private void scanSouth(){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.S));
+        logger.info("Scanning South");
     }
     private void scanEast(){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.E));
+        logger.info("Scanning East");
     }
     private void scanWest(){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.W));
+        logger.info("Scanning West");
     }
 
     // private int extractRange(String jsonResponse) {

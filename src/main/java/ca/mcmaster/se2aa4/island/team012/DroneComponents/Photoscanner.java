@@ -21,7 +21,7 @@ public class Photoscanner {
 
     public void scanBelow(JSONObject decision) {//might need position as a parameter depending on how the scanBelow function works
         decision.put("action", "scan");
-        logger.info(decision.toString());
+        logger.info("Scanning below");
     }
 
 }
