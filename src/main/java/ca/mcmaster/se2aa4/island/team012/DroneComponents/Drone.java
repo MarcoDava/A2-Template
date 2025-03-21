@@ -66,11 +66,34 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
 
     @Override
     public String takeDecision() {
-        JSONObject decision = new JSONObject();
-        // unsure if these need to be created because
+        JSONObject decision = new JSONObject(); // unsure if these need to be created because of below logic
 
-        String catchDecision = droneBrain.makeDecision(decision); // should take state as well
-        return catchDecision; // or something like this because I dont think we can 
+        // **** assume actionQueue already set up as a queue of Strings in this (Drone) class with the below code -J****
+
+        /*
+         * import java.util.LinkedList;
+         * import java.util.Queue;
+         * 
+         * Queue<String> actionQueue = new LinkedList<>();
+         * // .add(String s) to enqueue
+         * // .remove() to dequeue
+         * // .peek() to peek at first in queue
+        */
+        
+        /*
+            // this is the implementation to go in this function -J
+         * if (actionQueue.empty() = true) {
+         *      actionQueue = dronebrain.makedecision(actionQueue);
+         * }
+         * // do next action
+         *  String nextAction = actionQueue.remove();
+         * 
+         * return nextAction;
+         */
+
+        // below may be replaced by above
+        String catchDecision = droneBrain.makeDecision(decision);
+        return catchDecision;
     }
 
     @Override
