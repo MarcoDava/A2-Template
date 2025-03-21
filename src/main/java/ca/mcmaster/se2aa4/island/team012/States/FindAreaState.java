@@ -9,6 +9,7 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Position;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
+import ca.mcmaster.se2aa4.island.team012.States.Status;
 
 public class FindAreaState implements State {
 
@@ -23,7 +24,7 @@ public class FindAreaState implements State {
     private int mapX=0;
     private int mapY=0;
 
-    public FindAreaState(MapArea mapArea) {
+    public FindAreaState(MapArea mapArea, Drone drone) {
         this.mapArea = mapArea;
     }
 
@@ -39,6 +40,7 @@ public class FindAreaState implements State {
         }
         else{
             mapArea.setMapArea(mapX,mapY);
+            drone.setStatus(Status.LOCATING_ISLAND_STATE);
             dronePosition.setRow(ROW);
             dronePosition.setCol(COL);
         }
@@ -48,6 +50,7 @@ public class FindAreaState implements State {
         //this is the starting position of the drone, assumed in the MVP
         //for the final, because we may not start at 1,1. This state should continue to fly until it can find a line that doesnt touch the land
         //this state should find the out of bounds, so the scan should be scanning the out of range and not land. 
+
 
         return decision.toString();
     }

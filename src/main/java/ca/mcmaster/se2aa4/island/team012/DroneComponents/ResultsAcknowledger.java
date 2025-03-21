@@ -63,12 +63,12 @@ public class ResultsAcknowledger{
 
     public void updateValues(String s){
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
+        JSONObject extraInfo = response.getJSONObject("extras");
         extractBattery(response);
         if(drone.getCommand()==Command.ECHO){
-            JSONObject extraInfo = response.getJSONObject("extras");
+            
         }
         else if (drone.getCommand()==Command.SCAN||drone.getCommand()==Command.SCAN_AROUND){
-            JSONObject extraInfo = response.getJSONObject("extras");
             if(extractCreeks(extraInfo)){
                 creekPosition.addCreekPosition(dronePosition.getDronePosition());
             }

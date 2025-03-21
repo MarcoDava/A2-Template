@@ -27,6 +27,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private Heading heading;
     private Battery batteryLevel;
     private Command action;
+    private ResultsAcknowledger resultsAcknowledger;
 
     private FlightSystem flightSystem=new FlightSystem(heading);
     private Photoscanner photoscanner=new Photoscanner();
@@ -36,6 +37,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     public Drone(){
         currentStatus = Status.LOCATING_ISLAND_STATE;
         DroneBrain droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition);
+        resultsAcknowledger=new ResultsAcknowledger(batteryLevel, null, drone, dronePosition, null, null);
     }
 
 
@@ -64,7 +66,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
 
     @Override
     public String takeDecision() {
-        JSONObject decision = new JSONObject(); 
+        JSONObject decision = new JSONObject();
         // unsure if these need to be created because
 
         String catchDecision = droneBrain.makeDecision(decision); // should take state as well
@@ -72,24 +74,23 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     }
 
     @Override
-    public void acknowledgeResults(String s) {
-        JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
-        logger.info("** Response received:\n"+response.toString(2));
+    public void acknowledgeResults(String s){
+        resultsAcknowledger.updateValues(s);
+        logger.info("** Response received:\n"+s);
 
-        Integer cost = response.getInt("cost");
-        logger.info("The cost of the action was {}", cost);
+        // Integer cost = response.getInt("cost");
+        // logger.info("The cost of the action was {}", cost);
         // pass in cost, convert to int, etc, then return -J
         // ex:
         // barreryStorageDummy = battryStorageDummy - processCost(cost)
 
-
-        String status = response.getString("status");
-        logger.info("The status of the drone is {}", status);
+        // String status = response.getString("status");
+        // logger.info("The status of the drone is {}", status);
         // ?pass status into action status checker and do something if it was bad?
         // depends on what status's there are beyond error if its required -J
 
-        JSONObject extraInfo = response.getJSONObject("extras");
-        logger.info("Additional information received: {}", extraInfo);
+        // JSONObject extraInfo = response.getJSONObject("extras");
+        // logger.info("Additional information received: {}", extraInfo);
 
         // storage may be formatted many ways, but something will exist to pass into and process that string'd JSON response -J
         // ex:

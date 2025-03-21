@@ -26,7 +26,7 @@ public class SimpleDroneBrain extends DroneBrain {
         this.drone=drone;
         this.battery=battery;
         this.dronePosition=dronePosition;
-        findAreaState = new FindAreaState(mapArea);
+        findAreaState = new FindAreaState(mapArea,drone);
         spiralSearchState = new SpiralSearchState(mapArea);
         droneRetriever= new DroneRetrieval(drone,mapArea,this.battery,this.dronePosition);
     }

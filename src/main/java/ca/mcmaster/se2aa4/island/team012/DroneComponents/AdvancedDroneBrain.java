@@ -33,7 +33,7 @@ public class AdvancedDroneBrain extends DroneBrain {
         this.drone = drone;
         this.battery=battery;
         this.dronePosition=dronePosition;
-        findAreaState = new FindAreaState(mapArea);
+        findAreaState = new FindAreaState(mapArea,drone);
         approachIsland = new ApproachIslandState(mapArea);
         creekFinding = new CreekFindingState(mapArea);
         spiralSearch = new SpiralSearchState(mapArea);
@@ -52,19 +52,19 @@ public class AdvancedDroneBrain extends DroneBrain {
                     this.currentState = this.findAreaState;
                     break;
                 case LOCATING_ISLAND_STATE:
-                    logger.info("STATE STATUS " + Status.FIND_AREA_STATE);
+                    logger.info("STATE STATUS " + Status.LOCATING_ISLAND_STATE);
                     this.currentState = this.findAreaState;
                     break;
                 case APPROACH_ISLAND_STATE:
-                    logger.info("STATE STATUS " + Status.FIND_AREA_STATE);
+                    logger.info("STATE STATUS " + Status.APPROACH_ISLAND_STATE);
                     this.currentState = this.findAreaState;
                     break;
                 case CREEK_FINDING_STATE:
-                    logger.info("STATE STATUS " + Status.FIND_AREA_STATE);
+                    logger.info("STATE STATUS " + Status.CREEK_FINDING_STATE);
                     this.currentState = this.findAreaState;
                     break;
                 case SPIRAL_SEARCH_STATE:
-                    logger.info("STATE STATUS " + Status.FIND_AREA_STATE);
+                    logger.info("STATE STATUS " + Status.SPIRAL_SEARCH_STATE);
                     this.currentState = this.findAreaState;
                     break;
                 default:
