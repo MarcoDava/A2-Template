@@ -12,8 +12,8 @@ public class ApproachIslandState implements State {
         this.mapArea = mapArea;
     }
     @Override
-    public void handle(Drone drone, JSONObject decision) {
-
+    public String handle(Drone drone, JSONObject decision) {
+        return decision.toString();
     }
 }
 // 

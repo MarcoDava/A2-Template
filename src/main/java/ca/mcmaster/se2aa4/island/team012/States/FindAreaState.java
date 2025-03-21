@@ -28,14 +28,14 @@ public class FindAreaState implements State {
     }
 
     @Override
-    public void handle(Drone drone, JSONObject decision) {
+    public String handle(Drone drone, JSONObject decision) {
         if(counter==0){
             action=Command.SCAN;
-            radar.scanForward((Heading)heading.getValue());
+            radar.scanForward(heading);
         }
         else if(counter==1){
             action=Command.SCAN;
-            radar.scanRight((Heading)heading.getValue());
+            radar.scanRight(heading);
         }
         else{
             mapArea.setMapArea(mapX,mapY);
@@ -49,7 +49,7 @@ public class FindAreaState implements State {
         //for the final, because we may not start at 1,1. This state should continue to fly until it can find a line that doesnt touch the land
         //this state should find the out of bounds, so the scan should be scanning the out of range and not land. 
 
-
+        return decision.toString();
     }
 
 }

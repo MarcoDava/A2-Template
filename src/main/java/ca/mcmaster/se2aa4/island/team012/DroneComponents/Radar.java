@@ -23,13 +23,18 @@ public class Radar {
     }
 
     public void scanForward(Heading direction) {
-        decision.put("action", "echo");
-        decision.put("parameters", new JSONObject().put("direction", direction));
-        logger.info(decision.toString());
+        if (direction.compareHeading(Direction.N)) {
+            scanNorth();
+        } else if (direction.compareHeading(Direction.W)) {
+           scanWest();
+        } else if (direction.compareHeading(Direction.S)) {
+            scanSouth();
+        } else {
+            scanEast();
+        }
     }
 
     public void scanLeft(Heading direction) {//resembles the heading the drone is currently headed
-        Direction leftHeading = null;
         if (direction.compareHeading(Direction.N)) {
             scanWest();
         } else if (direction.compareHeading(Direction.W)) {
@@ -42,7 +47,6 @@ public class Radar {
     }
 
     public void scanRight(Heading direction) {
-        Direction rightHeading = null;
         if (direction.compareHeading(Direction.N)) {
             scanEast();
         } else if (direction.compareHeading(Direction.E)) {

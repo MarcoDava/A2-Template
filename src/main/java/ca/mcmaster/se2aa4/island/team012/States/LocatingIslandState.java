@@ -29,8 +29,9 @@ public class LocatingIslandState implements State {
      * 
      */
     @Override
-    public void handle(Drone drone, JSONObject decision) {
+    public String handle(Drone drone, JSONObject decision) {
         this.locateIsland(drone, decision);
+        return decision.toString();
     }
 
     public void locateIsland(Drone drone, JSONObject decision) {

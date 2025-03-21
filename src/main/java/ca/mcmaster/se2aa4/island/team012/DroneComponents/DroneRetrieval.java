@@ -68,7 +68,7 @@ public class DroneRetrieval {
 
     public boolean batteryDanger() {
         //this is currently hard coded, need a better way to determine the danger
-        if ((int)battery.getValue()<20) {
+        if ((int)battery.getBattery()<20) {
             return false;
         }
         return true;

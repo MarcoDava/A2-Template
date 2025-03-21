@@ -35,7 +35,7 @@ public class SpiralSearchState implements State {
         endCol=mapArea.getCols()-1;
     }
     @Override
-    public void handle(Drone drone, JSONObject decision) {
+    public String handle(Drone drone, JSONObject decision) {
 
         if(counter%2==0){
             photoScanner.scanBelow(decision);
@@ -54,6 +54,7 @@ public class SpiralSearchState implements State {
             }
         }
         counter=(counter+1)%2;
+        return decision.toString();
     }
 
     private void shrinkSearchArea(){

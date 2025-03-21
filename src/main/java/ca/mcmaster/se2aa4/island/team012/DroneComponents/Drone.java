@@ -2,11 +2,6 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
 import ca.mcmaster.se2aa4.island.team012.States.Status;
-import ca.mcmaster.se2aa4.island.team012.States.State;
-import ca.mcmaster.se2aa4.island.team012.States.ApproachIslandState;
-import ca.mcmaster.se2aa4.island.team012.States.CreekFindingState;
-import ca.mcmaster.se2aa4.island.team012.States.SpiralSearchState;
-import ca.mcmaster.se2aa4.island.team012.States.LocatingIslandState;
 
 import java.io.StringReader;
 
@@ -17,7 +12,6 @@ import eu.ace_design.island.bot.IExplorerRaid;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import ca.mcmaster.se2aa4.island.team012.DroneObserver;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
@@ -47,9 +41,6 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
 
     @Override
     public void initialize(String s) {
-        DroneObserver observer = new DroneObserver();
-        batteryLevel.addObserver(observer);
-        heading.addObserver(observer);
 
         logger.info("** Initializing the Exploration Command Center");
         JSONObject info = new JSONObject(new JSONTokener(new StringReader(s)));
