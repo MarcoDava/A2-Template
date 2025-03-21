@@ -65,7 +65,6 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     @Override
     public String takeDecision() {
         JSONObject decision = new JSONObject(); 
-        JSONObject parameters = new JSONObject();
         // unsure if these need to be created because
 
         String catchDecision = droneBrain.makeDecision(decision); // should take state as well
