@@ -4,15 +4,16 @@ public class EmergencyPosition extends Position {
 
     private Position emergencyPosition;
 
-    public EmergencyPosition(int row, int col) {
-        super(row, col);
+    public EmergencyPosition(int[] position) {
+        super(position); // Call the parent class constructor with the required argument
+        emergencyPosition = new Position(position); // Initialize emergencyPosition properly
     }
 
-    public Position getLastSavedPosition() {
+    public Position getEmergencyPosition() {
         return emergencyPosition;
     }
 
-    public void setDronePosition(int row, int col) {
-        emergencyPosition = new Position(row, col);
+    public void setEmergencyPosition(Position position) {
+        emergencyPosition = position;
     }
 }

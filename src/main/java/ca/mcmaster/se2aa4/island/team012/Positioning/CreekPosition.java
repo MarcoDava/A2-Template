@@ -7,8 +7,8 @@ public class CreekPosition extends Position {
 
     private List<Position> creekPositions = new ArrayList<Position>();
 
-    public CreekPosition(int row, int col) {
-        super(row, col);
+    public CreekPosition(Position position) {
+        super(position.getPosition());
     }
 
     public List<Position> getCreekPositions() {

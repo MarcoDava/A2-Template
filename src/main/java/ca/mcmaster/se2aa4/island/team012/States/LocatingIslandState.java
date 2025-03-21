@@ -29,11 +29,11 @@ public class LocatingIslandState implements State {
      * 
      */
     @Override
-    public void handle(Drone drone, JSONObject decision, JSONObject parameters) {
-        this.locateIsland(drone, decision, parameters);
+    public void handle(Drone drone, JSONObject decision) {
+        this.locateIsland(drone, decision);
     }
 
-    public void locateIsland(Drone drone, JSONObject decision, JSONObject parameters) {
+    public void locateIsland(Drone drone, JSONObject decision) {
 
         //scan for island
         //if found, move to next state

@@ -32,6 +32,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private DronePosition dronePosition;
     private Heading heading;
     private Battery batteryLevel;
+    private Command action;
 
     private FlightSystem flightSystem=new FlightSystem(batteryLevel, heading);
     private Photoscanner photoscanner=new Photoscanner();
@@ -53,9 +54,6 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         logger.info("** Initializing the Exploration Command Center");
         JSONObject info = new JSONObject(new JSONTokener(new StringReader(s)));
         logger.info("** Initialization info:\n {}",info.toString(2));
-
-        info.getString("position");
-        dronePosition = new DronePosition(1,1);// need to fill in row and column
 
         String direction = info.getString("heading");
         if (direction.equals("N")) {
@@ -79,7 +77,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         JSONObject parameters = new JSONObject();
         // unsure if these need to be created because
 
-        String catchDecision = droneBrain.makeDecision(parameters, decision); // should take state as well
+        String catchDecision = droneBrain.makeDecision(decision); // should take state as well
         return catchDecision; // or something like this because I dont think we can 
     }
 
@@ -121,6 +119,18 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     // non-required for interface, implemented by Marco:
     public Status getStatus(){
         return currentStatus;
+    }
+
+    public void setStatus(Status status){
+        this.currentStatus=status;
+    }
+
+    public Command getCommand(){
+        return action;
+    }
+
+    public void setCommand(Command action){
+        this.action=action;
     }
     
 }

@@ -42,21 +42,21 @@ public class DroneRetrieval {
         return DangerType.NEUTRAL;
     }
 
-    public void handleDanger(JSONObject parameters, JSONObject decision, DangerType dangerType) {
+    public void handleDanger(JSONObject decision, DangerType dangerType) {
     }
 
 
     private Direction rangeDanger() {
-        if (dronePosition.getDronePosition()[0]==2
-        ||dronePosition.getDronePosition()[0]==mapArea.getRows()-2) {
-            if(dronePosition.getDronePosition()[0]>mapArea.getRows()/2){
+        if (dronePosition.getRow()==2
+        ||dronePosition.getRow()==mapArea.getRows()-2) {
+            if(dronePosition.getRow()>mapArea.getRows()/2){
                 return Direction.S;
             }
             else{
                 return Direction.N;
             } 
-        }else if(dronePosition.getDronePosition()[1]==2||dronePosition.getDronePosition()[1]==mapArea.getCols()-2){
-            if(dronePosition.getDronePosition()[1]>mapArea.getCols()/2){
+        }else if(dronePosition.getCol()==2||dronePosition.getCol()==mapArea.getCols()-2){
+            if(dronePosition.getCol()>mapArea.getCols()/2){
                 return Direction.W;
             }
             else{

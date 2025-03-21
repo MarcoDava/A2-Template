@@ -35,13 +35,13 @@ public class SpiralSearchState implements State {
         endCol=mapArea.getCols()-1;
     }
     @Override
-    public void handle(Drone drone, JSONObject decision, JSONObject parameters) {
+    public void handle(Drone drone, JSONObject decision) {
 
         if(counter%2==0){
-            photoScanner.scanBelow();
+            photoScanner.scanBelow(decision);
         }
         else{
-            if(dronePosition.getDronePosition()[0]==startRow+1||dronePosition.getDronePosition()[0]==endRow-1||dronePosition.getDronePosition()[1]==startCol+1||dronePosition.getDronePosition()[1]==endCol-1){
+            if(dronePosition.getRow()==startRow+1||dronePosition.getRow()==endRow-1||dronePosition.getCol()==startCol+1||dronePosition.getCol()==endCol-1){
                 flightSystem.turnRight();
                 numberOfTurns=(numberOfTurns+1)%4;
                 if(numberOfTurns==3){

@@ -28,6 +28,6 @@ public class CreekFindingState implements State {
         this.mapArea = mapArea;
     }
     @Override
-    public void handle(Drone drone, JSONObject decision, JSONObject parameters) {
+    public void handle(Drone drone, JSONObject decision) {
     }
 }

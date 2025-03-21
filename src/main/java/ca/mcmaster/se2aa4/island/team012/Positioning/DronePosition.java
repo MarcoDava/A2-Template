@@ -4,21 +4,19 @@ public class DronePosition extends Position {
 
     private Position dronePosition;
 
-    public DronePosition(int row, int col) {
-        super(row, col);
+    public DronePosition(Position position) { // Call the parent class constructor with the required argument
+        super(position.getPosition()); // Explicitly call the parent class constructor
+        dronePosition = position; // Initialize dronePosition properly
     }
 
-    public int[] getDronePosition() {
-        String dronePositionString = (String)dronePosition.getValue();
-        String[] dronePositionArrayString = dronePositionString.split(",");
-        int[] dronePositionArray = new int[dronePositionArrayString.length];
-        for (int i = 0; i < dronePositionArrayString.length; i++) {
-            dronePositionArray[i] = Integer.parseInt(dronePositionArrayString[i]);
-        }
-        return dronePositionArray;
+    public Position getDronePosition() {
+        return dronePosition;
     }
 
-    public void setDronePosition(int row, int col) {
-        dronePosition = new Position(row, col);
+    public void updateDronePosition(int rowsMoved, int colsMoved) {
+        int finalRow= getPosition()[0]+rowsMoved;
+        int finalCol= getPosition()[1]+colsMoved;
+        dronePosition.setRow(finalRow);
+        dronePosition.setCol(finalCol);
     }
 }

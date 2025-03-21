@@ -19,31 +19,9 @@ public class Photoscanner {
     private CreekPosition creekPosition;
     private DronePosition dronePosition;
 
-    public boolean scanBelow() {//might need position as a parameter depending on how the scanBelow function works
+    public void scanBelow(JSONObject decision) {//might need position as a parameter depending on how the scanBelow function works
         decision.put("action", "scan");
         logger.info(decision.toString());
-        extractInformation(decision.toString());
-        return true;
-    }
-
-    public boolean extractInformation(String jsonResponse) {
-        JSONObject response = new JSONObject(new JSONTokener(new StringReader(jsonResponse)));
-
-        battery.useBattery(response.getInt("cost"));
-
-        JSONObject headings = response.getJSONObject("extras");
-        JSONArray sites = headings.getJSONArray("sites");
-        JSONArray creeks = headings.getJSONArray("creeks");
-
-
-        // extract sites and creeks from the JSON arrays
-
-        // if there is a creek ??and it is not in the list of creeks??
-        //      add the creek to the list
-        // if there is an emergency site ??and it is not in the list of emergency sites??
-        //      add the site to the list
-        creekPosition.addCreekPosition(dronePosition);
-        return true;
     }
 
 }

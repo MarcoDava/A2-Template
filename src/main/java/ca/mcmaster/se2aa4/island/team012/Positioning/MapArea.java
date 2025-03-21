@@ -23,4 +23,12 @@ public class MapArea {
     public void setMapArea(int row, int col) {
         mapArea = new int[]{row, col};
     }
+
+    public void setMapX(int row){
+        mapArea[0]=row;
+    }
+
+    public void setMapY(int col){
+        mapArea[1]=col;
+    }
 }
