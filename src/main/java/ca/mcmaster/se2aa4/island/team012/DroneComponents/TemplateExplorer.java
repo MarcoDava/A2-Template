@@ -9,6 +9,9 @@ import org.json.JSONTokener;
 
 import eu.ace_design.island.bot.IExplorerRaid;
 
+/**
+ * This class is responsible for exploring the island
+ */
 public class TemplateExplorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();

@@ -14,6 +14,10 @@ import ca.mcmaster.se2aa4.island.team012.States.State;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 
+
+/**
+ * This class is responsible for the decision making of the drone
+ */
 public class SimpleDroneBrain extends DroneBrain {
     private Status currentStatus;
     private State currentState;
@@ -32,6 +36,16 @@ public class SimpleDroneBrain extends DroneBrain {
     private Control controller;
     private static final Logger logger = LogManager.getLogger();
 
+    /*
+     * This is the constructor for the SimpleDroneBrain class
+     * 
+     * @param drone the drone
+     * @param battery the battery of the drone
+     * @param dronePosition the position of the drone
+     * @param heading the heading of the drone
+     * @param controller the controller of the drone
+     * @param mapArea the mapArea of the drone
+     */
     public SimpleDroneBrain(Drone drone,Battery battery,DronePosition dronePosition,Heading heading,Control controller,MapArea mapArea) {
         this.drone=drone;
         this.battery=battery;
@@ -49,6 +63,12 @@ public class SimpleDroneBrain extends DroneBrain {
         droneRetriever= new DroneRetrieval(this.drone,this.mapArea,this.battery,this.dronePosition);
     }
 
+    /*
+     * This function will make a decision for the drone
+     * 
+     * @param decision the decision to be made
+     * @return the decision to be made
+     */
     @Override
     public String makeDecision(JSONObject decision) {
         if (this.droneRetriever.dangerAssesment() != DangerType.NEUTRAL) { // checks if run out of battery or out of search area 
@@ -90,18 +110,38 @@ public class SimpleDroneBrain extends DroneBrain {
         return decision.toString();
     }
     
+    /*
+     * This function will return the current status of the drone
+     * 
+     * @return the current status of the drone
+     */
     public Status getStatus(){
         return currentStatus;
     }
-
+    
+    /*
+     * This function will set the current status of the drone
+     * 
+     * @param status the status to be set
+     */
     public void setStatus(Status status){
         this.currentStatus=status;
     }
 
+    /*
+     * This function will return the current state of the drone
+     * 
+     * @return the current state of the drone
+     */
     public Command getCommand(){
         return action;
     }
 
+    /*
+     * This function will set the current state of the drone
+     * 
+     * @param action the state to be set
+     */
     public void setCommand(Command action){
         this.action=action;
     }
