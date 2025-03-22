@@ -10,10 +10,8 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 public class FlightSystem {
 
     private static final Logger logger = LogManager.getLogger();
-    private Heading heading;
 
-    public FlightSystem(Heading initialHeading) {
-        heading = initialHeading;
+    public FlightSystem() {
     }
 
     public void fly(JSONObject decision) {
@@ -26,52 +24,52 @@ public class FlightSystem {
         logger.info("Ending Search");
     }
 
-    public void turnRight(JSONObject decision){
+    public void turnRight(Heading heading, JSONObject decision){
         if(heading.compareHeading(Direction.N)){
-            turnEast(decision);
+            turnEast(heading, decision);
         } else if(heading.compareHeading(Direction.E)){
-            turnSouth(decision);
+            turnSouth(heading, decision);
         } else if(heading.compareHeading(Direction.S)){
-            turnWest(decision);
+            turnWest(heading, decision);
         } else if(heading.compareHeading(Direction.W)){
-            turnNorth(decision);
+            turnNorth(heading, decision);
         }
     }
 
-    public void turnLeft(JSONObject decision){
+    public void turnLeft(Heading heading, JSONObject decision){
         if(heading.compareHeading(Direction.N)){
-            turnWest(decision);
+            turnWest(heading, decision);
         } else if(heading.compareHeading(Direction.W)){
-            turnSouth(decision);
+            turnSouth(heading, decision);
         } else if(heading.compareHeading(Direction.S)){
-            turnEast(decision);
+            turnEast(heading, decision);
         } else if(heading.compareHeading(Direction.E)){
-            turnNorth(decision);
+            turnNorth(heading, decision);
         }
     }
 
-    private void turnNorth(JSONObject decision) {
+    private void turnNorth(Heading heading, JSONObject decision) {
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "N"));
         heading.updateHeading(Direction.N);
         logger.info("Turning North");
     }
 
-    public void turnEast(JSONObject decision) {
+    public void turnEast(Heading heading, JSONObject decision) {
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "E"));
         heading.updateHeading(Direction.E);
         logger.info("Turning East");
     }
 
-    public void turnSouth(JSONObject decision) {
+    public void turnSouth(Heading heading, JSONObject decision) {
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "S"));
         heading.updateHeading(Direction.S);
         logger.info("Turning South");
     }
 
-    public void turnWest(JSONObject decision) {
+    public void turnWest(Heading heading, JSONObject decision) {
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "W"));
         heading.updateHeading(Direction.W);

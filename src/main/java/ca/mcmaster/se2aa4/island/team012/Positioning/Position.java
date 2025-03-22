@@ -3,8 +3,7 @@ package ca.mcmaster.se2aa4.island.team012.Positioning;
 public class Position { // Class for storing (row, col) coordinates
     private int[] position;
 
-    public Position(int[] position) {
-        this.position=position;
+    public Position() {
     }
 
     public int[] getPosition() {

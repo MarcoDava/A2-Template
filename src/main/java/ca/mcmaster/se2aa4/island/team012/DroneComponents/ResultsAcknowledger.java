@@ -23,6 +23,8 @@ public class ResultsAcknowledger{
     private EmergencyPosition emergencyPosition;
     private DronePosition dronePosition;
     private boolean groundFound;
+    private boolean creekFound;
+    private boolean siteFound;
     private int range;
     private final Logger logger = LogManager.getLogger();
     private Control controller;
@@ -36,6 +38,9 @@ public class ResultsAcknowledger{
         this.emergencyPosition = emergencyPosition;
         this.droneBrain=droneBrain;
         this.controller=controller;
+        groundFound=false;
+        creekFound=false;
+        siteFound=false;
     }
 
     public int returnRange(){
@@ -63,18 +68,21 @@ public class ResultsAcknowledger{
     }
 
     private boolean extractSites(JSONObject extraInfo){
-        JSONArray creek = extraInfo.getJSONArray("creeks");
-        logger.info(creek);
-        if(creek.toString().isEmpty()){
+        logger.info("hello");
+        JSONArray emergencySite = extraInfo.getJSONArray("sites");
+        logger.info(emergencySite);
+        if(emergencySite.length()==0){
+            logger.info("returning false");
             return false;
         }
-        return true;
-        
+        return false;
     }
 
     private boolean extractCreeks(JSONObject extraInfo){
-        String emergencySite = extraInfo.getString("sites");
-        if(emergencySite.toString().isEmpty()){
+        JSONArray creek = extraInfo.getJSONArray("creeks");
+        logger.info(creek.length());
+        if(creek.length()==0){
+            logger.info("returning false");
             return false;
         }
         return true;
@@ -99,10 +107,12 @@ public class ResultsAcknowledger{
         else if (controller.compareAction(Command.SCAN)){
             logger.info("checking for creeks");
             if(extractCreeks(extraInfo)){
+                creekFound=true;
                 creekPosition.addCreekPosition(dronePosition.getDronePosition());
             }
             logger.info("checking for sites");
             if(extractSites(extraInfo)){
+                siteFound=true;
                 emergencyPosition.setEmergencyPosition(dronePosition.getDronePosition());
             }
         }
@@ -117,6 +127,9 @@ public class ResultsAcknowledger{
                     findLengthStateHandler();
                 case FIND_WIDTH_STATE:
                     findWidthStateHandler();
+                case SPIRAL_SEARCH_STATE:
+                    spiralSearchStateHandler();
+                    break;
                 default:
                     break;
             }
@@ -132,6 +145,19 @@ public class ResultsAcknowledger{
     private void findWidthStateHandler(){
         mapArea.setMapY(range);
         droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
+    }
+
+    private void spiralSearchStateHandler(){
+        if(creekFound&&siteFound){
+            endSearch();
+        }
+        else{
+            droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
+        }
+    }
+
+    private void endSearch(){
+        
     }
 
 

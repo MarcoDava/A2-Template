@@ -4,9 +4,7 @@ public class DronePosition extends Position {
 
     private Position dronePosition;
 
-    public DronePosition(Position position) { // Call the parent class constructor with the required argument
-        super(position.getPosition()); // Explicitly call the parent class constructor
-        dronePosition = position; // Initialize dronePosition properly
+    public DronePosition() { // Call the parent class constructor with the required argument
     }
 
     public Position getDronePosition() {

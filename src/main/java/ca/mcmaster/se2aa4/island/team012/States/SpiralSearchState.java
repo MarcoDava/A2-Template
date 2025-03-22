@@ -29,7 +29,7 @@ public class SpiralSearchState implements State {
     private int startCol;
     private int endRow;
     private int endCol;
-    private FlightSystem flightSystem;
+    private FlightSystem flightSystem=new FlightSystem();
     private Photoscanner photoScanner=new Photoscanner();
     private DronePosition dronePosition;
     private Control controller;
@@ -44,7 +44,6 @@ public class SpiralSearchState implements State {
     }
     @Override
     public String handle(Drone drone, JSONObject decision) {
-        logger.info("scanning below");
 
         if(counter%2==0){
             logger.info("executing if statement");
@@ -52,8 +51,9 @@ public class SpiralSearchState implements State {
             controller.setCommand(Command.SCAN);
         }
         else{
+            logger.info("executing else statement");
             if(dronePosition.getRow()==startRow+1||dronePosition.getRow()==endRow-1||dronePosition.getCol()==startCol+1||dronePosition.getCol()==endCol-1){
-                flightSystem.turnRight(decision);
+                flightSystem.turnRight(heading, decision);
                 numberOfTurns=(numberOfTurns+1)%4;
                 if(numberOfTurns==3){
                     shrinkSearchArea();

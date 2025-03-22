@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
+import ca.mcmaster.se2aa4.island.team012.States.EndSearchState;
 import ca.mcmaster.se2aa4.island.team012.States.FindLengthState;
 import ca.mcmaster.se2aa4.island.team012.States.FindWidthState;
 import ca.mcmaster.se2aa4.island.team012.States.SpiralSearchState;
@@ -19,6 +20,7 @@ public class SimpleDroneBrain extends DroneBrain {
     private State findLengthState;
     private State findWidthState;
     private State spiralSearchState;
+    private State endSearchState;
     private Drone drone;
     private MapArea mapArea;
     private DroneRetrieval droneRetriever;
@@ -41,6 +43,7 @@ public class SimpleDroneBrain extends DroneBrain {
         findLengthState = new FindLengthState(this.mapArea,this.drone,this.heading,this.controller);
         findWidthState = new FindWidthState(this.mapArea,this.drone,this.heading,this.controller);
         spiralSearchState = new SpiralSearchState(this.mapArea,this.dronePosition,this.controller,this.heading);
+        endSearchState=new EndSearchState();
         droneRetriever= new DroneRetrieval(this.drone,this.mapArea,this.battery,this.dronePosition);
     }
 
@@ -66,6 +69,10 @@ public class SimpleDroneBrain extends DroneBrain {
                 case SPIRAL_SEARCH_STATE:
                     logger.info("STATE STATUS " + Status.SPIRAL_SEARCH_STATE);
                     this.currentState = this.spiralSearchState;
+                    break;
+                case END_SEARCH_STATE:
+                    logger.info("STATE STATUS " + Status.END_SEARCH_STATE);
+                    this.currentState = this.endSearchState;
                     break;
                 default:
                     break;

@@ -7,8 +7,7 @@ public class CreekPosition extends Position {// need to remake to only save the 
 
     private List<Position> creekPositions = new ArrayList<Position>();//use a hashmap instead. position : creek id
 
-    public CreekPosition(Position position) {
-        super(position.getPosition());
+    public CreekPosition() {
     }
 
     public List<Position> getCreekPositions() {

@@ -35,8 +35,8 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private ResultsAcknowledger resultsAcknowledger;
     private MapArea mapArea;
     private Control controller;
-    private FlightSystem flightSystem=new FlightSystem(heading);
-    private Photoscanner photoscanner=new Photoscanner();
+    // private FlightSystem flightSystem=new FlightSystem();
+    // private Photoscanner photoscanner=new Photoscanner();
     private final Logger logger = LogManager.getLogger();
 
 
