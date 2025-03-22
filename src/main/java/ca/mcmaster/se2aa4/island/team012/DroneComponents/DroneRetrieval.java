@@ -33,12 +33,16 @@ public class DroneRetrieval {
     }
 
     public DangerType dangerAssesment(){
+        logger.info("Got here 6");
         if(rangeDanger()!=Direction.NEUTRAL){
             return DangerType.OUTOFRANGE;
         }
+        
         else if(batteryDanger()){
+            logger.info("Got here 7");
             return DangerType.BATTERYLOW;
         }
+        logger.info("Got here 8");
         return DangerType.NEUTRAL;
     }
 
@@ -47,20 +51,22 @@ public class DroneRetrieval {
 
 
     private Direction rangeDanger() {
-        if (dronePosition.getRow()==2
-        ||dronePosition.getRow()==mapArea.getRows()-2) {
-            if(dronePosition.getRow()>mapArea.getRows()/2){
-                return Direction.S;
-            }
-            else{
-                return Direction.N;
-            } 
-        }else if(dronePosition.getCol()==2||dronePosition.getCol()==mapArea.getCols()-2){
-            if(dronePosition.getCol()>mapArea.getCols()/2){
-                return Direction.W;
-            }
-            else{
-                return Direction.E;
+        if(dronePosition != null){
+            if (dronePosition.getRow()==2
+            ||dronePosition.getRow()==mapArea.getRows()-2) {
+                if(dronePosition.getRow()>mapArea.getRows()/2){
+                    return Direction.S;
+                }
+                else{
+                    return Direction.N;
+                } 
+            }else if(dronePosition.getCol()==2||dronePosition.getCol()==mapArea.getCols()-2){
+                if(dronePosition.getCol()>mapArea.getCols()/2){
+                    return Direction.W;
+                }
+                else{
+                    return Direction.E;
+                }
             }
         }
         return Direction.NEUTRAL;
@@ -68,9 +74,9 @@ public class DroneRetrieval {
 
     public boolean batteryDanger() {
         //this is currently hard coded, need a better way to determine the danger
-        if ((int)battery.getBattery()<20) {
-            return false;
+        if (battery.getBattery()<20) {
+            return true;
         }
-        return true;
+        return false;
     }
 }

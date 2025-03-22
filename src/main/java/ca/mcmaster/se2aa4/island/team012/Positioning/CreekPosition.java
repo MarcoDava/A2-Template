@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class CreekPosition extends Position {
 
-    private List<Position> creekPositions = new ArrayList<Position>();
+    private List<Position> creekPositions = new ArrayList<Position>();//use a hashmap instead. position : creek id
 
     public CreekPosition(Position position) {
         super(position.getPosition());

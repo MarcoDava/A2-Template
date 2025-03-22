@@ -6,19 +6,24 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.Command;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Drone;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Radar;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
+import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 
 public class FindWidthState implements State {
     private Radar radar = new Radar();
     private Heading heading;
+    private Drone drone;
+    private MapArea mapArea;
     
     
 
-    public FindWidthState() {
+    public FindWidthState(MapArea mapArea, Drone drone) {
+        this.mapArea=mapArea;
+        this.drone=drone;
     }
 
     @Override
     public String handle(Drone drone, JSONObject decision) {
-        drone.setCommand(Command.SCAN);
+        // drone.setCommand(Command.SCAN);
         radar.scanRight(heading,decision);
         // else{//need some way to pass the results to maparea
         //     mapArea.setMapArea(mapX,mapY);

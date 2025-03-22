@@ -30,9 +30,6 @@ public class SpiralSearchState implements State {
 
     public SpiralSearchState(MapArea mapArea) {
         this.mapArea = mapArea;
-
-        endRow=mapArea.getRows()-1;
-        endCol=mapArea.getCols()-1;
     }
     @Override
     public String handle(Drone drone, JSONObject decision) {

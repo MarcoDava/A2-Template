@@ -7,26 +7,36 @@ import org.json.JSONObject;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.States.FindLengthState;
+import ca.mcmaster.se2aa4.island.team012.States.FindWidthState;
 import ca.mcmaster.se2aa4.island.team012.States.SpiralSearchState;
 import ca.mcmaster.se2aa4.island.team012.States.State;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
+import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 
 public class SimpleDroneBrain extends DroneBrain {
+    private Status currentStatus;
     private State currentState;
-    private State findAreaState;
+    private State findLengthState;
+    private State findWidthState;
     private State spiralSearchState;
     private Drone drone;
     private MapArea mapArea;
     private DroneRetrieval droneRetriever;
     private Battery battery;
     private DronePosition dronePosition;
+    private Command action;
+    private Heading heading;
+    private SimpleDroneBrain droneBrain;
+    private Control controller;
     private static final Logger logger = LogManager.getLogger();
 
-    public SimpleDroneBrain(Drone drone,Battery battery,DronePosition dronePosition) {
+    public SimpleDroneBrain(Drone drone,Battery battery,DronePosition dronePosition,Heading heading) {
         this.drone=drone;
         this.battery=battery;
         this.dronePosition=dronePosition;
-        findAreaState = new FindLengthState(mapArea,drone);
+        currentStatus=Status.FIND_LENGTH_STATE;
+        findLengthState = new FindLengthState(mapArea,drone,heading,controller);
+        findWidthState = new FindWidthState(mapArea,drone);
         spiralSearchState = new SpiralSearchState(mapArea);
         droneRetriever= new DroneRetrieval(drone,mapArea,this.battery,this.dronePosition);
     }
@@ -37,14 +47,18 @@ public class SimpleDroneBrain extends DroneBrain {
         if (this.droneRetriever.dangerAssesment() != DangerType.NEUTRAL) {
             this.droneRetriever.handleDanger(decision, droneRetriever.dangerAssesment());
         } else {
-            switch (drone.getStatus()) {
+            logger.info("Got here 9");
+            switch (currentStatus) {
                 case FIND_LENGTH_STATE:
+                    logger.info("Got here 10");
                     logger.info("STATE STATUS " + Status.FIND_LENGTH_STATE);
-                    this.currentState = this.findAreaState;
+                    logger.info("Got here 11");
+                    this.currentState = this.findLengthState;
+                    logger.info("Got here 12");
                     break;
                 case FIND_WIDTH_STATE:
                     logger.info("STATE STATUS " + Status.FIND_WIDTH_STATE);
-                    this.currentState = this.findAreaState;
+                    this.currentState = this.findWidthState;
                     break;
                 case SPIRAL_SEARCH_STATE:
                     logger.info("STATE STATUS " + Status.SPIRAL_SEARCH_STATE);
@@ -53,9 +67,26 @@ public class SimpleDroneBrain extends DroneBrain {
                 default:
                     break;
             }
+            logger.info("Got here 13");
             this.currentState.handle(drone, decision);
         }
+        logger.info(decision.toString());
         return decision.toString();
+    }
+    public Status getStatus(){
+        return currentStatus;
+    }
+
+    public void setStatus(Status status){
+        this.currentStatus=status;
+    }
+
+    public Command getCommand(){
+        return action;
+    }
+
+    public void setCommand(Command action){
+        this.action=action;
     }
 
 
