@@ -76,9 +76,9 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         // logger.info("The drone is facing {}", direction);
         // logger.info("Battery level is {}", batteryLevel);
         this.currentStatus = Status.FIND_LENGTH_STATE;
-        logger.info("Got here");
         this.controller=new Control(Command.NEUTRAL);
         this.mapArea=new MapArea(new int[]{-1,-1});  
+        dronePosition=new DronePosition(1,1);
         droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition, this.heading,this.controller, this.mapArea);
         logger.info("Got here 11");
         resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.mapArea, drone, dronePosition, creekPosition, emergencyPosition,this.droneBrain, this.controller);

@@ -108,7 +108,7 @@ public class ResultsAcknowledger{
             logger.info("checking for creeks");
             if(extractCreeks(extraInfo)){
                 creekFound=true;
-                creekPosition.addCreekPosition(dronePosition.getDronePosition());
+                creekPosition.setCreekPosition(dronePosition.getDronePosition());
             }
             logger.info("checking for sites");
             if(extractSites(extraInfo)){
@@ -144,20 +144,17 @@ public class ResultsAcknowledger{
 
     private void findWidthStateHandler(){
         mapArea.setMapY(range);
+        dronePosition=new DronePosition(1,1);
         droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
     }
 
     private void spiralSearchStateHandler(){
         if(creekFound&&siteFound){
-            endSearch();
+            droneBrain.setStatus(Status.END_SEARCH_STATE);
         }
         else{
             droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
         }
-    }
-
-    private void endSearch(){
-        
     }
 
 

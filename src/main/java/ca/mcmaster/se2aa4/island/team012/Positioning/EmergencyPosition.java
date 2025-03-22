@@ -4,7 +4,9 @@ public class EmergencyPosition extends Position {
 
     private Position emergencyPosition;
 
-    public EmergencyPosition() {
+    public EmergencyPosition(int row, int col) {
+        super(row, col);
+        emergencyPosition = new Position(row, col);
     }
 
     public Position getEmergencyPosition() {

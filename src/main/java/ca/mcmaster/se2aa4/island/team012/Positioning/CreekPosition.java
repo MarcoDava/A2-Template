@@ -5,16 +5,18 @@ import java.util.ArrayList;
 
 public class CreekPosition extends Position {// need to remake to only save the closest creek position, no longer need a list
 
-    private List<Position> creekPositions = new ArrayList<Position>();//use a hashmap instead. position : creek id
+    private Position creekPosition;//use a hashmap instead. position : creek id
+    private String creekID;
 
-    public CreekPosition() {
+    public CreekPosition(int row, int col) {
+        super(row, col);
     }
 
-    public List<Position> getCreekPositions() {
-        return creekPositions;
+    public Position getCreekPositions() {
+        return creekPosition;
     }
 
-    public void addCreekPosition(Position position) {
-        creekPositions.add(position);
+    public void setCreekPosition(Position position) {
+        creekPosition=position;
     }
 }

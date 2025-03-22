@@ -42,9 +42,19 @@ public class SpiralSearchState implements State {
         this.dronePosition=dronePosition;
         this.heading=heading;
     }
+    private void setInitialSearchArea(int startRow,int startCol,int endRow,int endCol){
+        if(this.startRow==0&&this.startCol==0&&this.endRow==0&&this.endCol==0){
+            this.startRow=startRow;
+            this.startCol=startCol;
+            this.endRow=endRow;
+            this.endCol=endCol;
+        }
+        //will only set the search area once
+    }
+
     @Override
     public String handle(Drone drone, JSONObject decision) {
-
+        setInitialSearchArea(dronePosition.getRow(), dronePosition.getCol(), mapArea.getRows(), mapArea.getCols());
         if(counter%2==0){
             logger.info("executing if statement");
             photoScanner.scanBelow(decision);
@@ -52,7 +62,9 @@ public class SpiralSearchState implements State {
         }
         else{
             logger.info("executing else statement");
-            if(dronePosition.getRow()==startRow+1||dronePosition.getRow()==endRow-1||dronePosition.getCol()==startCol+1||dronePosition.getCol()==endCol-1){
+            logger.info(dronePosition.getRow());
+            if(dronePosition.getRow()==startRow+1||dronePosition.getRow()==endRow||dronePosition.getCol()==startCol+1||dronePosition.getCol()==endCol){
+                controller.setCommand(Command.TURN);
                 flightSystem.turnRight(heading, decision);
                 numberOfTurns=(numberOfTurns+1)%4;
                 if(numberOfTurns==3){
@@ -62,6 +74,7 @@ public class SpiralSearchState implements State {
             }
             else{
                 flightSystem.fly(decision);
+                controller.setCommand(Command.MOVE);
             }
         }
         counter=(counter+1)%2;

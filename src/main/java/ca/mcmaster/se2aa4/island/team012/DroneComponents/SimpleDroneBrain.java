@@ -69,6 +69,7 @@ public class SimpleDroneBrain extends DroneBrain {
                 case SPIRAL_SEARCH_STATE:
                     logger.info("STATE STATUS " + Status.SPIRAL_SEARCH_STATE);
                     this.currentState = this.spiralSearchState;
+                    
                     break;
                 case END_SEARCH_STATE:
                     logger.info("STATE STATUS " + Status.END_SEARCH_STATE);
@@ -77,9 +78,7 @@ public class SimpleDroneBrain extends DroneBrain {
                 default:
                     break;
             }
-            logger.info("Got here 13");
             this.currentState.handle(drone, decision);
-            logger.info("Got here 14");
         }
         logger.info(decision.toString());
         return decision.toString();
