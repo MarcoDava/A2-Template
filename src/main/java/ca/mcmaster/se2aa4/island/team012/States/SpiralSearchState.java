@@ -23,68 +23,75 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 public class SpiralSearchState implements State {
 
     private MapArea mapArea;
-    private int counter=0;
-    private int numberOfTurns=0;
-    private int startRow;
-    private int startCol;
-    private int endRow;
-    private int endCol;
-    private FlightSystem flightSystem=new FlightSystem();
-    private Photoscanner photoScanner=new Photoscanner();
+    private int counter = 0;
+    private int turnsMade = 0; // Tracks turns to ensure proper spiral logic
+    private int startRow, startCol, endRow, endCol;
+    private FlightSystem flightSystem;
+    private Photoscanner photoScanner = new Photoscanner();
     private DronePosition dronePosition;
     private Control controller;
     private Heading heading;
     private static final Logger logger = LogManager.getLogger();
 
-    public SpiralSearchState(MapArea mapArea,DronePosition dronePosition, Control controller, Heading heading) {
+    public SpiralSearchState(MapArea mapArea, DronePosition dronePosition, Control controller, Heading heading) {
         this.mapArea = mapArea;
         this.controller = controller;
-        this.dronePosition=dronePosition;
-        this.heading=heading;
+        this.dronePosition = dronePosition;
+        this.heading = heading;
+        flightSystem = new FlightSystem(dronePosition);
     }
-    private void setInitialSearchArea(int startRow,int startCol,int endRow,int endCol){
-        if(this.startRow==0&&this.startCol==0&&this.endRow==0&&this.endCol==0){
-            this.startRow=startRow;
-            this.startCol=startCol;
-            this.endRow=endRow;
-            this.endCol=endCol;
+
+    private void setInitialSearchArea(int startRow, int startCol, int endRow, int endCol) {
+        if (this.startRow == 0 && this.startCol == 0 && this.endRow == 0 && this.endCol == 0) {
+            this.startRow = startRow;
+            this.startCol = startCol;
+            this.endRow = endRow;
+            this.endCol = endCol;
         }
-        //will only set the search area once
     }
 
     @Override
     public String handle(Drone drone, JSONObject decision) {
         setInitialSearchArea(dronePosition.getRow(), dronePosition.getCol(), mapArea.getRows(), mapArea.getCols());
-        if(counter%2==0){
-            logger.info("executing if statement");
+
+        if (counter % 2 == 0) {
+            logger.info("Scanning below...");
             photoScanner.scanBelow(decision);
             controller.setCommand(Command.SCAN);
-        }
-        else{
-            logger.info("executing else statement");
-            logger.info(dronePosition.getRow());
-            if(dronePosition.getRow()==startRow+1||dronePosition.getRow()==endRow||dronePosition.getCol()==startCol+1||dronePosition.getCol()==endCol){
+        } else {
+            logger.info("Executing movement logic...");
+            logger.info("Drone Position: Row=" + dronePosition.getRow() + " Col=" + dronePosition.getCol());
+
+            if (isAtBoundary()) {
                 controller.setCommand(Command.TURN);
                 flightSystem.turnRight(heading, decision);
-                numberOfTurns=(numberOfTurns+1)%4;
-                if(numberOfTurns==3){
+                turnsMade++;
+
+                if (turnsMade == 4) { // After completing a full spiral lap, shrink area
                     shrinkSearchArea();
-                    numberOfTurns=0;
+                    turnsMade = 0; // Reset for next cycle
                 }
-            }
-            else{
-                flightSystem.fly(decision);
+            } else {
+                flightSystem.fly(heading,decision);
                 controller.setCommand(Command.MOVE);
             }
         }
-        counter=(counter+1)%2;
+        
+        counter = (counter + 1) % 2;
         return decision.toString();
     }
 
-    private void shrinkSearchArea(){
+    private boolean isAtBoundary() {
+        return (dronePosition.getRow() <= startRow || dronePosition.getRow() >= endRow ||
+                dronePosition.getCol() <= startCol || dronePosition.getCol() >= endCol);
+    }
+
+    private void shrinkSearchArea() {
         startRow++;
         startCol++;
         endRow--;
         endCol--;
+        logger.info("Shrinking search area: New boundaries - StartRow: " + startRow + ", EndRow: " + endRow +
+                ", StartCol: " + startCol + ", EndCol: " + endCol);
     }
 }

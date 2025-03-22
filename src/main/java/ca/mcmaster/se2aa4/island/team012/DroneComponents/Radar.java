@@ -55,23 +55,23 @@ public class Radar {
         }
     }
 
-    private void scanNorth(JSONObject decision){
+    public void scanNorth(JSONObject decision){
         logger.info("Got here 16");
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.N));
         logger.info("Scanning North");
     }
-    private void scanSouth(JSONObject decision){
+    public void scanSouth(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.S));
         logger.info("Scanning South");
     }
-    private void scanEast(JSONObject decision){
+    public void scanEast(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.E));
         logger.info("Scanning East");
     }
-    private void scanWest(JSONObject decision){
+    public void scanWest(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.W));
         logger.info("Scanning West");
