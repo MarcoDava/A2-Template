@@ -7,25 +7,33 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.Drone;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Radar;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
+import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FindWidthState implements State {
     private Radar radar = new Radar();
     private Heading heading;
     private Drone drone;
     private MapArea mapArea;
+    private Control controller;
+    private static final Logger logger = LogManager.getLogger();
     
     
 
-    public FindWidthState(MapArea mapArea, Drone drone) {
+    public FindWidthState(MapArea mapArea, Drone drone,Heading heading, Control controller) {
         this.mapArea=mapArea;
         this.drone=drone;
+        this.heading=heading;
+        this.controller=controller;
     }
 
     @Override
     public String handle(Drone drone, JSONObject decision) {
-        controller.setCommand(Command.SCAN);
+        controller.setCommand(Command.ECHO);
         logger.info("Got here 30");
         radar.scanRight(heading,decision);
+
         // else{//need some way to pass the results to maparea
         //     mapArea.setMapArea(mapX,mapY);
         //     drone.setStatus(Status.LOCATING_ISLAND_STATE);

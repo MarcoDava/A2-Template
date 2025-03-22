@@ -17,8 +17,10 @@ public class Radar {
     public void scanForward(Heading direction,JSONObject decision) {
         logger.info("Got here 15");
         if (direction.compareHeading(Direction.N)) {
+            logger.info("Got here 17");
             scanNorth(decision);
         } else if (direction.compareHeading(Direction.W)) {
+            logger.info("Got here 16");
            scanWest(decision);
         } else if (direction.compareHeading(Direction.S)) {
             scanSouth(decision);

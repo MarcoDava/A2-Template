@@ -4,6 +4,7 @@ import java.io.StringReader;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -24,8 +25,9 @@ public class ResultsAcknowledger{
     private boolean groundFound;
     private int range;
     private final Logger logger = LogManager.getLogger();
+    private Control controller;
 
-    public ResultsAcknowledger(Battery battery, MapArea mapArea, Drone drone,DronePosition dronePosition,CreekPosition creekPosition,EmergencyPosition emergencyPosition, SimpleDroneBrain droneBrain){
+    public ResultsAcknowledger(Battery battery, MapArea mapArea, Drone drone,DronePosition dronePosition,CreekPosition creekPosition,EmergencyPosition emergencyPosition, SimpleDroneBrain droneBrain, Control controller){
         this.battery = battery;
         this.mapArea = mapArea;
         this.drone = drone;
@@ -33,6 +35,7 @@ public class ResultsAcknowledger{
         this.creekPosition = creekPosition;
         this.emergencyPosition = emergencyPosition;
         this.droneBrain=droneBrain;
+        this.controller=controller;
     }
 
     public int returnRange(){
@@ -44,8 +47,11 @@ public class ResultsAcknowledger{
     }
 
     public boolean extractGround(JSONObject extraInfo){
-        JSONObject Ground = extraInfo.getJSONObject("found");
-        if(Ground.toString().equals("GROUND")){
+        logger.info("21");
+        String Ground = extraInfo.getString("found");
+        logger.info("22");
+        if(Ground.equals("GROUND")){
+            logger.info("23");
             return true;
         }
         return false;
@@ -57,7 +63,8 @@ public class ResultsAcknowledger{
     }
 
     private boolean extractSites(JSONObject extraInfo){
-        JSONObject creek = extraInfo.getJSONObject("creeks");
+        JSONArray creek = extraInfo.getJSONArray("creeks");
+        logger.info(creek);
         if(creek.toString().isEmpty()){
             return false;
         }
@@ -66,7 +73,7 @@ public class ResultsAcknowledger{
     }
 
     private boolean extractCreeks(JSONObject extraInfo){
-        JSONObject emergencySite = extraInfo.getJSONObject("sites");
+        String emergencySite = extraInfo.getString("sites");
         if(emergencySite.toString().isEmpty()){
             return false;
         }
@@ -77,19 +84,24 @@ public class ResultsAcknowledger{
         logger.info("Got here 21");
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
         JSONObject extraInfo = response.getJSONObject("extras");
-
+        logger.info(extraInfo);
+        
         extractBattery(response);
         logger.info("Got here 22");
-        if(droneBrain.getCommand()==Command.ECHO){
+        logger.info(controller.getCommand()==Command.ECHO||droneBrain.getCommand()==Command.ECHO_AROUND);
+        if(controller.compareAction(Command.ECHO)){
             range=extractRange(extraInfo);
             logger.info("Got here 23");
+            logger.info(range);
             groundFound=extractGround(extraInfo);
             logger.info("Got here 24");
         }
-        else if (droneBrain.getCommand()==Command.SCAN||droneBrain.getCommand()==Command.SCAN_AROUND){
+        else if (controller.compareAction(Command.SCAN)){
+            logger.info("checking for creeks");
             if(extractCreeks(extraInfo)){
                 creekPosition.addCreekPosition(dronePosition.getDronePosition());
             }
+            logger.info("checking for sites");
             if(extractSites(extraInfo)){
                 emergencyPosition.setEmergencyPosition(dronePosition.getDronePosition());
             }
@@ -98,8 +110,10 @@ public class ResultsAcknowledger{
             logger.info("Got here 24");
 
         }
+        
         switch (droneBrain.getStatus()) {
                 case FIND_LENGTH_STATE:
+                    logger.info("Got here 25");
                     findLengthStateHandler();
                 case FIND_WIDTH_STATE:
                     findWidthStateHandler();
@@ -109,11 +123,15 @@ public class ResultsAcknowledger{
     }
 
     private void findLengthStateHandler(){
+        logger.info("Got here 26");
         mapArea.setMapX(range);
+        logger.info("Got here 27");
+        droneBrain.setStatus(Status.FIND_WIDTH_STATE);
     }
 
     private void findWidthStateHandler(){
-        mapArea.setMapX(range);
+        mapArea.setMapY(range);
+        droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
     }
 
 

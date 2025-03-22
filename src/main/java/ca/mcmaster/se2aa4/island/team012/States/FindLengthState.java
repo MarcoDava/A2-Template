@@ -11,7 +11,6 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.Radar;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.SimpleDroneBrain;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 
 public class FindLengthState implements State {
@@ -35,7 +34,7 @@ public class FindLengthState implements State {
     @Override
     public String handle(Drone drone, JSONObject decision) {
         logger.info("Got here 14");
-        controller.setCommand(Command.SCAN);
+        this.controller.setCommand(Command.ECHO);
         logger.info("Got here 14");
         radar.scanForward(heading,decision);
         // else{//need some way to pass the results to maparea

@@ -30,17 +30,18 @@ public class SimpleDroneBrain extends DroneBrain {
     private Control controller;
     private static final Logger logger = LogManager.getLogger();
 
-    public SimpleDroneBrain(Drone drone,Battery battery,DronePosition dronePosition,Heading heading,Control controller) {
+    public SimpleDroneBrain(Drone drone,Battery battery,DronePosition dronePosition,Heading heading,Control controller,MapArea mapArea) {
         this.drone=drone;
         this.battery=battery;
         this.dronePosition=dronePosition;
         this.controller=controller;
-        this.controller=new Control(Command.ECHO);
+        this.heading=heading;
+        this.mapArea=mapArea;
         currentStatus=Status.FIND_LENGTH_STATE;
         findLengthState = new FindLengthState(this.mapArea,this.drone,this.heading,this.controller);
-        findWidthState = new FindWidthState(mapArea,drone);
-        spiralSearchState = new SpiralSearchState(mapArea);
-        droneRetriever= new DroneRetrieval(drone,mapArea,this.battery,this.dronePosition);
+        findWidthState = new FindWidthState(this.mapArea,this.drone,this.heading,this.controller);
+        spiralSearchState = new SpiralSearchState(this.mapArea,this.dronePosition,this.controller,this.heading);
+        droneRetriever= new DroneRetrieval(this.drone,this.mapArea,this.battery,this.dronePosition);
     }
 
     @Override
