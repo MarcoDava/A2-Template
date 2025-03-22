@@ -14,6 +14,9 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
 
+/*
+ * This class is responsible for acknowledging the results from the server
+ */
 public class ResultsAcknowledger{
     private Battery battery;
     private MapArea mapArea;
@@ -29,6 +32,17 @@ public class ResultsAcknowledger{
     private final Logger logger = LogManager.getLogger();
     private Control controller;
 
+    /*
+     * This is the constructor for the ResultsAcknowledger class
+     * 
+     * @param battery the battery of the drone
+     * @param mapArea the mapArea of the drone
+     * @param drone the drone
+     * @param dronePosition the position of the drone
+     * @param creekPosition the position of the creek
+     * @param emergencyPosition the position of the emergency site
+     * @param droneBrain the brain of the drone
+     */
     public ResultsAcknowledger(Battery battery, MapArea mapArea, Drone drone,DronePosition dronePosition,CreekPosition creekPosition,EmergencyPosition emergencyPosition, SimpleDroneBrain droneBrain, Control controller){
         this.battery = battery;
         this.mapArea = mapArea;
@@ -43,14 +57,31 @@ public class ResultsAcknowledger{
         siteFound=false;
     }
 
+    /*
+     * This function will return the range of the drone
+     * 
+     * @return the range of the drone
+     */
     public int returnRange(){
         return range;
     }
 
+    /*
+     * This function will extract the battery from the response from the server
+     * 
+     * @param response the response from the server
+     * @return true if battery is found, false otherwise
+     */
     public void extractBattery(JSONObject response){
         battery.useBattery(response.getInt("cost"));
     }
 
+    /*
+     * This function will extract the ground from the response from the server
+     * 
+     * @param extraInfo the JSONObject that contains the ground
+     * @return true if ground is found, false otherwise
+     */
     public boolean extractGround(JSONObject extraInfo){
         logger.info("21");
         String Ground = extraInfo.getString("found");
@@ -67,6 +98,12 @@ public class ResultsAcknowledger{
         return range;
     }
 
+    /*
+     * This function will extract the sites from the response from the server
+     * 
+     * @param extraInfo the JSONObject that contains the sites
+     * @return true if sites are found, false otherwise
+     */
     private boolean extractSites(JSONObject extraInfo){
         logger.info("hello");
         JSONArray emergencySite = extraInfo.getJSONArray("sites");
@@ -77,7 +114,12 @@ public class ResultsAcknowledger{
         }
         return false;
     }
-
+    /*
+     * This function will extract the creeks from the response from the server
+     * 
+     * @param extraInfo the JSONObject that contains the creeks
+     * @return true if creeks are found, false otherwise
+     */
     private boolean extractCreeks(JSONObject extraInfo){
         JSONArray creek = extraInfo.getJSONArray("creeks");
         logger.info(creek.length());
@@ -87,7 +129,11 @@ public class ResultsAcknowledger{
         }
         return true;
     }
-
+    /*
+     * This function will update the values of the drone based on the response from the server
+     * 
+     * @param s the response from the server
+     */
     public void updateValues(String s){
         logger.info("Got here 21");
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
@@ -135,6 +181,9 @@ public class ResultsAcknowledger{
             }
     }
 
+    /*
+     * This function will handle the find length state
+     */
     private void findLengthStateHandler(){
         logger.info("Got here 26");
         mapArea.setMapX(range);
@@ -142,12 +191,18 @@ public class ResultsAcknowledger{
         droneBrain.setStatus(Status.FIND_WIDTH_STATE);
     }
 
+    /*
+     * This function will handle the find width state
+     */
     private void findWidthStateHandler(){
         mapArea.setMapY(range);
         dronePosition=new DronePosition(1,1);
         droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
     }
 
+    /*
+     * This function will handle the spiral search state
+     */
     private void spiralSearchStateHandler(){
         if(creekFound&&siteFound){
             droneBrain.setStatus(Status.END_SEARCH_STATE);
