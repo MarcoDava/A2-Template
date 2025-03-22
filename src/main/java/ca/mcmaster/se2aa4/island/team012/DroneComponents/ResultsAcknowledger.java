@@ -89,20 +89,13 @@ public class ResultsAcknowledger{
     }
 
     public void updateValues(String s){
-        logger.info("Got here 21");
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
         JSONObject extraInfo = response.getJSONObject("extras");
         logger.info(extraInfo);
-        
         extractBattery(response);
-        logger.info("Got here 22");
-        logger.info(controller.getCommand()==Command.ECHO||droneBrain.getCommand()==Command.ECHO_AROUND);
         if(controller.compareAction(Command.ECHO)){
             range=extractRange(extraInfo);
-            logger.info("Got here 23");
-            logger.info(range);
             groundFound=extractGround(extraInfo);
-            logger.info("Got here 24");
         }
         else if (controller.compareAction(Command.SCAN)){
             logger.info("checking for creeks");
@@ -117,13 +110,11 @@ public class ResultsAcknowledger{
             }
         }
         else{
-            logger.info("Got here 24");
-
+            logger.info("Didnt scan or echo");
         }
         
         switch (droneBrain.getStatus()) {
                 case FIND_LENGTH_STATE:
-                    logger.info("Got here 25");
                     findLengthStateHandler();
                 case FIND_WIDTH_STATE:
                     findWidthStateHandler();
@@ -138,7 +129,6 @@ public class ResultsAcknowledger{
     private void findLengthStateHandler(){
         logger.info("Got here 26");
         mapArea.setMapX(range);
-        logger.info("Got here 27");
         droneBrain.setStatus(Status.FIND_WIDTH_STATE);
     }
 

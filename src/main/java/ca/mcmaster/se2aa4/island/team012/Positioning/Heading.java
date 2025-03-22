@@ -23,7 +23,6 @@ public class Heading {
     }
 
     public boolean compareHeading(Direction heading) {
-        logger.info("Got here 17");
         return this.heading == heading;
     }
 }

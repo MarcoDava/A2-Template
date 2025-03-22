@@ -39,14 +39,12 @@ public class DroneRetrieval {
         }
         
         else if(batteryDanger()){
-            logger.info("Got here 7");
             return DangerType.BATTERYLOW;
         }
-        logger.info("Got here 8");
         return DangerType.NEUTRAL;
     }
 
-    public void handleDanger(JSONObject decision, DangerType dangerType) {
+    public void handleDanger(JSONObject decision, DangerType dangerType){
     }
 
 
