@@ -34,6 +34,7 @@ public class FindLengthState implements State {
 
     @Override
     public String handle(Drone drone, JSONObject decision) {
+        logger.info("Got here 14");
         controller.setCommand(Command.SCAN);
         logger.info("Got here 14");
         radar.scanForward(heading,decision);

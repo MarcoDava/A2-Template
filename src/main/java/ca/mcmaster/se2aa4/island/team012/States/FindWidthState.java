@@ -23,7 +23,8 @@ public class FindWidthState implements State {
 
     @Override
     public String handle(Drone drone, JSONObject decision) {
-        // drone.setCommand(Command.SCAN);
+        controller.setCommand(Command.SCAN);
+        logger.info("Got here 30");
         radar.scanRight(heading,decision);
         // else{//need some way to pass the results to maparea
         //     mapArea.setMapArea(mapX,mapY);

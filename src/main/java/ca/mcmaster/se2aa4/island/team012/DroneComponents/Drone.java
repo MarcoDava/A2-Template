@@ -34,6 +34,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private Command action;
     private ResultsAcknowledger resultsAcknowledger;
     private MapArea mapArea;
+    private Control controller;
     private FlightSystem flightSystem=new FlightSystem(heading);
     private Photoscanner photoscanner=new Photoscanner();
     private final Logger logger = LogManager.getLogger();
@@ -76,7 +77,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         // logger.info("Battery level is {}", batteryLevel);
         this.currentStatus = Status.FIND_LENGTH_STATE;
         logger.info("Got here");
-        droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition, this.heading);
+        droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition, this.heading,this.controller);
         logger.info("Got here 11");
         resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.mapArea, drone, dronePosition, creekPosition, emergencyPosition,this.droneBrain);
         logger.info("Got here 12");
@@ -112,6 +113,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
 
         // below may be replaced by above
         String catchDecision = droneBrain.makeDecision(decision);
+        logger.info(catchDecision);
         return catchDecision;
 
     }

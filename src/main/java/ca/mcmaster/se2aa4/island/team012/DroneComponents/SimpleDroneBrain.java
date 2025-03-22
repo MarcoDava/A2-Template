@@ -30,12 +30,14 @@ public class SimpleDroneBrain extends DroneBrain {
     private Control controller;
     private static final Logger logger = LogManager.getLogger();
 
-    public SimpleDroneBrain(Drone drone,Battery battery,DronePosition dronePosition,Heading heading) {
+    public SimpleDroneBrain(Drone drone,Battery battery,DronePosition dronePosition,Heading heading,Control controller) {
         this.drone=drone;
         this.battery=battery;
         this.dronePosition=dronePosition;
+        this.controller=controller;
+        this.controller=new Control(Command.ECHO);
         currentStatus=Status.FIND_LENGTH_STATE;
-        findLengthState = new FindLengthState(mapArea,drone,heading,controller);
+        findLengthState = new FindLengthState(this.mapArea,this.drone,this.heading,this.controller);
         findWidthState = new FindWidthState(mapArea,drone);
         spiralSearchState = new SpiralSearchState(mapArea);
         droneRetriever= new DroneRetrieval(drone,mapArea,this.battery,this.dronePosition);
@@ -69,10 +71,12 @@ public class SimpleDroneBrain extends DroneBrain {
             }
             logger.info("Got here 13");
             this.currentState.handle(drone, decision);
+            logger.info("Got here 14");
         }
         logger.info(decision.toString());
         return decision.toString();
     }
+    
     public Status getStatus(){
         return currentStatus;
     }
