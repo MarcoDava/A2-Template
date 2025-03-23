@@ -12,8 +12,7 @@ public class EndSearchState implements State {
     public EndSearchState() {
     }
     @Override
-    public String handle(JSONObject decision){
+    public void handle(JSONObject decision){
         flightSystem.stop(decision);
-        return decision.toString();
     }
 }

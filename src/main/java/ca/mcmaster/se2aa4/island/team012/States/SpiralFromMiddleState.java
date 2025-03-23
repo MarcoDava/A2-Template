@@ -3,13 +3,17 @@ package ca.mcmaster.se2aa4.island.team012.States;
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.Drone;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 
-public class SpiralFromMiddleState {
+public class SpiralFromMiddleState implements State {
+    private MapArea mapArea;
+    private Control controller;
+    private DronePosition dronePosition;
+    private Heading heading;
+    private FlightSystem flightSystem;
     // name is a WIP
 
     /*
@@ -35,13 +39,12 @@ public class SpiralFromMiddleState {
         this.controller = controller;
         this.dronePosition = dronePosition;
         this.heading = heading;
-        flightSystem = new FlightSystem(dronePosition);
+        flightSystem = new FlightSystem(dronePosition,controller);
     }
 
 
     @Override
-    public String handle(Drone drone, JSONObject decision) {
-
+    public void handle(JSONObject decision) {
 
     }
 }

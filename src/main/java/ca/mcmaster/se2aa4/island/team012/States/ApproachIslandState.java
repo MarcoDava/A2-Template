@@ -29,7 +29,7 @@ public class ApproachIslandState implements State {
         flightSystem=new FlightSystem(this.dronePosition,controller);
     }
     @Override
-    public String handle(JSONObject decision) {
+    public void handle(JSONObject decision) {
         int mapCenterRow=mapArea.getRows()/2;
         int mapCenterCol=mapArea.getCols()/2;
         if(dronePosition.getRow()!=mapCenterRow){//if the drone is not 1 above, 1 below or at the center row, it will execute the below code.
@@ -98,8 +98,6 @@ public class ApproachIslandState implements State {
                 }
             }
         }
-        
-        return decision.toString();
     }
 }
 // 

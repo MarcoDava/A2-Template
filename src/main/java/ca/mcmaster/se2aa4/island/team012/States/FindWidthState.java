@@ -24,7 +24,7 @@ public class FindWidthState implements State {
     }
 
     @Override
-    public String handle(JSONObject decision) {
+    public void handle(JSONObject decision) {
         logger.info("Got here 30");
         radar.scanRight(heading,decision);
 
@@ -40,6 +40,5 @@ public class FindWidthState implements State {
         //this is the starting position of the drone, assumed in the MVP
         //for the final, because we may not start at 1,1. This state should continue to fly until it can find a line that doesnt touch the land
         //this state should find the out of bounds, so the scan should be scanning the out of range and not land. 
-        return decision.toString();
     }
 }

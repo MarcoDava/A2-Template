@@ -50,7 +50,7 @@ public class SpiralSearchState implements State {
     }
 
     @Override
-    public String handle(JSONObject decision) {
+    public void handle(JSONObject decision) {
         // setInitialSearchArea(dronePosition.getRow(), dronePosition.getCol(), mapArea.getRows(), mapArea.getCols());
 
         // if (counter % 2 == 0) {
@@ -75,7 +75,6 @@ public class SpiralSearchState implements State {
         
         // counter = (counter + 1) % 2;
         decision.put("action", "stop");
-        return decision.toString();
     }
 
     private boolean isAtBoundary() {

@@ -63,7 +63,7 @@ public class SimpleDroneBrain extends DroneBrain {
         approachIslandState = new ApproachIslandState(this.mapArea,this.dronePosition,this.heading,this.controller);
         spiralSearchState = new SpiralSearchState(this.mapArea,this.dronePosition,this.controller,this.heading);
         endSearchState=new EndSearchState();
-        droneRetriever= new DroneRetrieval(this.mapArea,this.battery,this.dronePosition,this.controller);
+        droneRetriever= new DroneRetrieval(this.mapArea,this.battery,this.dronePosition,this.controller,this.heading);
     }
 
     /*

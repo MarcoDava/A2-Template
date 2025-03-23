@@ -28,7 +28,6 @@ public class CreekFindingState implements State {
         this.mapArea = mapArea;
     }
     @Override
-    public String handle(JSONObject decision) {
-        return decision.toString();
+    public void handle(JSONObject decision) {
     }
 }

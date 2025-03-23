@@ -19,20 +19,23 @@ public class DroneRetrieval {
     private MapArea mapArea;
     private DronePosition dronePosition;
     private Battery battery;
+    private final int MIN_ROW = 2;
+    private final int MIN_COL = 2;
 
-   
+    
 
     private final int RANGE_BORDER = 1;
 
-    public DroneRetrieval(MapArea mapArea, Battery battery,DronePosition dronePosition,Control controller) {
+    public DroneRetrieval(MapArea mapArea, Battery battery,DronePosition dronePosition,Control controller,Heading heading) {
         this.mapArea = mapArea;
         this.battery=battery;
         this.dronePosition = dronePosition;
+        this.heading = heading;
         flightSystem = new FlightSystem(dronePosition, controller);
     }
 
     public DangerType dangerAssesment(){
-        if(rangeDanger()!=Direction.NEUTRAL){
+        if(rangeDanger()){
             return DangerType.OUTOFRANGE;
         }
         
@@ -54,29 +57,55 @@ public class DroneRetrieval {
     }
 
     private void handleRangeDanger(JSONObject decision){
+        if(dronePosition.getRow()==MIN_ROW && heading.compareHeading(Direction.N)){
+            if(dronePosition.getCol()>mapArea.getCols()/2){
+                flightSystem.turnLeft(heading, decision);
+            }
+            else{
+                flightSystem.turnRight(heading, decision);
+            }
+        }
+        else if(dronePosition.getRow()==mapArea.getRows()-MIN_ROW && heading.compareHeading(Direction.S)){
+            if(dronePosition.getCol()>mapArea.getCols()/2){
+                flightSystem.turnRight(heading, decision);
+            }
+            else{
+                flightSystem.turnLeft(heading, decision);
+            }
+        }
+        else if(dronePosition.getCol()==MIN_COL && heading.compareHeading(Direction.W)){
+            if(dronePosition.getRow()>mapArea.getRows()/2){
+                flightSystem.turnRight(heading, decision);
+            }
+            else{
+                flightSystem.turnLeft(heading, decision);
+            }
+        }
+        else if(dronePosition.getCol()==mapArea.getCols()-MIN_COL && heading.compareHeading(Direction.E)){
+            if(dronePosition.getRow()>mapArea.getRows()/2){
+                flightSystem.turnLeft(heading, decision);
+            }
+            else{
+                flightSystem.turnRight(heading, decision);
+            }
+        }
     }
 
 
-    private Direction rangeDanger() { // if going to go out of bounds, turn right or left based on where there is the most open map
-        // if(dronePosition != null){
-        //     if (dronePosition.getRow()==2
-        //     ||dronePosition.getRow()==mapArea.getRows()-2) {
-        //         if(dronePosition.getRow()>mapArea.getRows()/2){
-        //             return Direction.S;
-        //         }
-        //         else{
-        //             return Direction.N;
-        //         } 
-        //     }else if(dronePosition.getCol()==2||dronePosition.getCol()==mapArea.getCols()-2){
-        //         if(dronePosition.getCol()>mapArea.getCols()/2){
-        //             return Direction.W;
-        //         }
-        //         else{
-        //             return Direction.E;
-        //         }
-        //     }
-        // }
-        return Direction.NEUTRAL;
+    private boolean rangeDanger() { // if going to go out of bounds, turn right or left based on where there is the most open map
+        if(dronePosition.getRow()==MIN_ROW && heading.compareHeading(Direction.N)){
+            return true;
+        }
+        else if(dronePosition.getRow()==mapArea.getRows()-MIN_ROW && heading.compareHeading(Direction.S)){
+            return true;
+        }
+        else if(dronePosition.getCol()==MIN_COL && heading.compareHeading(Direction.W)){
+            return true;
+        }
+        else if(dronePosition.getCol()==mapArea.getCols()-MIN_COL && heading.compareHeading(Direction.E)){
+            return true;
+        }
+        return false;
     }
 
     public boolean batteryDanger() {  // run  out of battery --> stop the program
