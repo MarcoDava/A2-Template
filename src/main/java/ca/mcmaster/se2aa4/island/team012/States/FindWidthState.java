@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class FindWidthState implements State {
-    private Radar radar = new Radar();
+    private Radar radar;
     private Heading heading;
     private Drone drone;
     private MapArea mapArea;
@@ -26,6 +26,7 @@ public class FindWidthState implements State {
         this.drone=drone;
         this.heading=heading;
         this.controller=controller;
+        radar = new Radar(controller);
     }
 
     @Override

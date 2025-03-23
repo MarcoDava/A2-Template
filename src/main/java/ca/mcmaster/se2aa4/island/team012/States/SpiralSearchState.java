@@ -27,7 +27,7 @@ public class SpiralSearchState implements State {
     private int turnsMade = 0; // Tracks turns to ensure proper spiral logic
     private int startRow, startCol, endRow, endCol;
     private FlightSystem flightSystem;
-    private Photoscanner photoScanner = new Photoscanner();
+    private Photoscanner photoScanner;
     private DronePosition dronePosition;
     private Control controller;
     private Heading heading;
@@ -38,7 +38,8 @@ public class SpiralSearchState implements State {
         this.controller = controller;
         this.dronePosition = dronePosition;
         this.heading = heading;
-        flightSystem = new FlightSystem(dronePosition);
+        flightSystem = new FlightSystem(dronePosition,controller);
+        photoScanner = new Photoscanner(controller);
     }
 
     private void setInitialSearchArea(int startRow, int startCol, int endRow, int endCol) {

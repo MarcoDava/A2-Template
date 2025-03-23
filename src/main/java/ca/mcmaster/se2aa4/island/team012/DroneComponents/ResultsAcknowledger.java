@@ -135,33 +135,20 @@ public class ResultsAcknowledger{
      * 
      * @param s the response from the server
      */
-<<<<<<< HEAD
-    public void updateValues(String s){
-        JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
-        JSONObject extraInfo = response.getJSONObject("extras");
-        logger.info(extraInfo);
-        extractBattery(response);
-        if(controller.compareAction(Command.ECHO)){
-            range=extractRange(extraInfo);
-            groundFound=extractGround(extraInfo);
-=======
+
     public void updateValues(String s) { // called in every loop by Drone.acknowledgeResults() for processing
-        logger.info("Got here 21");
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s))); // converts the response from engine to JSON
         JSONObject extraInfo = response.getJSONObject("extras"); // extras contains actual information (always with battery)
         logger.info(extraInfo);
         
         extractBattery(response); // extract and update battery
-        logger.info("Got here 22");
         logger.info(controller.getCommand()==Command.ECHO||droneBrain.getCommand()==Command.ECHO_AROUND);
 
         if(controller.compareAction(Command.ECHO)){ // if we just used radar
             range=extractRange(extraInfo); // how far away did we scan
-            logger.info("Got here 23");
             logger.info(range);
             groundFound=extractGround(extraInfo); // check if radar found ground or went out of bounds
-            logger.info("Got here 24");
->>>>>>> 1ab918583a2f8e33c0a92a81a5fa79c467137f07
+
         }
         else if (controller.compareAction(Command.SCAN)){ // if we just used photoscanner
             logger.info("checking for creeks");
@@ -202,15 +189,8 @@ public class ResultsAcknowledger{
      * This function will handle the find length state
      */
     private void findLengthStateHandler(){
-        logger.info("Got here 26");
-<<<<<<< HEAD
-        mapArea.setMapX(range);
-        droneBrain.setStatus(Status.FIND_WIDTH_STATE);
-=======
-        mapArea.setMapX(range); // assumes drone is at the edge, so length is the returned range
-        logger.info("Got here 27");
+        mapArea.setMapX(range); // assumes drone is at the edge, so length is the returned rang
         droneBrain.setStatus(Status.FIND_WIDTH_STATE); // move to next state
->>>>>>> 1ab918583a2f8e33c0a92a81a5fa79c467137f07
     }
 
     /*

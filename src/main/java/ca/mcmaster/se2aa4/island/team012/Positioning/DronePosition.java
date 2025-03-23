@@ -25,4 +25,9 @@ public class DronePosition extends Position {
         dronePosition.setRow(finalRow);
         dronePosition.setCol(finalCol);
     }
+
+    public boolean comparePosition(int row, int col) {
+        Position position = new Position(row, col);
+        return dronePosition.equals(position);
+    }
 }

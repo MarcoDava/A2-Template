@@ -16,7 +16,7 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 public class FindLengthState implements State {
 
     private MapArea mapArea;
-    private Radar radar = new Radar();
+    private Radar radar;
     private Heading heading;
     private Drone drone;
     private DronePosition dronePosition;
@@ -29,6 +29,7 @@ public class FindLengthState implements State {
         this.drone=drone;
         this.heading=heading;
         this.controller=controller;
+        radar=new Radar(controller);
     }
 
     @Override

@@ -7,14 +7,17 @@ import org.json.JSONObject;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
+import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 
 public class FlightSystem {
 
     private static final Logger logger = LogManager.getLogger();
     private DronePosition dronePosition;
+    private Control controller;
 
-    public FlightSystem(DronePosition dronePosition) {
+    public FlightSystem(DronePosition dronePosition,Control controller) {
         this.dronePosition = dronePosition;
+        this.controller = controller;
     }
 
     public void fly(Heading heading, JSONObject decision) {
@@ -29,6 +32,7 @@ public class FlightSystem {
         } else if(heading.compareHeading(Direction.W)){
             dronePosition.updateDronePosition(-1,0);
         }
+        controller.setCommand(Command.MOVE);
     }
 
     public void stop(JSONObject decision) {
@@ -50,6 +54,7 @@ public class FlightSystem {
             turnNorth(heading, decision);
             dronePosition.updateDronePosition(-1, 1);
         }
+        controller.setCommand(Command.TURN);
     }
 
     public void turnLeft(Heading heading, JSONObject decision){
@@ -66,6 +71,7 @@ public class FlightSystem {
             turnNorth(heading, decision);
             dronePosition.updateDronePosition(1, 1);
         }
+        controller.setCommand(Command.MOVE);
     }
 
     private void turnNorth(Heading heading, JSONObject decision) {
