@@ -14,27 +14,15 @@ public class SpiralFromMiddleState implements State {
     private DronePosition dronePosition;
     private Heading heading;
     private FlightSystem flightSystem;
-    // name is a WIP
 
-    /*
 
-    x = 0
-    numForwards = 0
-    numTurns = -2
-
-    loop:
-        if (x != 0): // go forward correct number of times
-            fly()
-            x--
-        else: // num forwards = 0
-            turnRight()
-            numTurns++
-            if (numTurns > 0 && numTurns % 2 = 1): // if the 2nd turn in a grouping
-                numForwards++ // increase the number of forwards to be taken
-            x = numForwards // reset the counter for forwards
-     */
-
-     public SpiralFromMiddleState(MapArea mapArea, DronePosition dronePosition, Control controller, Heading heading) { // contructor copied unchanged from spiralsearchstate
+    private int remainingForwards;
+    private int numForwards;
+    private int numTurns;
+    private boolean scanning;
+    
+    
+    public SpiralFromMiddleState(MapArea mapArea, DronePosition dronePosition, Control controller, Heading heading) { // contructor copied unchanged from spiralsearchstate
         this.mapArea = mapArea;
         this.controller = controller;
         this.dronePosition = dronePosition;
@@ -45,6 +33,26 @@ public class SpiralFromMiddleState implements State {
 
     @Override
     public void handle(JSONObject decision) {
-
+        if (scanning == true) { // scanning step
+            scan()
+            scanning = false; // to alternate between moving and scanning
+        }
+        else { // movement step
+            if (remainingForwards != 0) { // go forward correct number of times
+                fly()
+                remainingForwards--;
+            }
+            else { // num forwards = 0
+                turnRight()
+                numTurns++;
+                if (numTurns > 0 && numTurns % 2 == 1) { // if the 2nd turn in a grouping
+                    numForwards++; // increase the number of forwards to be taken
+                }
+                remainingForwards = numForwards; // reset the counter for forwards
+            }
+            scanning = true; // to alternate between moving and scanning
+        }
+        return;
     }
+
 }
