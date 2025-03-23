@@ -20,6 +20,7 @@ import ca.mcmaster.se2aa4.island.team012.States.Status;
 public class ResultsAcknowledger{
     private Battery battery;
     private MapArea mapArea;
+    private Control controller;
     private Drone drone;
     private SimpleDroneBrain droneBrain;
     private CreekPosition creekPosition;
@@ -28,9 +29,12 @@ public class ResultsAcknowledger{
     private boolean groundFound;
     private boolean creekFound;
     private boolean siteFound;
+    private boolean wasGroundFound;
     private int range;
+    private int actionCtr;
+    private int dimensionsAligned;
     private final Logger logger = LogManager.getLogger();
-    private Control controller;
+    
 
     /*
      * This is the constructor for the ResultsAcknowledger class
@@ -56,6 +60,10 @@ public class ResultsAcknowledger{
         groundFound=false;
         creekFound=false;
         siteFound=false;
+
+        wasGroundFound=false;
+        actionCtr=0;
+        dimensionsAligned=0;
     }
 
     /*
@@ -135,7 +143,6 @@ public class ResultsAcknowledger{
      * 
      * @param s the response from the server
      */
-
     public void updateValues(String s) { // called in every loop by Drone.acknowledgeResults() for processing
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s))); // converts the response from engine to JSON
         JSONObject extraInfo = response.getJSONObject("extras"); // extras contains actual information (always with battery)
@@ -148,7 +155,6 @@ public class ResultsAcknowledger{
             range=extractRange(extraInfo); // how far away did we scan
             logger.info(range);
             groundFound=extractGround(extraInfo); // check if radar found ground or went out of bounds
-
         }
         else if (controller.compareAction(Command.SCAN)){ // if we just used photoscanner
             logger.info("checking for creeks");
@@ -168,6 +174,10 @@ public class ResultsAcknowledger{
         }
         
         switch (droneBrain.getStatus()) {
+                case DIMENSION_ALIGN_STATE:
+                    dimensionStateHandler();
+                    break;
+
                 case FIND_LENGTH_STATE:
                     findLengthStateHandler();
                     break;
@@ -184,6 +194,32 @@ public class ResultsAcknowledger{
                     break;
             }
     }
+
+    /*
+     * This function will handle the dimension align state
+     * 
+     * when actionCtr == 3, we have scanned forward and both sides.
+     * 
+     * if we have found no ground on 2 sides, then we have found the spot
+     * to start searching for dimensions
+     */
+    private void dimensionStateHandler() {
+        if (dimensionsAligned == 2) {
+            droneBrain.setStatus(Status.FIND_LENGTH_STATE);
+        } else if(actionCtr % 4 == 3 && wasGroundFound == false) {
+            dimensionsAligned++;
+        } else {
+            if (actionCtr % 4 < 3 && groundFound) {
+                wasGroundFound = true;
+            }
+            else {
+                wasGroundFound = false;
+            }
+            droneBrain.setStatus(Status.DIMENSION_ALIGN_STATE);
+        }
+
+    }
+
 
     /*
      * This function will handle the find length state
