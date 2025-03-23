@@ -75,6 +75,7 @@ public class ResultsAcknowledger{
      */
     public void extractBattery(JSONObject response){
         battery.useBattery(response.getInt("cost"));
+        logger.info("Battery level is: "+battery.getBattery());
     }
 
     /*
@@ -84,11 +85,8 @@ public class ResultsAcknowledger{
      * @return true if ground is found, false otherwise
      */
     public boolean extractGround(JSONObject extraInfo){
-        logger.info("21");
         String Ground = extraInfo.getString("found");
-        logger.info("22");
         if(Ground.equals("GROUND")){
-            logger.info("23");
             return true;
         }
         return false;
@@ -106,7 +104,6 @@ public class ResultsAcknowledger{
      * @return true if sites are found, false otherwise
      */
     private boolean extractSites(JSONObject extraInfo){
-        logger.info("hello");
         JSONArray emergencySite = extraInfo.getJSONArray("sites");
         logger.info(emergencySite);
         if(emergencySite.length()==0){
@@ -139,28 +136,25 @@ public class ResultsAcknowledger{
     public void updateValues(String s) { // called in every loop by Drone.acknowledgeResults() for processing
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s))); // converts the response from engine to JSON
         JSONObject extraInfo = response.getJSONObject("extras"); // extras contains actual information (always with battery)
-        logger.info(extraInfo);
-        
+        logger.info(dronePosition.getRow()+" "+dronePosition.getCol());
         extractBattery(response); // extract and update battery
-        logger.info(controller.getCommand()==Command.ECHO||droneBrain.getCommand()==Command.ECHO_AROUND);
 
         if(controller.compareAction(Command.ECHO)){ // if we just used radar
             range=extractRange(extraInfo); // how far away did we scan
-            logger.info(range);
+            logger.info("SCAN was "+range+" units long");
             groundFound=extractGround(extraInfo); // check if radar found ground or went out of bounds
-
         }
         else if (controller.compareAction(Command.SCAN)){ // if we just used photoscanner
             logger.info("checking for creeks");
             if(extractCreeks(extraInfo)){ // check if we found any creeks
                 creekFound=true;
-                creekPosition.setCreekPosition(dronePosition.getDronePosition()); // save the position of the creek
+                creekPosition.setCreekPosition(dronePosition.getRow(),dronePosition.getCol()); // save the position of the creek
                 // also save the UID of the creek because we need to return it at the end (we stop exectution when creek found)
             }
             logger.info("checking for sites");
             if(extractSites(extraInfo)) { // check if we found any creeks
                 siteFound=true;
-                emergencyPosition.setEmergencyPosition(dronePosition.getDronePosition());
+                emergencyPosition.setEmergencyPosition(dronePosition.getRow(),dronePosition.getCol());
             }
         }
         else{
@@ -174,6 +168,9 @@ public class ResultsAcknowledger{
 
                 case FIND_WIDTH_STATE:
                     findWidthStateHandler();
+                    break;
+                case APPROACH_ISLAND_STATE:
+                    approachIslandStateHandler();
                     break;
 
                 case SPIRAL_SEARCH_STATE:
@@ -193,13 +190,27 @@ public class ResultsAcknowledger{
         droneBrain.setStatus(Status.FIND_WIDTH_STATE); // move to next state
     }
 
+
     /*
      * This function will handle the find width state
      */
     private void findWidthStateHandler(){
         mapArea.setMapY(range);
-        dronePosition=new DronePosition(1,1);
-        droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
+        dronePosition.setRow(1);
+        dronePosition.setCol(1);//assumption for mvp is it starts at 1,1
+        droneBrain.setStatus(Status.APPROACH_ISLAND_STATE);
+    }
+
+    private void approachIslandStateHandler(){
+        logger.info("Middle is at:");
+        logger.info(dronePosition.getRow()+" "+dronePosition.getCol());
+        if(mapArea.getRows()/2==dronePosition.getRow() && mapArea.getCols()/2==dronePosition.getCol()){
+            droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
+        }
+        else{
+            droneBrain.setStatus(Status.APPROACH_ISLAND_STATE);
+        }
+        
     }
 
     /*

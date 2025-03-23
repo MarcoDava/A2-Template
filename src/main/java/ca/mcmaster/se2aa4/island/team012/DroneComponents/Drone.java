@@ -78,7 +78,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         this.currentStatus = Status.FIND_LENGTH_STATE;
         this.controller=new Control(Command.NEUTRAL);
         this.mapArea=new MapArea(new int[]{-1,-1});  
-        dronePosition=new DronePosition(1,1);
+        dronePosition=new DronePosition(-1,-1);
         droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition, this.heading,this.controller, this.mapArea);
         resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.mapArea, drone, dronePosition, creekPosition, emergencyPosition,this.droneBrain, this.controller);
     }
@@ -120,6 +120,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
 
     @Override
     public void acknowledgeResults(String s){
+        
         resultsAcknowledger.updateValues(s);
         logger.info("** Response received:\n"+s);
 

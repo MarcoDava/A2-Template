@@ -23,15 +23,9 @@ public class FindLengthState implements State {
 
     @Override
     public String handle(JSONObject decision) {
-        logger.info("Got here 14");
-        logger.info("Got here 14");
+
         radar.scanForward(heading,decision);
-        // else{//need some way to pass the results to maparea
-        //     mapArea.setMapArea(mapX,mapY);
-        //     drone.setStatus(Status.LOCATING_ISLAND_STATE);
-        //     dronePosition.setRow(ROW);
-        //     dronePosition.setCol(COL);
-        // }
+
         //this algorithm assumes that we start at 1,1
         //will scan east and west to determine the area in which the drone can fly for the mvp
         

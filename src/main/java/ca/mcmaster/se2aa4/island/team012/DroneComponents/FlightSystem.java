@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 
 public class FlightSystem {
 
@@ -24,15 +23,16 @@ public class FlightSystem {
         decision.put("action", "fly");
         logger.info("Going Forward");
         if(heading.compareHeading(Direction.N)){
-            dronePosition.updateDronePosition(0,1);
-        } else if(heading.compareHeading(Direction.E)){
-            dronePosition.updateDronePosition(1,0);
-        } else if(heading.compareHeading(Direction.S)){
-            dronePosition.updateDronePosition(0,-1);
-        } else if(heading.compareHeading(Direction.W)){
             dronePosition.updateDronePosition(-1,0);
+        } else if(heading.compareHeading(Direction.E)){
+            dronePosition.updateDronePosition(0,1);
+        } else if(heading.compareHeading(Direction.S)){
+            dronePosition.updateDronePosition(1,0);
+        } else if(heading.compareHeading(Direction.W)){
+            dronePosition.updateDronePosition(0,-1);
         }
         controller.setCommand(Command.MOVE);
+        logger.info(dronePosition.getRow() + " " + dronePosition.getCol());
     }
 
     public void stop(JSONObject decision) {
@@ -43,35 +43,37 @@ public class FlightSystem {
     public void turnRight(Heading heading, JSONObject decision){
         if(heading.compareHeading(Direction.N)){
             turnEast(heading, decision);
-            dronePosition.updateDronePosition(1, 1);
+            dronePosition.updateDronePosition(-1, 1);
         } else if(heading.compareHeading(Direction.E)){
             turnSouth(heading, decision);
-            dronePosition.updateDronePosition(1, -1);
+            dronePosition.updateDronePosition(1, 1);
         } else if(heading.compareHeading(Direction.S)){
             turnWest(heading, decision);
-            dronePosition.updateDronePosition(-1, -1);
+            dronePosition.updateDronePosition(1, -1);
         } else if(heading.compareHeading(Direction.W)){
             turnNorth(heading, decision);
-            dronePosition.updateDronePosition(-1, 1);
+            dronePosition.updateDronePosition(-1, -1);
         }
+        logger.info(dronePosition.getRow() + " " + dronePosition.getCol());
         controller.setCommand(Command.TURN);
     }
 
     public void turnLeft(Heading heading, JSONObject decision){
         if(heading.compareHeading(Direction.N)){
             turnWest(heading, decision);
-            dronePosition.updateDronePosition(-1, 1);
+            dronePosition.updateDronePosition(-1, -1);
         } else if(heading.compareHeading(Direction.W)){
             turnSouth(heading, decision);
-            dronePosition.updateDronePosition(-1, -1);
+            dronePosition.updateDronePosition(1, -1);
         } else if(heading.compareHeading(Direction.S)){
             turnEast(heading, decision);
-            dronePosition.updateDronePosition(1, -1);
+            dronePosition.updateDronePosition(1, 1);
         } else if(heading.compareHeading(Direction.E)){
             turnNorth(heading, decision);
-            dronePosition.updateDronePosition(1, 1);
+            dronePosition.updateDronePosition(-1, 1);
         }
-        controller.setCommand(Command.MOVE);
+        logger.info(dronePosition.getRow() + " " + dronePosition.getCol());
+        controller.setCommand(Command.TURN);
     }
 
     private void turnNorth(Heading heading, JSONObject decision) {

@@ -16,7 +16,6 @@ public class DroneRetrieval {
     private boolean batteryDanger;
     private Heading heading;
     private FlightSystem flightSystem;
-    private Drone drone;
     private MapArea mapArea;
     private DronePosition dronePosition;
     private Battery battery;
@@ -25,15 +24,14 @@ public class DroneRetrieval {
 
     private final int RANGE_BORDER = 1;
 
-    public DroneRetrieval(Drone drone, MapArea mapArea, Battery battery,DronePosition dronePosition) {
-        this.drone = drone;
+    public DroneRetrieval(MapArea mapArea, Battery battery,DronePosition dronePosition,Control controller) {
         this.mapArea = mapArea;
         this.battery=battery;
         this.dronePosition = dronePosition;
+        flightSystem = new FlightSystem(dronePosition, controller);
     }
 
     public DangerType dangerAssesment(){
-        logger.info("Got here 6");
         if(rangeDanger()!=Direction.NEUTRAL){
             return DangerType.OUTOFRANGE;
         }
@@ -45,28 +43,39 @@ public class DroneRetrieval {
     }
 
     public void handleDanger(JSONObject decision, DangerType dangerType){
+        if(dangerType==DangerType.OUTOFRANGE){
+            logger.info("Drone is going out of range");
+            handleRangeDanger(decision);
+        }
+        else if(dangerType==DangerType.BATTERYLOW){
+            logger.info("Battery is low");
+            flightSystem.stop(decision);
+        }
+    }
+
+    private void handleRangeDanger(JSONObject decision){
     }
 
 
     private Direction rangeDanger() { // if going to go out of bounds, turn right or left based on where there is the most open map
-        if(dronePosition != null){
-            if (dronePosition.getRow()==2
-            ||dronePosition.getRow()==mapArea.getRows()-2) {
-                if(dronePosition.getRow()>mapArea.getRows()/2){
-                    return Direction.S;
-                }
-                else{
-                    return Direction.N;
-                } 
-            }else if(dronePosition.getCol()==2||dronePosition.getCol()==mapArea.getCols()-2){
-                if(dronePosition.getCol()>mapArea.getCols()/2){
-                    return Direction.W;
-                }
-                else{
-                    return Direction.E;
-                }
-            }
-        }
+        // if(dronePosition != null){
+        //     if (dronePosition.getRow()==2
+        //     ||dronePosition.getRow()==mapArea.getRows()-2) {
+        //         if(dronePosition.getRow()>mapArea.getRows()/2){
+        //             return Direction.S;
+        //         }
+        //         else{
+        //             return Direction.N;
+        //         } 
+        //     }else if(dronePosition.getCol()==2||dronePosition.getCol()==mapArea.getCols()-2){
+        //         if(dronePosition.getCol()>mapArea.getCols()/2){
+        //             return Direction.W;
+        //         }
+        //         else{
+        //             return Direction.E;
+        //         }
+        //     }
+        // }
         return Direction.NEUTRAL;
     }
 

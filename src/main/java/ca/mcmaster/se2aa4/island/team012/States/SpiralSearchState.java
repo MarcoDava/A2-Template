@@ -51,29 +51,30 @@ public class SpiralSearchState implements State {
 
     @Override
     public String handle(JSONObject decision) {
-        setInitialSearchArea(dronePosition.getRow(), dronePosition.getCol(), mapArea.getRows(), mapArea.getCols());
+        // setInitialSearchArea(dronePosition.getRow(), dronePosition.getCol(), mapArea.getRows(), mapArea.getCols());
 
-        if (counter % 2 == 0) {
-            logger.info("Scanning below...");
-            photoScanner.scanBelow(decision);
-        } else {
-            logger.info("Executing movement logic...");
-            logger.info("Drone Position: Row=" + dronePosition.getRow() + " Col=" + dronePosition.getCol());
+        // if (counter % 2 == 0) {
+        //     logger.info("Scanning below...");
+        //     photoScanner.scanBelow(decision);
+        // } else {
+        //     logger.info("Executing movement logic...");
+        //     logger.info("Drone Position: Row=" + dronePosition.getRow() + " Col=" + dronePosition.getCol());
 
-            if (isAtBoundary()) {
-                flightSystem.turnRight(heading, decision);
-                turnsMade++;
+        //     if (isAtBoundary()) {
+        //         flightSystem.turnRight(heading, decision);
+        //         turnsMade++;
 
-                if (turnsMade == 4) { // After completing a full spiral lap, shrink area
-                    shrinkSearchArea();
-                    turnsMade = 0; // Reset for next cycle
-                }
-            } else {
-                flightSystem.fly(heading,decision);
-            }
-        }
+        //         if (turnsMade == 4) { // After completing a full spiral lap, shrink area
+        //             shrinkSearchArea();
+        //             turnsMade = 0; // Reset for next cycle
+        //         }
+        //     } else {
+        //         flightSystem.fly(heading,decision);
+        //     }
+        // }
         
-        counter = (counter + 1) % 2;
+        // counter = (counter + 1) % 2;
+        decision.put("action", "stop");
         return decision.toString();
     }
 

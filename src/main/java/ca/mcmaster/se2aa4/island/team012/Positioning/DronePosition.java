@@ -4,30 +4,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DronePosition extends Position {
-
-    private Position dronePosition;
     private static final Logger logger = LogManager.getLogger();
 
-    public DronePosition(int row,int col) { // Call the parent class constructor with the required argument
-        super(row,col);
-        logger.info("Drone Position: "+row+" "+col);
-        dronePosition = new Position(row,col);
-        logger.info(dronePosition.getRow());
+    public DronePosition(int row, int col) {
+        super(row, col);
     }
 
-    public Position getDronePosition() {
-        return dronePosition;
+    public int[] getDronePosition() {
+        return new int[]{getRow(), getCol()};
     }
 
     public void updateDronePosition(int rowsMoved, int colsMoved) {
-        int finalRow= getPosition()[0]+rowsMoved;
-        int finalCol= getPosition()[1]+colsMoved;
-        dronePosition.setRow(finalRow);
-        dronePosition.setCol(finalCol);
+        int newRow = getRow() + rowsMoved;
+        int newCol = getCol() + colsMoved;
+        setRow(newRow);
+        setCol(newCol);
+        logger.info("Drone position updated to: " + newRow + " " + newCol);
     }
 
     public boolean comparePosition(int row, int col) {
-        Position position = new Position(row, col);
-        return dronePosition.equals(position);
+        return getRow() == row && getCol() == col;
     }
 }

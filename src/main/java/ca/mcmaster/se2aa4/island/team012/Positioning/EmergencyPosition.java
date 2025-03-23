@@ -13,7 +13,7 @@ public class EmergencyPosition extends Position {
         return emergencyPosition;
     }
 
-    public void setEmergencyPosition(Position position) {
-        emergencyPosition = position;
+    public void setEmergencyPosition(int row, int col) {
+        emergencyPosition = new Position(row, col);
     }
 }

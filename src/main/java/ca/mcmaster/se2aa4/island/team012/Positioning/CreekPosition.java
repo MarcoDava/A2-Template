@@ -16,7 +16,7 @@ public class CreekPosition extends Position {// need to remake to only save the 
         return creekPosition;
     }
 
-    public void setCreekPosition(Position position) {
-        creekPosition=position;
+    public void setCreekPosition(int row, int col) {
+        creekPosition = new Position(row, col);
     }
 }

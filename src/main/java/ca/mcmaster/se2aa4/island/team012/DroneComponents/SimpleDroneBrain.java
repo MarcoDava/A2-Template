@@ -9,6 +9,7 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.States.EndSearchState;
 import ca.mcmaster.se2aa4.island.team012.States.FindLengthState;
 import ca.mcmaster.se2aa4.island.team012.States.FindWidthState;
+import ca.mcmaster.se2aa4.island.team012.States.ApproachIslandState;
 import ca.mcmaster.se2aa4.island.team012.States.SpiralSearchState;
 import ca.mcmaster.se2aa4.island.team012.States.State;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
@@ -23,6 +24,7 @@ public class SimpleDroneBrain extends DroneBrain {
     private State currentState;
     private State findLengthState;
     private State findWidthState;
+    private State approachIslandState;
     private State spiralSearchState;
     private State endSearchState;
     private Drone drone;
@@ -58,9 +60,10 @@ public class SimpleDroneBrain extends DroneBrain {
 
         findLengthState = new FindLengthState(this.heading,this.controller);
         findWidthState = new FindWidthState(this.heading,this.controller);
+        approachIslandState = new ApproachIslandState(this.mapArea,this.dronePosition,this.heading,this.controller);
         spiralSearchState = new SpiralSearchState(this.mapArea,this.dronePosition,this.controller,this.heading);
         endSearchState=new EndSearchState();
-        droneRetriever= new DroneRetrieval(this.drone,this.mapArea,this.battery,this.dronePosition);
+        droneRetriever= new DroneRetrieval(this.mapArea,this.battery,this.dronePosition,this.controller);
     }
 
     /*
@@ -75,28 +78,30 @@ public class SimpleDroneBrain extends DroneBrain {
             this.droneRetriever.handleDanger(decision, droneRetriever.dangerAssesment()); // prevents drone crashing - Marco to fix
         } 
         else { // process action based on state, as no risk
-            logger.info("Got here 9");
+
             switch (currentStatus) {
                 case FIND_LENGTH_STATE:
-                    logger.info("Got here 10");
-                    logger.info("STATE STATUS " + Status.FIND_LENGTH_STATE);
-                    logger.info("Got here 11");
+                    logger.info("STATUS " + Status.FIND_LENGTH_STATE);
                     this.currentState = this.findLengthState;
-                    logger.info("Got here 12");
                     break;
 
                 case FIND_WIDTH_STATE:
-                    logger.info("STATE STATUS " + Status.FIND_WIDTH_STATE);
+                    logger.info("STATUS " + Status.FIND_WIDTH_STATE);
                     this.currentState = this.findWidthState;
                     break;
 
+                case APPROACH_ISLAND_STATE:
+                    logger.info("STATUS " + Status.APPROACH_ISLAND_STATE);
+                    this.currentState = this.approachIslandState;
+                    break;
+
                 case SPIRAL_SEARCH_STATE:
-                    logger.info("STATE STATUS " + Status.SPIRAL_SEARCH_STATE);
+                    logger.info("STATUS " + Status.SPIRAL_SEARCH_STATE);
                     this.currentState = this.spiralSearchState;
                     break;
 
                 case END_SEARCH_STATE:
-                    logger.info("STATE STATUS " + Status.END_SEARCH_STATE);
+                    logger.info("STATUS " + Status.END_SEARCH_STATE);
                     this.currentState = this.endSearchState;
                     break;
 

@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 
 public class Radar {
     private static final Logger logger = LogManager.getLogger();
@@ -26,7 +25,7 @@ public class Radar {
         } else {
             scanEast(decision);
         }
-        controller.setCommand(Command.SCAN);
+        controller.setCommand(Command.ECHO);
     }
 
     public void scanLeft(Heading direction,JSONObject decision) {//resembles the heading the drone is currently headed
@@ -39,7 +38,7 @@ public class Radar {
         } else {
             scanNorth(decision);
         }
-        controller.setCommand(Command.SCAN);
+        controller.setCommand(Command.ECHO);
     }
 
     public void scanRight(Heading direction,JSONObject decision) {
@@ -52,11 +51,10 @@ public class Radar {
         } else {
             scanNorth(decision);
         }
-        controller.setCommand(Command.SCAN);
+        controller.setCommand(Command.ECHO);
     }
 
     public void scanNorth(JSONObject decision){
-        logger.info("Got here 16");
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.N));
         logger.info("Scanning North");
