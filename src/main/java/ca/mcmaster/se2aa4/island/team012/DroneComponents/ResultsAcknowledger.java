@@ -109,6 +109,7 @@ public class ResultsAcknowledger{
             logger.info("returning false, no site found");
             return false;
         }
+        emergencyPosition.setEmergencyPosition(dronePosition.getRow(),dronePosition.getCol(),emergencySite.getString(0));
         return false;
     }
     /*
@@ -124,6 +125,7 @@ public class ResultsAcknowledger{
             return false;
         }
         logger.info("creek found, returning true");
+        creekPosition.setCreekPosition(dronePosition.getRow(), dronePosition.getCol(), creek.getString(0));
         return true;
     }
     /*
@@ -155,7 +157,6 @@ public class ResultsAcknowledger{
             logger.info("checking for sites");
             if(extractSites(extraInfo)) { // check if we found any creeks
                 siteFound=true;
-                emergencyPosition.setEmergencyPosition(dronePosition.getRow(),dronePosition.getCol());
             }
         }
         else{
