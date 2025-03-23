@@ -202,17 +202,23 @@ public class ResultsAcknowledger{
      * 
      * if we have found no ground on 2 sides, then we have found the spot
      * to start searching for dimensions
+     * 
+     * if ground on either side, keep scanning until we find a spot with no ground
      */
     private void dimensionStateHandler() {
-        if (dimensionsAligned == 2) {
-            droneBrain.setStatus(Status.FIND_LENGTH_STATE);
-        } else if(actionCtr % 4 == 3 && wasGroundFound == false) {
+        if(actionCtr % 4 == 3 && !wasGroundFound) { // if no ground found after scanning, we can move onto the next deimension
             dimensionsAligned++;
+            if (dimensionsAligned == 2) { // we have aligned ourselves to find the dimensions of the map
+                droneBrain.setStatus(Status.FIND_LENGTH_STATE);
+            } else {
+                // some kind of turn logic here-------------------------------------------------------
+                droneBrain.setStatus(Status.DIMENSION_ALIGN_STATE);
+            }
         } else {
-            if (actionCtr % 4 < 3 && groundFound) {
+            if (actionCtr % 4 < 3 && groundFound) { // to check if there is ground while scanning
                 wasGroundFound = true;
             }
-            else {
+            else if (actionCtr % 4 == 3) { // reset was ground found at the move state
                 wasGroundFound = false;
             }
             droneBrain.setStatus(Status.DIMENSION_ALIGN_STATE);
