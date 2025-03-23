@@ -53,7 +53,9 @@ public class SimpleDroneBrain extends DroneBrain {
         this.controller=controller;
         this.heading=heading;
         this.mapArea=mapArea;
+
         currentStatus=Status.FIND_LENGTH_STATE;
+
         findLengthState = new FindLengthState(this.mapArea,this.drone,this.heading,this.controller);
         findWidthState = new FindWidthState(this.mapArea,this.drone,this.heading,this.controller);
         spiralSearchState = new SpiralSearchState(this.mapArea,this.dronePosition,this.controller,this.heading);
@@ -69,9 +71,10 @@ public class SimpleDroneBrain extends DroneBrain {
      */
     @Override
     public String makeDecision(JSONObject decision) {
-        if (this.droneRetriever.dangerAssesment() != DangerType.NEUTRAL) {
-            this.droneRetriever.handleDanger(decision, droneRetriever.dangerAssesment());
-        } else {
+        if (this.droneRetriever.dangerAssesment() != DangerType.NEUTRAL) { // checks if run out of battery or out of search area 
+            this.droneRetriever.handleDanger(decision, droneRetriever.dangerAssesment()); // prevents drone crashing - Marco to fix
+        } 
+        else { // process action based on state, as no risk
             logger.info("Got here 9");
             switch (currentStatus) {
                 case FIND_LENGTH_STATE:
@@ -81,23 +84,27 @@ public class SimpleDroneBrain extends DroneBrain {
                     this.currentState = this.findLengthState;
                     logger.info("Got here 12");
                     break;
+
                 case FIND_WIDTH_STATE:
                     logger.info("STATE STATUS " + Status.FIND_WIDTH_STATE);
                     this.currentState = this.findWidthState;
                     break;
+
                 case SPIRAL_SEARCH_STATE:
                     logger.info("STATE STATUS " + Status.SPIRAL_SEARCH_STATE);
                     this.currentState = this.spiralSearchState;
-                    
                     break;
+
                 case END_SEARCH_STATE:
                     logger.info("STATE STATUS " + Status.END_SEARCH_STATE);
                     this.currentState = this.endSearchState;
                     break;
+
                 default:
                     break;
             }
             this.currentState.handle(drone, decision);
+            
         }
         logger.info(decision.toString());
         return decision.toString();

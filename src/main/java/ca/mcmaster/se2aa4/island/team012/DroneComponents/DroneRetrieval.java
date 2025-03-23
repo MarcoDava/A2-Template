@@ -48,7 +48,7 @@ public class DroneRetrieval {
     }
 
 
-    private Direction rangeDanger() {
+    private Direction rangeDanger() { // if going to go out of bounds, turn right or left based on where there is the most open map
         if(dronePosition != null){
             if (dronePosition.getRow()==2
             ||dronePosition.getRow()==mapArea.getRows()-2) {
@@ -70,7 +70,7 @@ public class DroneRetrieval {
         return Direction.NEUTRAL;
     }
 
-    public boolean batteryDanger() {
+    public boolean batteryDanger() {  // run  out of battery --> stop the program
         //this is currently hard coded, need a better way to determine the danger
         if (battery.getBattery()<20) {
             return true;

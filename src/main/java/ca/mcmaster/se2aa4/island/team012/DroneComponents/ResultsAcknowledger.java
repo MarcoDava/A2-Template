@@ -52,6 +52,7 @@ public class ResultsAcknowledger{
         this.emergencyPosition = emergencyPosition;
         this.droneBrain=droneBrain;
         this.controller=controller;
+
         groundFound=false;
         creekFound=false;
         siteFound=false;
@@ -109,7 +110,7 @@ public class ResultsAcknowledger{
         JSONArray emergencySite = extraInfo.getJSONArray("sites");
         logger.info(emergencySite);
         if(emergencySite.length()==0){
-            logger.info("returning false");
+            logger.info("returning false, no site found");
             return false;
         }
         return false;
@@ -124,7 +125,7 @@ public class ResultsAcknowledger{
         JSONArray creek = extraInfo.getJSONArray("creeks");
         logger.info(creek.length());
         if(creek.length()==0){
-            logger.info("returning false");
+            logger.info("returning false, no creek found");
             return false;
         }
         return true;
@@ -134,6 +135,7 @@ public class ResultsAcknowledger{
      * 
      * @param s the response from the server
      */
+<<<<<<< HEAD
     public void updateValues(String s){
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
         JSONObject extraInfo = response.getJSONObject("extras");
@@ -142,15 +144,34 @@ public class ResultsAcknowledger{
         if(controller.compareAction(Command.ECHO)){
             range=extractRange(extraInfo);
             groundFound=extractGround(extraInfo);
+=======
+    public void updateValues(String s) { // called in every loop by Drone.acknowledgeResults() for processing
+        logger.info("Got here 21");
+        JSONObject response = new JSONObject(new JSONTokener(new StringReader(s))); // converts the response from engine to JSON
+        JSONObject extraInfo = response.getJSONObject("extras"); // extras contains actual information (always with battery)
+        logger.info(extraInfo);
+        
+        extractBattery(response); // extract and update battery
+        logger.info("Got here 22");
+        logger.info(controller.getCommand()==Command.ECHO||droneBrain.getCommand()==Command.ECHO_AROUND);
+
+        if(controller.compareAction(Command.ECHO)){ // if we just used radar
+            range=extractRange(extraInfo); // how far away did we scan
+            logger.info("Got here 23");
+            logger.info(range);
+            groundFound=extractGround(extraInfo); // check if radar found ground or went out of bounds
+            logger.info("Got here 24");
+>>>>>>> 1ab918583a2f8e33c0a92a81a5fa79c467137f07
         }
-        else if (controller.compareAction(Command.SCAN)){
+        else if (controller.compareAction(Command.SCAN)){ // if we just used photoscanner
             logger.info("checking for creeks");
-            if(extractCreeks(extraInfo)){
+            if(extractCreeks(extraInfo)){ // check if we found any creeks
                 creekFound=true;
-                creekPosition.setCreekPosition(dronePosition.getDronePosition());
+                creekPosition.setCreekPosition(dronePosition.getDronePosition()); // save the position of the creek
+                // also save the UID of the creek because we need to return it at the end (we stop exectution when creek found)
             }
             logger.info("checking for sites");
-            if(extractSites(extraInfo)){
+            if(extractSites(extraInfo)) { // check if we found any creeks
                 siteFound=true;
                 emergencyPosition.setEmergencyPosition(dronePosition.getDronePosition());
             }
@@ -162,11 +183,16 @@ public class ResultsAcknowledger{
         switch (droneBrain.getStatus()) {
                 case FIND_LENGTH_STATE:
                     findLengthStateHandler();
+                    break;
+
                 case FIND_WIDTH_STATE:
                     findWidthStateHandler();
+                    break;
+
                 case SPIRAL_SEARCH_STATE:
                     spiralSearchStateHandler();
                     break;
+
                 default:
                     break;
             }
@@ -177,8 +203,14 @@ public class ResultsAcknowledger{
      */
     private void findLengthStateHandler(){
         logger.info("Got here 26");
+<<<<<<< HEAD
         mapArea.setMapX(range);
         droneBrain.setStatus(Status.FIND_WIDTH_STATE);
+=======
+        mapArea.setMapX(range); // assumes drone is at the edge, so length is the returned range
+        logger.info("Got here 27");
+        droneBrain.setStatus(Status.FIND_WIDTH_STATE); // move to next state
+>>>>>>> 1ab918583a2f8e33c0a92a81a5fa79c467137f07
     }
 
     /*
@@ -194,11 +226,11 @@ public class ResultsAcknowledger{
      * This function will handle the spiral search state
      */
     private void spiralSearchStateHandler(){
-        if(creekFound&&siteFound){
-            droneBrain.setStatus(Status.END_SEARCH_STATE);
+        if(creekFound && siteFound){ // if we have found a creek and a site so far
+            droneBrain.setStatus(Status.END_SEARCH_STATE); // then we end
         }
         else{
-            droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
+            droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE); // otherwise stay in this state
         }
     }
 
