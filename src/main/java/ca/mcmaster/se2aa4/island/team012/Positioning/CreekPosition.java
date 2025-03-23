@@ -1,22 +1,25 @@
 package ca.mcmaster.se2aa4.island.team012.Positioning;
 
-import java.util.List;
-import java.util.ArrayList;
 
-public class CreekPosition extends Position {// need to remake to only save the closest creek position, no longer need a list
-
-    private Position creekPosition;//use a hashmap instead. position : creek id
+public class CreekPosition extends Position {
+    private Position creekPosition; // Add this field
     private String creekID;
 
     public CreekPosition(int row, int col) {
         super(row, col);
+        this.creekPosition = new Position(row, col); // Initialize it
     }
 
-    public Position getCreekPositions() {
-        return creekPosition;
+    public int[] getCreekPosition() {
+        return new int[]{creekPosition.getRow(), creekPosition.getCol()};
     }
 
-    public void setCreekPosition(int row, int col) {
+    public void setCreekPosition(int row, int col, String creekID) {
         creekPosition = new Position(row, col);
+        this.creekID = creekID;
+    }
+    
+    public String getCreekID() {
+        return creekID;
     }
 }

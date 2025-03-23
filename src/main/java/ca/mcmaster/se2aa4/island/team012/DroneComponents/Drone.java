@@ -79,6 +79,8 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         this.controller=new Control(Command.NEUTRAL);
         this.mapArea=new MapArea(new int[]{-1,-1});  
         dronePosition=new DronePosition(-1,-1);
+        creekPosition=new CreekPosition(-1,-1);
+        emergencyPosition=new EmergencyPosition(-1,-1);
         droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition, this.heading,this.controller, this.mapArea);
         resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.mapArea, drone, dronePosition, creekPosition, emergencyPosition,this.droneBrain, this.controller);
     }
@@ -112,9 +114,8 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
          */
 
         // below may be replaced by above
-        String catchDecision = droneBrain.makeDecision(decision);
-        logger.info(catchDecision);
-        return catchDecision;
+        droneBrain.makeDecision(decision);
+        return decision.toString();
 
     }
 
@@ -149,7 +150,9 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     @Override
     public String deliverFinalReport() {
         // return id of creek thats closest to 
-        return "no creek found";
+        logger.info("** Delivering final report");
+        logger.info("The closest creek is: {}", creekPosition.getCreekID());
+        return creekPosition.getCreekID();
     }
 
 

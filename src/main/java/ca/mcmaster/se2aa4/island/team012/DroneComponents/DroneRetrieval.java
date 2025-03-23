@@ -8,6 +8,7 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
+import java.lang.Math;
 
 public class DroneRetrieval {
 
@@ -47,11 +48,11 @@ public class DroneRetrieval {
 
     public void handleDanger(JSONObject decision, DangerType dangerType){
         if(dangerType==DangerType.OUTOFRANGE){
-            logger.info("Drone is going out of range");
+            logger.info("Drone is going out of range, Taking control to avoid going MIA");
             handleRangeDanger(decision);
         }
         else if(dangerType==DangerType.BATTERYLOW){
-            logger.info("Battery is low");
+            logger.info("Battery is low, stopping program now");
             flightSystem.stop(decision);
         }
     }
@@ -109,8 +110,8 @@ public class DroneRetrieval {
     }
 
     public boolean batteryDanger() {  // run  out of battery --> stop the program
-        //this is currently hard coded, need a better way to determine the danger
-        if (battery.getBattery()<20) {
+        logger.info(Math.sqrt(dronePosition.getRow()*dronePosition.getRow()+dronePosition.getCol()*dronePosition.getCol()));
+        if (Math.sqrt(dronePosition.getRow()*dronePosition.getRow()+dronePosition.getCol()*dronePosition.getCol())>battery.getBattery()) {
             return true;
         }
         return false;

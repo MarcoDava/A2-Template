@@ -32,7 +32,6 @@ public class FlightSystem {
             dronePosition.updateDronePosition(0,-1);
         }
         controller.setCommand(Command.MOVE);
-        logger.info(dronePosition.getRow() + " " + dronePosition.getCol());
     }
 
     public void stop(JSONObject decision) {
@@ -54,7 +53,6 @@ public class FlightSystem {
             turnNorth(heading, decision);
             dronePosition.updateDronePosition(-1, -1);
         }
-        logger.info(dronePosition.getRow() + " " + dronePosition.getCol());
         controller.setCommand(Command.TURN);
     }
 
@@ -72,7 +70,6 @@ public class FlightSystem {
             turnNorth(heading, decision);
             dronePosition.updateDronePosition(-1, 1);
         }
-        logger.info(dronePosition.getRow() + " " + dronePosition.getCol());
         controller.setCommand(Command.TURN);
     }
 

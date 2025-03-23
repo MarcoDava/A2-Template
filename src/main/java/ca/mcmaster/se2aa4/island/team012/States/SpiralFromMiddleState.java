@@ -7,6 +7,7 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
+import ca.mcmaster.se2aa4.island.team012.DroneComponents.Photoscanner;
 
 public class SpiralFromMiddleState implements State {
     private MapArea mapArea;
@@ -14,7 +15,7 @@ public class SpiralFromMiddleState implements State {
     private DronePosition dronePosition;
     private Heading heading;
     private FlightSystem flightSystem;
-
+    private Photoscanner photoscanner;
 
     private int remainingForwards;
     private int numForwards;
@@ -28,22 +29,23 @@ public class SpiralFromMiddleState implements State {
         this.dronePosition = dronePosition;
         this.heading = heading;
         flightSystem = new FlightSystem(dronePosition,controller);
+        photoscanner = new Photoscanner(controller);
     }
 
 
     @Override
     public void handle(JSONObject decision) {
         if (scanning == true) { // scanning step
-            scan()
+            photoscanner.scanBelow(decision);
             scanning = false; // to alternate between moving and scanning
         }
         else { // movement step
             if (remainingForwards != 0) { // go forward correct number of times
-                fly()
+                flightSystem.fly(heading, decision);
                 remainingForwards--;
             }
             else { // num forwards = 0
-                turnRight()
+                flightSystem.turnRight(heading, decision); // turn right
                 numTurns++;
                 if (numTurns > 0 && numTurns % 2 == 1) { // if the 2nd turn in a grouping
                     numForwards++; // increase the number of forwards to be taken

@@ -10,7 +10,7 @@ import ca.mcmaster.se2aa4.island.team012.States.EndSearchState;
 import ca.mcmaster.se2aa4.island.team012.States.FindLengthState;
 import ca.mcmaster.se2aa4.island.team012.States.FindWidthState;
 import ca.mcmaster.se2aa4.island.team012.States.ApproachIslandState;
-import ca.mcmaster.se2aa4.island.team012.States.SpiralSearchState;
+import ca.mcmaster.se2aa4.island.team012.States.SpiralFromMiddleState;
 import ca.mcmaster.se2aa4.island.team012.States.State;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
@@ -25,7 +25,7 @@ public class SimpleDroneBrain extends DroneBrain {
     private State findLengthState;
     private State findWidthState;
     private State approachIslandState;
-    private State spiralSearchState;
+    private State spiralFromMiddleState;
     private State endSearchState;
     private Drone drone;
     private MapArea mapArea;
@@ -61,7 +61,7 @@ public class SimpleDroneBrain extends DroneBrain {
         findLengthState = new FindLengthState(this.heading,this.controller);
         findWidthState = new FindWidthState(this.heading,this.controller);
         approachIslandState = new ApproachIslandState(this.mapArea,this.dronePosition,this.heading,this.controller);
-        spiralSearchState = new SpiralSearchState(this.mapArea,this.dronePosition,this.controller,this.heading);
+        spiralFromMiddleState = new SpiralFromMiddleState(this.mapArea,this.dronePosition,this.controller,this.heading);
         endSearchState=new EndSearchState();
         droneRetriever= new DroneRetrieval(this.mapArea,this.battery,this.dronePosition,this.controller,this.heading);
     }
@@ -95,9 +95,9 @@ public class SimpleDroneBrain extends DroneBrain {
                     this.currentState = this.approachIslandState;
                     break;
 
-                case SPIRAL_SEARCH_STATE:
-                    logger.info("STATUS " + Status.SPIRAL_SEARCH_STATE);
-                    this.currentState = this.spiralSearchState;
+                case SPIRAL_FROM_MIDDLE_STATE:
+                    logger.info("STATUS " + Status.SPIRAL_FROM_MIDDLE_STATE);
+                    this.currentState = this.spiralFromMiddleState;
                     break;
 
                 case END_SEARCH_STATE:
@@ -131,24 +131,6 @@ public class SimpleDroneBrain extends DroneBrain {
      */
     public void setStatus(Status status){
         this.currentStatus=status;
-    }
-
-    /*
-     * This function will return the current state of the drone
-     * 
-     * @return the current state of the drone
-     */
-    public Command getCommand(){
-        return action;
-    }
-
-    /*
-     * This function will set the current state of the drone
-     * 
-     * @param action the state to be set
-     */
-    public void setCommand(Command action){
-        this.action=action;
     }
 
 

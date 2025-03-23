@@ -105,7 +105,6 @@ public class ResultsAcknowledger{
      */
     private boolean extractSites(JSONObject extraInfo){
         JSONArray emergencySite = extraInfo.getJSONArray("sites");
-        logger.info(emergencySite);
         if(emergencySite.length()==0){
             logger.info("returning false, no site found");
             return false;
@@ -120,11 +119,11 @@ public class ResultsAcknowledger{
      */
     private boolean extractCreeks(JSONObject extraInfo){
         JSONArray creek = extraInfo.getJSONArray("creeks");
-        logger.info(creek.length());
         if(creek.length()==0){
             logger.info("returning false, no creek found");
             return false;
         }
+        logger.info("creek found, returning true");
         return true;
     }
     /*
@@ -138,6 +137,8 @@ public class ResultsAcknowledger{
         JSONObject extraInfo = response.getJSONObject("extras"); // extras contains actual information (always with battery)
         logger.info(dronePosition.getRow()+" "+dronePosition.getCol());
         extractBattery(response); // extract and update battery
+        logger.info(creekFound);
+        logger.info(creekPosition.getCreekPosition()[0]+" "+creekPosition.getCreekPosition()[1]+" "+creekPosition.getCreekID());
 
         if(controller.compareAction(Command.ECHO)){ // if we just used radar
             range=extractRange(extraInfo); // how far away did we scan
@@ -148,7 +149,7 @@ public class ResultsAcknowledger{
             logger.info("checking for creeks");
             if(extractCreeks(extraInfo)){ // check if we found any creeks
                 creekFound=true;
-                creekPosition.setCreekPosition(dronePosition.getRow(),dronePosition.getCol()); // save the position of the creek
+                // save the position of the creek
                 // also save the UID of the creek because we need to return it at the end (we stop exectution when creek found)
             }
             logger.info("checking for sites");
@@ -173,8 +174,8 @@ public class ResultsAcknowledger{
                     approachIslandStateHandler();
                     break;
 
-                case SPIRAL_SEARCH_STATE:
-                    spiralSearchStateHandler();
+                case SPIRAL_FROM_MIDDLE_STATE:
+                    spiralFromMiddleStateHandler();
                     break;
 
                 default:
@@ -205,7 +206,7 @@ public class ResultsAcknowledger{
         logger.info("Middle is at:");
         logger.info(dronePosition.getRow()+" "+dronePosition.getCol());
         if(mapArea.getRows()/2==dronePosition.getRow() && mapArea.getCols()/2==dronePosition.getCol()){
-            droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE);
+            droneBrain.setStatus(Status.SPIRAL_FROM_MIDDLE_STATE);
         }
         else{
             droneBrain.setStatus(Status.APPROACH_ISLAND_STATE);
@@ -216,12 +217,12 @@ public class ResultsAcknowledger{
     /*
      * This function will handle the spiral search state
      */
-    private void spiralSearchStateHandler(){
+    private void spiralFromMiddleStateHandler(){
         if(creekFound && siteFound){ // if we have found a creek and a site so far
             droneBrain.setStatus(Status.END_SEARCH_STATE); // then we end
         }
         else{
-            droneBrain.setStatus(Status.SPIRAL_SEARCH_STATE); // otherwise stay in this state
+            droneBrain.setStatus(Status.SPIRAL_FROM_MIDDLE_STATE); // otherwise stay in this state
         }
     }
 
