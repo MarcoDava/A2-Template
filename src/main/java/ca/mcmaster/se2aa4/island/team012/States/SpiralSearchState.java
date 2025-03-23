@@ -29,13 +29,11 @@ public class SpiralSearchState implements State {
     private FlightSystem flightSystem;
     private Photoscanner photoScanner;
     private DronePosition dronePosition;
-    private Control controller;
     private Heading heading;
     private static final Logger logger = LogManager.getLogger();
 
     public SpiralSearchState(MapArea mapArea, DronePosition dronePosition, Control controller, Heading heading) {
         this.mapArea = mapArea;
-        this.controller = controller;
         this.dronePosition = dronePosition;
         this.heading = heading;
         flightSystem = new FlightSystem(dronePosition,controller);
@@ -52,19 +50,17 @@ public class SpiralSearchState implements State {
     }
 
     @Override
-    public String handle(Drone drone, JSONObject decision) {
+    public String handle(JSONObject decision) {
         setInitialSearchArea(dronePosition.getRow(), dronePosition.getCol(), mapArea.getRows(), mapArea.getCols());
 
         if (counter % 2 == 0) {
             logger.info("Scanning below...");
             photoScanner.scanBelow(decision);
-            controller.setCommand(Command.SCAN);
         } else {
             logger.info("Executing movement logic...");
             logger.info("Drone Position: Row=" + dronePosition.getRow() + " Col=" + dronePosition.getCol());
 
             if (isAtBoundary()) {
-                controller.setCommand(Command.TURN);
                 flightSystem.turnRight(heading, decision);
                 turnsMade++;
 
@@ -74,7 +70,6 @@ public class SpiralSearchState implements State {
                 }
             } else {
                 flightSystem.fly(heading,decision);
-                controller.setCommand(Command.MOVE);
             }
         }
         

@@ -56,8 +56,8 @@ public class SimpleDroneBrain extends DroneBrain {
 
         currentStatus=Status.FIND_LENGTH_STATE;
 
-        findLengthState = new FindLengthState(this.mapArea,this.drone,this.heading,this.controller);
-        findWidthState = new FindWidthState(this.mapArea,this.drone,this.heading,this.controller);
+        findLengthState = new FindLengthState(this.heading,this.controller);
+        findWidthState = new FindWidthState(this.heading,this.controller);
         spiralSearchState = new SpiralSearchState(this.mapArea,this.dronePosition,this.controller,this.heading);
         endSearchState=new EndSearchState();
         droneRetriever= new DroneRetrieval(this.drone,this.mapArea,this.battery,this.dronePosition);
@@ -103,7 +103,7 @@ public class SimpleDroneBrain extends DroneBrain {
                 default:
                     break;
             }
-            this.currentState.handle(drone, decision);
+            this.currentState.handle(decision);
             
         }
         logger.info(decision.toString());

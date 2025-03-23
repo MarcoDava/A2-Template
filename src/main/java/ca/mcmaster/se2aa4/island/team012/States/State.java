@@ -5,5 +5,5 @@ import org.json.JSONObject;
 
 public interface State {
 
-    String handle(Drone drone, JSONObject decision);
+    String handle(JSONObject decision);
 }

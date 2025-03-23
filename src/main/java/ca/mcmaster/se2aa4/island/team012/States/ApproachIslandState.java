@@ -30,7 +30,7 @@ public class ApproachIslandState implements State {
         this.controller=controller;
     }
     @Override
-    public String handle(Drone drone, JSONObject decision) {
+    public String handle(JSONObject decision) {
         if(dronePosition.getRow()!=mapCenterRow-1 && dronePosition.getRow()!=mapCenterRow+1 && dronePosition.getRow()!=mapCenterRow){//if the drone is not 1 above, 1 below or at the center row, it will execute the below code.
             //the reason for these particular conditions is that the drone will always be at the center row even when it turns, because a turn is one forward and one in the direction of the turn.
             if(dronePosition.getRow()-mapCenterRow>0){//this means that the droneposition is above the center row

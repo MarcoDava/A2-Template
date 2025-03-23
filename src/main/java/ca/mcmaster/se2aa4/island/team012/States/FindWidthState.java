@@ -14,24 +14,17 @@ import org.apache.logging.log4j.Logger;
 public class FindWidthState implements State {
     private Radar radar;
     private Heading heading;
-    private Drone drone;
-    private MapArea mapArea;
-    private Control controller;
-    private static final Logger logger = LogManager.getLogger();
-    
-    
 
-    public FindWidthState(MapArea mapArea, Drone drone,Heading heading, Control controller) {
-        this.mapArea=mapArea;
-        this.drone=drone;
+    private static final Logger logger = LogManager.getLogger();
+
+    public FindWidthState(Heading heading, Control controller) {
+
         this.heading=heading;
-        this.controller=controller;
         radar = new Radar(controller);
     }
 
     @Override
-    public String handle(Drone drone, JSONObject decision) {
-        controller.setCommand(Command.ECHO);
+    public String handle(JSONObject decision) {
         logger.info("Got here 30");
         radar.scanRight(heading,decision);
 
