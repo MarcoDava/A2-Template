@@ -158,7 +158,6 @@ public class ResultsAcknowledger{
             logger.info("checking for sites");
             if(extractSites(extraInfo)) { // check if we found any creeks
                 siteFound=true;
-                System.exit(0);
             }
         }
         else{
@@ -185,8 +184,8 @@ public class ResultsAcknowledger{
                     break;
         }
         if(siteFound){ // DEBUG
-            logger.warn("Site found");
-            logger.warn(response.toString());
+            logger.info("Site found");
+            logger.info(response.toString());
             System.exit(0);
         }
     }
