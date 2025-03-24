@@ -14,7 +14,7 @@ public class Runner {
             run(Drone.class)
                     .exploring(new File(filename))
                     .withSeed(42L)
-                    .startingAt(1, 1, "EAST")
+                    .startingAt(33, 33, "EAST")
                     .backBefore(9000)
                     .withCrew(5)
                     .collecting(1000, "WOOD")

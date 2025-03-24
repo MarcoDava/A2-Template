@@ -35,26 +35,25 @@ public class SpiralFromMiddleState implements State {
 
     @Override
     public void handle(JSONObject decision) {
-        // if (scanning == true) { // scanning step
-        //     photoscanner.scanBelow(decision);
-        //     scanning = false; // to alternate between moving and scanning
-        // }
-        // else { // movement step
-        //     if (remainingForwards != 0) { // go forward correct number of times
-        //         flightSystem.fly(heading, decision);
-        //         remainingForwards--;
-        //     }
-        //     else { // num forwards = 0
-        //         flightSystem.turnRight(heading, decision); // turn right
-        //         numTurns++;
-        //         if (numTurns > 0 && numTurns % 2 == 1) { // if the 2nd turn in a grouping
-        //             numForwards++; // increase the number of forwards to be taken
-        //         }
-        //         remainingForwards = numForwards; // reset the counter for forwards
-        //     }
-        //     scanning = true; // to alternate between moving and scanning
-        // }
-        decision.put("action", "stop");
+        if (scanning == true) { // scanning step
+            photoscanner.scanBelow(decision);
+            scanning = false; // to alternate between moving and scanning
+        }
+        else { // movement step
+            if (remainingForwards != 0) { // go forward correct number of times
+                flightSystem.fly(heading, decision);
+                remainingForwards--;
+            }
+            else { // num forwards = 0
+                flightSystem.turnRight(heading, decision); // turn right
+                numTurns++;
+                if (numTurns > 0 && numTurns % 2 == 1) { // if the 2nd turn in a grouping
+                    numForwards++; // increase the number of forwards to be taken
+                }
+                remainingForwards = numForwards; // reset the counter for forwards
+            }
+            scanning = true; // to alternate between moving and scanning
+        }
     }
 
 }

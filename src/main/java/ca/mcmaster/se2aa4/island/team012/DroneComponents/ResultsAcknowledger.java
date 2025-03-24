@@ -20,6 +20,7 @@ import ca.mcmaster.se2aa4.island.team012.States.Status;
 public class ResultsAcknowledger{
     private Battery battery;
     private MapArea mapArea;
+    private Control controller;
     private Drone drone;
     private SimpleDroneBrain droneBrain;
     private CreekPosition creekPosition;
@@ -28,9 +29,12 @@ public class ResultsAcknowledger{
     private boolean groundFound;
     private boolean creekFound;
     private boolean siteFound;
+    private boolean wasGroundFound;
     private int range;
+    private int actionCtr;
+    private int dimensionsAligned;
     private final Logger logger = LogManager.getLogger();
-    private Control controller;
+    
 
     /*
      * This is the constructor for the ResultsAcknowledger class
@@ -56,6 +60,10 @@ public class ResultsAcknowledger{
         groundFound=false;
         creekFound=false;
         siteFound=false;
+
+        wasGroundFound=false;
+        actionCtr=0;
+        dimensionsAligned=0;
     }
 
     /*
@@ -134,7 +142,6 @@ public class ResultsAcknowledger{
      * 
      * @param s the response from the server
      */
-
     public void updateValues(String s) { // called in every loop by Drone.acknowledgeResults() for processing
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s))); // converts the response from engine to JSON
         JSONObject extraInfo = response.getJSONObject("extras"); // extras contains actual information (always with battery)
@@ -167,6 +174,10 @@ public class ResultsAcknowledger{
         }
         
         switch (droneBrain.getStatus()) {
+                case DIMENSION_ALIGN_STATE:
+                    dimensionStateHandler();
+                    break;
+
                 case FIND_LENGTH_STATE:
                     findLengthStateHandler();
                     break;
@@ -190,6 +201,39 @@ public class ResultsAcknowledger{
                     break;
         }
     }
+
+    /*
+     * This function will handle the dimension align state
+     * 
+     * when actionCtr == 3, we have scanned forward and both sides.
+     * 
+     * if we have found no ground on 2 sides, then we have found the spot
+     * to start searching for dimensions
+     * 
+     * if ground on either side, keep scanning until we find a spot with no ground
+     */
+    private void dimensionStateHandler() {
+        if(actionCtr % 3 == 2 && !wasGroundFound) { // if no ground found after scanning, we can move onto the next deimension
+            dimensionsAligned++;
+            if (dimensionsAligned == 2) { // we have aligned ourselves to find the dimensions of the map
+                droneBrain.setStatus(Status.FIND_LENGTH_STATE);
+            } else {
+                // some kind of turn logic here-------------------------------------------------------
+                droneBrain.setStatus(Status.DIMENSION_ALIGN_STATE);
+            }
+        } else {
+            if (actionCtr % 3 < 2 && groundFound) { // to check if there is ground while scanning
+                wasGroundFound = true;
+            }
+            else if (actionCtr % 3 == 2) { // reset was ground found at the move state
+                wasGroundFound = false;
+            }
+            droneBrain.setStatus(Status.DIMENSION_ALIGN_STATE);
+        }
+        actionCtr++;
+        logger.info("actionCtr: " + actionCtr);
+    }
+
 
     /*
      * This function will handle the find length state

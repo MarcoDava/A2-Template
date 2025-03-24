@@ -14,6 +14,7 @@ import ca.mcmaster.se2aa4.island.team012.States.SpiralFromMiddleState;
 import ca.mcmaster.se2aa4.island.team012.States.State;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
+import ca.mcmaster.se2aa4.island.team012.States.DimensionAlignState;
 
 
 /**
@@ -22,6 +23,7 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 public class SimpleDroneBrain extends DroneBrain {
     private Status currentStatus;
     private State currentState;
+    private State DimensionAlignState;
     private State findLengthState;
     private State findWidthState;
     private State approachIslandState;
@@ -57,8 +59,9 @@ public class SimpleDroneBrain extends DroneBrain {
         this.heading=heading;
         this.mapArea=mapArea;
 
-        currentStatus=Status.FIND_LENGTH_STATE;
+        currentStatus=Status.DIMENSION_ALIGN_STATE;
 
+        DimensionAlignState = new DimensionAlignState(this.heading,this.controller,this.dronePosition);
         findLengthState = new FindLengthState(this.heading,this.controller);
         findWidthState = new FindWidthState(this.heading,this.controller);
         approachIslandState = new ApproachIslandState(this.mapArea,this.dronePosition,this.heading,this.controller);
@@ -82,6 +85,11 @@ public class SimpleDroneBrain extends DroneBrain {
         else { // process action based on state, as no risk
 
             switch (currentStatus) {
+                case DIMENSION_ALIGN_STATE:
+                    logger.info("STATE STATUS " + Status.DIMENSION_ALIGN_STATE);
+                    this.currentState = this.DimensionAlignState;
+                    break;
+
                 case FIND_LENGTH_STATE:
                     logger.info("STATUS " + Status.FIND_LENGTH_STATE);
                     this.currentState = this.findLengthState;
