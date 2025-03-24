@@ -26,6 +26,7 @@ public class SimpleDroneBrain extends DroneBrain {
     private State findWidthState;
     private State approachIslandState;
     private State spiralFromMiddleState;
+    private State spiralFromSiteState;
     private State endSearchState;
     private Drone drone;
     private MapArea mapArea;
@@ -62,6 +63,7 @@ public class SimpleDroneBrain extends DroneBrain {
         findWidthState = new FindWidthState(this.heading,this.controller);
         approachIslandState = new ApproachIslandState(this.mapArea,this.dronePosition,this.heading,this.controller);
         spiralFromMiddleState = new SpiralFromMiddleState(this.mapArea,this.dronePosition,this.controller,this.heading);
+        spiralFromSiteState = new SpiralFromMiddleState(this.mapArea,this.dronePosition,this.controller,this.heading);
         endSearchState=new EndSearchState();
         droneRetriever= new DroneRetrieval(this.mapArea,this.battery,this.dronePosition,this.controller,this.heading);
     }
@@ -98,6 +100,11 @@ public class SimpleDroneBrain extends DroneBrain {
                 case SPIRAL_FROM_MIDDLE_STATE:
                     logger.info("STATUS " + Status.SPIRAL_FROM_MIDDLE_STATE);
                     this.currentState = this.spiralFromMiddleState;
+                    break;
+
+                case SPIRAL_FROM_SITE_STATE:
+                    logger.info("STATUS " + Status.SPIRAL_FROM_SITE_STATE);
+                    this.currentState = this.spiralFromSiteState;
                     break;
 
                 case END_SEARCH_STATE:

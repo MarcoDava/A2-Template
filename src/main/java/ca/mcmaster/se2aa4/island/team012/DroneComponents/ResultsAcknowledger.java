@@ -1,7 +1,6 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
 import java.io.StringReader;
-import java.util.EmptyStackException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -112,7 +111,7 @@ public class ResultsAcknowledger{
         }
         logger.info("site found, returning true");
         emergencyPosition.setEmergencyPosition(dronePosition.getRow(),dronePosition.getCol(),emergencySite.getString(0));
-        return false;
+        return true;
     }
     /*
      * This function will extract the creeks from the response from the server
@@ -183,13 +182,12 @@ public class ResultsAcknowledger{
                     spiralFromMiddleStateHandler();
                     break;
 
+                case SPIRAL_FROM_SITE_STATE:
+                    spiralFromSiteHandler();
+                    break;
+                
                 default:
                     break;
-        }
-        if(siteFound){ // DEBUG
-            logger.info("Site found");
-            logger.info(response.toString());
-            System.exit(0);
         }
     }
 
@@ -228,11 +226,9 @@ public class ResultsAcknowledger{
      * This function will handle the spiral search state
      */
     private void spiralFromMiddleStateHandler(){
-        logger.info("in spiral from middle, site is: " + siteFound);
-        if(creekFound && siteFound){ // if we have found the site
-            logger.info("Would go to next but in this case just exit");
-            System.exit(0);
-            droneBrain.setStatus(Status.END_SEARCH_STATE); // go to creek spiral
+        if(siteFound){ // if we have found the site
+            creekFound = false;
+            droneBrain.setStatus(Status.SPIRAL_FROM_SITE_STATE); // go to creek spiral
         }
         else{
             droneBrain.setStatus(Status.SPIRAL_FROM_MIDDLE_STATE); // otherwise stay in this state
@@ -240,15 +236,13 @@ public class ResultsAcknowledger{
     }
 
     private void spiralFromSiteHandler(){
-        logger.info("in spiral from site, creeks and site are: " + creekFound + siteFound);
         if(creekFound){ // if we have found a creek and a site so far
             droneBrain.setStatus(Status.END_SEARCH_STATE); // then we end
         }
         else{
-            droneBrain.setStatus(Status.SPIRAL_FROM_MIDDLE_STATE); // otherwise stay in this state
+            droneBrain.setStatus(Status.SPIRAL_FROM_SITE_STATE); // otherwise stay in this state
         }
     }
-
 
     //need a function that gets the mapX and mapY to determine the size of the map
 
