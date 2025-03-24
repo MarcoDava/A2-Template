@@ -182,9 +182,13 @@ public class ResultsAcknowledger{
                     spiralFromMiddleStateHandler();
                     break;
 
+                case SPIRAL_FROM_SITE_STATE:
+                    spiralFromSiteHandler();
+                    break;
+                
                 default:
                     break;
-            }
+        }
     }
 
     /*
@@ -222,16 +226,23 @@ public class ResultsAcknowledger{
      * This function will handle the spiral search state
      */
     private void spiralFromMiddleStateHandler(){
-        if(creekFound && siteFound){ // if we have found a creek and a site so far
-            droneBrain.setStatus(Status.END_SEARCH_STATE); // then we end
+        if(siteFound){ // if we have found the site
+            creekFound = false;
+            droneBrain.setStatus(Status.SPIRAL_FROM_SITE_STATE); // go to creek spiral
         }
         else{
             droneBrain.setStatus(Status.SPIRAL_FROM_MIDDLE_STATE); // otherwise stay in this state
         }
     }
 
-
-
+    private void spiralFromSiteHandler(){
+        if(creekFound){ // if we have found a creek and a site so far
+            droneBrain.setStatus(Status.END_SEARCH_STATE); // then we end
+        }
+        else{
+            droneBrain.setStatus(Status.SPIRAL_FROM_SITE_STATE); // otherwise stay in this state
+        }
+    }
 
     //need a function that gets the mapX and mapY to determine the size of the map
 
