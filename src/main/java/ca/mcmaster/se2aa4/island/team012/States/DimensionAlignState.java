@@ -4,9 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.Command;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.Drone;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Radar;
@@ -40,24 +38,34 @@ public class DimensionAlignState implements State {
         this.radar = new Radar(controller);
     }
 
+    /*
+     * This method is responsible for handling a situation where the drone is started
+     * in a random postition on the map.
+     * 
+     * @param decision the decision that the drone will make
+     * @return the decision that the drone will make
+     */
     @Override
     public String handle(JSONObject decision) {
-        if (actionCtr % 4 == 0) {                   // scan forward
-            radar.scanForward(heading, decision);
-        } else if (actionCtr % 4 == 1) {            // scan left
+        if (actionCtr % 3 == 0) {                   // scan left
             radar.scanLeft(heading, decision);
-        } else if (actionCtr % 4 == 2) {            // scan right
+        } else if (actionCtr % 3 == 1) {            // scan right
             radar.scanRight(heading, decision);
         } else {                                    // move forward
-            flightSystem.fly(heading, decision);
             updateCtr();
+            flightSystem.fly(heading, decision);
         }
         this.actionCtr++;
         return decision.toString();
     }
 
     
-
+    /*
+     * This method is responsible for updating the counters for the directions
+     * that the drone has flown in.
+     * 
+     * @return void
+     */
     private void updateCtr() {
         if (heading.compareHeading(Direction.E)) {
             this.eastCtr++;
