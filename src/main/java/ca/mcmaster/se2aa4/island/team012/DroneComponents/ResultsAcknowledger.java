@@ -379,7 +379,7 @@ public class ResultsAcknowledger{
             }
             else{
                 mapArea.setMapX(eastDistance+westDistance+1);
-                dronePosition.setCol(eastDistance+1);
+                dronePosition.setCol(westDistance+1);
             }
             droneBrain.setStatus(Status.APPROACH_ISLAND_STATE);
         }
