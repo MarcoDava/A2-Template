@@ -8,13 +8,10 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
-import java.lang.Math;
 
 public class DroneRetrieval {
 
     private static final Logger logger = LogManager.getLogger();
-    private boolean rangeDanger;
-    private boolean batteryDanger;
     private Heading heading;
     private FlightSystem flightSystem;
     private MapArea mapArea;
@@ -110,6 +107,7 @@ public class DroneRetrieval {
     }
 
     public boolean batteryDanger() {  // run  out of battery --> stop the program
+    logger.info("Hello");
         logger.info(Math.sqrt(dronePosition.getRow()*dronePosition.getRow()+dronePosition.getCol()*dronePosition.getCol()));
         if (Math.sqrt(dronePosition.getRow()*dronePosition.getRow()+dronePosition.getCol()*dronePosition.getCol())>battery.getBattery()) {
             return true;

@@ -1,24 +1,21 @@
 
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
-import ca.mcmaster.se2aa4.island.team012.States.Status;
-
 import java.io.StringReader;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import eu.ace_design.island.bot.IExplorerRaid;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import ca.mcmaster.se2aa4.island.team012.Positioning.CreekPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
-import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
-import ca.mcmaster.se2aa4.island.team012.Positioning.Position;
-import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
-import ca.mcmaster.se2aa4.island.team012.Positioning.CreekPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.EmergencyPosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
+import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
+import ca.mcmaster.se2aa4.island.team012.States.Status;
+import eu.ace_design.island.bot.IExplorerRaid;
 
 
 public class Drone implements IExplorerRaid{//reduce the amount of times that the dron changes heading, rarely use scan. 
@@ -75,19 +72,20 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         // Integer batteryLevel = info.getInt("budget");
         // logger.info("The drone is facing {}", direction);
         // logger.info("Battery level is {}", batteryLevel);
-        this.currentStatus = Status.LENGTH_ALIGN_STATE;
+        logger.info("The current status is {}", currentStatus);
         this.controller=new Control(Command.NEUTRAL);
         this.mapArea=new MapArea(new int[]{-1,-1});  
         dronePosition=new DronePosition(-1,-1);
         creekPosition=new CreekPosition(-1,-1);
         emergencyPosition=new EmergencyPosition(-1,-1);
         droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition, this.heading,this.controller, this.mapArea);
+        logger.info("here");
         resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.heading, this.mapArea, this.drone, this.dronePosition, this.creekPosition, this.emergencyPosition,this.droneBrain, this.controller);
     }
 
     @Override
     public String takeDecision() {
-
+        logger.info("here");
         JSONObject decision = new JSONObject(); // unsure if these need to be created because of below logic
 
         // **** assume actionQueue already set up as a queue of Strings in this (Drone) class with the below code -J****
@@ -114,6 +112,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
 
         // below may be replaced by above
         droneBrain.makeDecision(decision);
+        logger.info("here");
         return decision.toString();
 
     }

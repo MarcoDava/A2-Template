@@ -199,6 +199,9 @@ public class ResultsAcknowledger{
                     leftTurnStateHandler();
                     break;
 
+                case RIGHT_TURN_STATE:
+                    rightTurnStateHandler();
+
                 case WIDTH_ALIGN_STATE:
                     widthStateHandler();
                     break;
@@ -260,31 +263,48 @@ public class ResultsAcknowledger{
      * This function will handle the find length state
      */
     private void findLengthStateHandler(){
-        logger.info("got to here");
         if(heading.getLastScanDirection()==Direction.N){
-            logger.info("got to here 1");
             northDistance=range;
         }
         else if(heading.getLastScanDirection()==Direction.E){
-            logger.info("got to here 2");
             eastDistance=range;
         }
         else if(heading.getLastScanDirection()==Direction.S){
-            logger.info("got to here 3");
             southDistance=range;
         }
         else if(heading.getLastScanDirection()==Direction.W){
-            logger.info("got to here 4");
             westDistance=range;
         }
         if(northDistance!=0 &&  southDistance!=0){
-            droneBrain.setStatus(Status.FIND_WIDTH_STATE);
+            if(northDistance>southDistance && heading.getHeading() == Direction.E){
+                droneBrain.setStatus(Status.LEFT_TURN_STATE);
+            }
+            else if (northDistance<southDistance && heading.getHeading() == Direction.E){
+                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+            }
+            else if (northDistance>southDistance && heading.getHeading() == Direction.W){
+                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+            }
+            else if (northDistance<southDistance && heading.getHeading() == Direction.W){
+                 droneBrain.setStatus(Status.LEFT_TURN_STATE);
+            }
             logger.info(northDistance+" "+southDistance);
             mapArea.setMapY(northDistance+southDistance+1);
             dronePosition.setRow(northDistance+1);
         }
         else if(eastDistance!=0 && westDistance!=0){
-            droneBrain.setStatus(Status.FIND_WIDTH_STATE);
+            if(eastDistance>westDistance && heading.getHeading() == Direction.N){
+                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+            }
+            else if (eastDistance<westDistance && heading.getHeading() == Direction.N){
+                droneBrain.setStatus(Status.LEFT_TURN_STATE);
+            }
+            else if (eastDistance>westDistance && heading.getHeading() == Direction.S){
+                droneBrain.setStatus(Status.LEFT_TURN_STATE);
+            }
+            else if (eastDistance<westDistance && heading.getHeading() == Direction.S){
+                 droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+            }
             logger.info(eastDistance+" "+westDistance);
             mapArea.setMapX(eastDistance+westDistance+1);
             dronePosition.setCol(eastDistance+1);
@@ -297,6 +317,12 @@ public class ResultsAcknowledger{
     }
 
     private void leftTurnStateHandler(){
+        actionCtr=0;
+        droneBrain.setStatus(Status.WIDTH_ALIGN_STATE);
+    }
+
+    private void rightTurnStateHandler(){
+        actionCtr=0;
         droneBrain.setStatus(Status.WIDTH_ALIGN_STATE);
     }
 

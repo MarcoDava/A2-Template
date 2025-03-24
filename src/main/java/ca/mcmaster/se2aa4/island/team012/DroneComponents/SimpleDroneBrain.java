@@ -13,6 +13,7 @@ import ca.mcmaster.se2aa4.island.team012.States.FindLengthState;
 import ca.mcmaster.se2aa4.island.team012.States.FindWidthState;
 import ca.mcmaster.se2aa4.island.team012.States.LeftTurnState;
 import ca.mcmaster.se2aa4.island.team012.States.LengthAlignState;
+import ca.mcmaster.se2aa4.island.team012.States.RightTurnState;
 import ca.mcmaster.se2aa4.island.team012.States.SpiralFromMiddleState;
 import ca.mcmaster.se2aa4.island.team012.States.State;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
@@ -27,6 +28,7 @@ public class SimpleDroneBrain extends DroneBrain {
     private State currentState;
     private State lengthAlignState;
     private State findLengthState;
+    private State rightTurnState;
     private State leftTurnState;
     private State widthAlignState;
     private State findWidthState;
@@ -63,9 +65,12 @@ public class SimpleDroneBrain extends DroneBrain {
         this.heading=heading;
         this.mapArea=mapArea;
 
+        currentStatus = Status.LENGTH_ALIGN_STATE;
+
         lengthAlignState = new LengthAlignState(this.heading,this.controller,this.dronePosition);
         findLengthState = new FindLengthState(this.heading,this.controller);
         leftTurnState = new LeftTurnState(this.heading,this.controller,this.dronePosition);
+        rightTurnState = new RightTurnState(this.heading,this.controller,this.dronePosition);
         widthAlignState = new WidthAlignState(this.heading,this.controller,this.dronePosition);
         findWidthState = new FindWidthState(this.heading,this.controller,this.dronePosition);
         approachIslandState = new ApproachIslandState(this.mapArea,this.dronePosition,this.heading,this.controller);
@@ -83,11 +88,11 @@ public class SimpleDroneBrain extends DroneBrain {
      */
     @Override
     public String makeDecision(JSONObject decision) {
-        if (this.droneRetriever.dangerAssesment() != DangerType.NEUTRAL) { // checks if run out of battery or out of search area 
-            this.droneRetriever.handleDanger(decision, droneRetriever.dangerAssesment()); // prevents drone crashing - Marco to fix
+        logger.info(droneRetriever.dangerAssesment());
+        if (this.droneRetriever.dangerAssesment() != DangerType.NEUTRAL) { 
+            this.droneRetriever.handleDanger(decision, droneRetriever.dangerAssesment());
         } 
         else { // process action based on state, as no risk
-
             switch (currentStatus) {
                 case LENGTH_ALIGN_STATE:
                     logger.info("STATE STATUS " + Status.LENGTH_ALIGN_STATE);
@@ -102,6 +107,11 @@ public class SimpleDroneBrain extends DroneBrain {
                 case LEFT_TURN_STATE:
                     logger.info("STATUS " + Status.FIND_LENGTH_STATE);
                     this.currentState = this.leftTurnState;
+                    break;
+
+                case RIGHT_TURN_STATE:
+                    logger.info("STATUS " + Status.RIGHT_TURN_STATE);
+                    this.currentState = this.rightTurnState;
                     break;
 
                 case WIDTH_ALIGN_STATE:
