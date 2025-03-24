@@ -25,7 +25,6 @@ public class FindWidthState implements State {
 
     @Override
     public String handle(JSONObject decision) {
-        logger.info("Got here 30");
         radar.scanRight(heading,decision);
 
         // else{//need some way to pass the results to maparea
