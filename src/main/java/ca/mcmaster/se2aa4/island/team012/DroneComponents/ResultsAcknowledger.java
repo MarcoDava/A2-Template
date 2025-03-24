@@ -10,14 +10,15 @@ import org.json.JSONTokener;
 
 import ca.mcmaster.se2aa4.island.team012.Positioning.CreekPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.EmergencyPosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
+import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
 
-/*
- * This class is responsible for acknowledging the results from the server
- */
+
 public class ResultsAcknowledger{
+    private Heading heading;
     private Battery battery;
     private MapArea mapArea;
     private Control controller;
@@ -30,7 +31,12 @@ public class ResultsAcknowledger{
     private boolean creekFound;
     private boolean siteFound;
     private boolean wasGroundFound;
+    private boolean XFound;
     private int range;
+    private int southDistance;
+    private int eastDistance;
+    private int northDistance;
+    private int westDistance;
     private int actionCtr;
     private int dimensionsAligned;
     private final Logger logger = LogManager.getLogger();
@@ -47,8 +53,9 @@ public class ResultsAcknowledger{
      * @param emergencyPosition the position of the emergency site
      * @param droneBrain the brain of the drone
      */
-    public ResultsAcknowledger(Battery battery, MapArea mapArea, Drone drone,DronePosition dronePosition,CreekPosition creekPosition,EmergencyPosition emergencyPosition, SimpleDroneBrain droneBrain, Control controller){
+    public ResultsAcknowledger(Battery battery, Heading heading, MapArea mapArea, Drone drone,DronePosition dronePosition,CreekPosition creekPosition,EmergencyPosition emergencyPosition, SimpleDroneBrain droneBrain, Control controller){
         this.battery = battery;
+        this.heading = heading;
         this.mapArea = mapArea;
         this.drone = drone;
         this.dronePosition = dronePosition;
@@ -57,9 +64,15 @@ public class ResultsAcknowledger{
         this.droneBrain=droneBrain;
         this.controller=controller;
 
+        southDistance=0;
+        eastDistance=0;
+        northDistance=0;
+        westDistance=0;
+
         groundFound=false;
         creekFound=false;
         siteFound=false;
+        XFound=false;
 
         wasGroundFound=false;
         actionCtr=0;
@@ -146,14 +159,14 @@ public class ResultsAcknowledger{
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s))); // converts the response from engine to JSON
         JSONObject extraInfo = response.getJSONObject("extras"); // extras contains actual information (always with battery)
         logger.info(dronePosition.getRow()+" "+dronePosition.getCol());
+        logger.info("Map Area is: "+mapArea.getRows()+" "+mapArea.getCols());
         extractBattery(response); // extract and update battery
-        logger.info(creekFound);
         logger.info(creekPosition.getCreekPosition()[0]+" "+creekPosition.getCreekPosition()[1]+" "+creekPosition.getCreekID());
-
         if(controller.compareAction(Command.ECHO)){ // if we just used radar
             range=extractRange(extraInfo); // how far away did we scan
             logger.info("SCAN was "+range+" units long");
             groundFound=extractGround(extraInfo); // check if radar found ground or went out of bounds
+            logger.info("Ground Found: "+groundFound);
         }
         else if (controller.compareAction(Command.SCAN)){ // if we just used photoscanner
             logger.info("checking for creeks");
@@ -239,8 +252,40 @@ public class ResultsAcknowledger{
      * This function will handle the find length state
      */
     private void findLengthStateHandler(){
-        mapArea.setMapX(range); // assumes drone is at the edge, so length is the returned rang
-        droneBrain.setStatus(Status.FIND_WIDTH_STATE); // move to next state
+        logger.info("got to here");
+        if(heading.getLastScanDirection()==Direction.N){
+            logger.info("got to here 1");
+            northDistance=range;
+        }
+        else if(heading.getLastScanDirection()==Direction.E){
+            logger.info("got to here 2");
+            eastDistance=range;
+        }
+        else if(heading.getLastScanDirection()==Direction.S){
+            logger.info("got to here 3");
+            southDistance=range;
+        }
+        else if(heading.getLastScanDirection()==Direction.W){
+            logger.info("got to here 4");
+            westDistance=range;
+        }
+        if(northDistance!=0 &&  southDistance!=0){
+            droneBrain.setStatus(Status.FIND_WIDTH_STATE);
+            logger.info(northDistance+" "+southDistance);
+            mapArea.setMapY(northDistance+southDistance+1);
+            dronePosition.setRow(northDistance+1);
+        }
+        else if(eastDistance!=0 && westDistance!=0){
+            droneBrain.setStatus(Status.FIND_WIDTH_STATE);
+            logger.info(eastDistance+" "+westDistance);
+            mapArea.setMapX(eastDistance+westDistance+1);
+            dronePosition.setCol(eastDistance+1);
+            XFound=true;
+        }
+        else{
+            droneBrain.setStatus(Status.FIND_LENGTH_STATE); // move to next state
+        }
+        logger.info("got to here");
     }
 
 
@@ -248,10 +293,37 @@ public class ResultsAcknowledger{
      * This function will handle the find width state
      */
     private void findWidthStateHandler(){
-        mapArea.setMapY(range);
-        dronePosition.setRow(1);
-        dronePosition.setCol(1);//assumption for mvp is it starts at 1,1
-        droneBrain.setStatus(Status.APPROACH_ISLAND_STATE);
+        if(heading.getLastScanDirection()==Direction.N){
+            logger.info("got to here 1");
+            northDistance=range;
+        }
+        else if(heading.getLastScanDirection()==Direction.E){
+            logger.info("got to here 2");
+            eastDistance=range;
+        }
+        else if(heading.getLastScanDirection()==Direction.S){
+            logger.info("got to here 3");
+            southDistance=range;
+        }
+        else if(heading.getLastScanDirection()==Direction.W){
+            logger.info("got to here 4");
+            westDistance=range;
+        }
+        if(eastDistance!=0 && westDistance!=0 && northDistance!=0 &&  southDistance!=0){
+            if(XFound){
+                droneBrain.setStatus(Status.APPROACH_ISLAND_STATE);
+                mapArea.setMapY(northDistance+southDistance+1);
+                dronePosition.setRow(northDistance+1);
+            }
+            else{
+                mapArea.setMapX(eastDistance+westDistance+1);
+                dronePosition.setCol(eastDistance+1);
+            }
+            droneBrain.setStatus(Status.APPROACH_ISLAND_STATE);
+        }
+        else{
+            droneBrain.setStatus(Status.FIND_WIDTH_STATE); // move to next state
+        }
     }
 
     private void approachIslandStateHandler(){

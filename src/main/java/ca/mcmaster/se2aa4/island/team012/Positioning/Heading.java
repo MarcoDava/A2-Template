@@ -9,6 +9,7 @@ public class Heading {
 
     private final Logger logger = LogManager.getLogger();
     private Direction heading;
+    private Direction lastScanDirection;
 
     public Heading(Direction heading) {
         this.heading = heading;
@@ -24,5 +25,13 @@ public class Heading {
 
     public boolean compareHeading(Direction heading) {
         return this.heading == heading;
+    }
+
+    public void setScanDirection(Direction direction){
+        lastScanDirection = direction;
+    }
+
+    public Direction getLastScanDirection(){
+        return lastScanDirection;
     }
 }

@@ -63,7 +63,7 @@ public class SimpleDroneBrain extends DroneBrain {
 
         DimensionAlignState = new DimensionAlignState(this.heading,this.controller,this.dronePosition);
         findLengthState = new FindLengthState(this.heading,this.controller);
-        findWidthState = new FindWidthState(this.heading,this.controller);
+        findWidthState = new FindWidthState(this.heading,this.controller,this.dronePosition);
         approachIslandState = new ApproachIslandState(this.mapArea,this.dronePosition,this.heading,this.controller);
         spiralFromMiddleState = new SpiralFromMiddleState(this.mapArea,this.dronePosition,this.controller,this.heading);
         spiralFromSiteState = new SpiralFromMiddleState(this.mapArea,this.dronePosition,this.controller,this.heading);

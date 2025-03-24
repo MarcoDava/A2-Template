@@ -32,7 +32,7 @@ public class ApproachIslandState implements State {
         photoScanner=new Photoscanner(controller);
     }
     @Override
-    public void handle(JSONObject decision) {;
+    public void handle(JSONObject decision) {
         int mapCenterRow=mapArea.getRows()/2;
         int mapCenterCol=mapArea.getCols()/2;
     
