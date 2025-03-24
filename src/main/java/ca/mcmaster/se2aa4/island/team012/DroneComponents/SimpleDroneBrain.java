@@ -88,14 +88,13 @@ public class SimpleDroneBrain extends DroneBrain {
      */
     @Override
     public String makeDecision(JSONObject decision) {
-        logger.info(droneRetriever.dangerAssesment());
         if (this.droneRetriever.dangerAssesment() != DangerType.NEUTRAL) { 
             this.droneRetriever.handleDanger(decision, droneRetriever.dangerAssesment());
         } 
         else { // process action based on state, as no risk
             switch (currentStatus) {
                 case LENGTH_ALIGN_STATE:
-                    logger.info("STATE STATUS " + Status.LENGTH_ALIGN_STATE);
+                    logger.info("STATUS " + Status.LENGTH_ALIGN_STATE);
                     this.currentState = this.lengthAlignState;
                     break;
 
@@ -105,7 +104,7 @@ public class SimpleDroneBrain extends DroneBrain {
                     break;
 
                 case LEFT_TURN_STATE:
-                    logger.info("STATUS " + Status.FIND_LENGTH_STATE);
+                    logger.info("STATUS " + Status.LEFT_TURN_STATE);
                     this.currentState = this.leftTurnState;
                     break;
 

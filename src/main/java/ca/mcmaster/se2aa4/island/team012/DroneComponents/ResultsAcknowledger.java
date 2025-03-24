@@ -31,14 +31,17 @@ public class ResultsAcknowledger{
     private boolean creekFound;
     private boolean siteFound;
     private boolean wasGroundFound;
+    private boolean XClear;
     private boolean XFound;
+    private boolean eastClear;
+    private boolean westClear;
+    private boolean northClear;
+    private boolean southClear;
     private int range;
     private int southDistance;
     private int eastDistance;
     private int northDistance;
     private int westDistance;
-    private int actionCtr;
-    private int dimensionsAligned;
     private final Logger logger = LogManager.getLogger();
     
 
@@ -73,10 +76,14 @@ public class ResultsAcknowledger{
         creekFound=false;
         siteFound=false;
         XFound=false;
+        XClear=false;
+
+        northClear=false;
+        southClear=false;
+        westClear=false;
+        eastClear=false;
 
         wasGroundFound=false;
-        actionCtr=0;
-        dimensionsAligned=0;
     }
 
     /*
@@ -158,8 +165,10 @@ public class ResultsAcknowledger{
     public void updateValues(String s) { // called in every loop by Drone.acknowledgeResults() for processing
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s))); // converts the response from engine to JSON
         JSONObject extraInfo = response.getJSONObject("extras"); // extras contains actual information (always with battery)
-        logger.info(dronePosition.getRow()+" "+dronePosition.getCol());
         logger.info("Map Area is: "+mapArea.getRows()+" "+mapArea.getCols());
+        logger.info("Current Position: ({}, {}), Center: ({}, {})", 
+    dronePosition.getRow(), dronePosition.getCol(), 
+    mapArea.getRows()/2, mapArea.getCols()/2);
         extractBattery(response); // extract and update battery
         logger.info(creekPosition.getCreekPosition()[0]+" "+creekPosition.getCreekPosition()[1]+" "+creekPosition.getCreekID());
         if(controller.compareAction(Command.ECHO)){ // if we just used radar
@@ -179,13 +188,10 @@ public class ResultsAcknowledger{
             if(extractSites(extraInfo)) { // check if we found any creeks
                 siteFound=true;
             }
-            logger.info("Emergency Site is at: "+emergencyPosition.getRow()+" "+emergencyPosition.getCol()+" "+emergencyPosition.getSiteID());
-            logger.info("Site Found "+siteFound);
         }
         else{
             logger.info("Didnt scan or echo");
         }
-        
         switch (droneBrain.getStatus()) {
                 case LENGTH_ALIGN_STATE:
                     lengthStateHandler();
@@ -201,6 +207,7 @@ public class ResultsAcknowledger{
 
                 case RIGHT_TURN_STATE:
                     rightTurnStateHandler();
+                    break;
 
                 case WIDTH_ALIGN_STATE:
                     widthStateHandler();
@@ -209,6 +216,7 @@ public class ResultsAcknowledger{
                 case FIND_WIDTH_STATE:
                     findWidthStateHandler();
                     break;
+
                 case APPROACH_ISLAND_STATE:
                     approachIslandStateHandler();
                     break;
@@ -237,25 +245,25 @@ public class ResultsAcknowledger{
      * if ground on either side, keep scanning until we find a spot with no ground
      */
     private void lengthStateHandler() {
-        if(actionCtr % 3 == 2 && !wasGroundFound) { // if no ground found after scanning, we can move onto the next deimension
-            dimensionsAligned++;
-            if (dimensionsAligned == 2) { // we have aligned ourselves to find the dimensions of the map
-                droneBrain.setStatus(Status.FIND_LENGTH_STATE);
-            } else {
-                // some kind of turn logic here-------------------------------------------------------
-                droneBrain.setStatus(Status.LENGTH_ALIGN_STATE);
-            }
-        } else {
-            if (actionCtr % 3 < 2 && groundFound) { // to check if there is ground while scanning
-                wasGroundFound = true;
-            }
-            else if (actionCtr % 3 == 2) { // reset was ground found at the move state
-                wasGroundFound = false;
-            }
-            droneBrain.setStatus(Status.LENGTH_ALIGN_STATE);
+        if(heading.getLastScanDirection()==Direction.E && !groundFound){
+            eastClear=true;
         }
-        actionCtr++;
-        logger.info("actionCtr: " + actionCtr);
+        else if(heading.getLastScanDirection()==Direction.N && !groundFound){
+            northClear=true;
+        }
+        else if(heading.getLastScanDirection()==Direction.W && !groundFound){
+            westClear=true;
+        }
+        else if(heading.getLastScanDirection()==Direction.S && !groundFound){
+            southClear=true;
+        }
+        if(northClear&&southClear){
+            droneBrain.setStatus(Status.FIND_LENGTH_STATE);
+        }
+        else if(westClear&&eastClear){
+            droneBrain.setStatus(Status.FIND_LENGTH_STATE);
+            XClear=true;
+        }
     }
 
 
@@ -275,7 +283,7 @@ public class ResultsAcknowledger{
         else if(heading.getLastScanDirection()==Direction.W){
             westDistance=range;
         }
-        if(northDistance!=0 &&  southDistance!=0){
+        if(northDistance!=0 && southDistance!=0){
             if(northDistance>southDistance && heading.getHeading() == Direction.E){
                 droneBrain.setStatus(Status.LEFT_TURN_STATE);
             }
@@ -313,39 +321,38 @@ public class ResultsAcknowledger{
         else{
             droneBrain.setStatus(Status.FIND_LENGTH_STATE); // move to next state
         }
-        logger.info("got to here");
     }
 
     private void leftTurnStateHandler(){
-        actionCtr=0;
         droneBrain.setStatus(Status.WIDTH_ALIGN_STATE);
     }
 
     private void rightTurnStateHandler(){
-        actionCtr=0;
         droneBrain.setStatus(Status.WIDTH_ALIGN_STATE);
     }
 
     private void widthStateHandler() {
-        if(actionCtr % 3 == 2 && !wasGroundFound) { // if no ground found after scanning, we can move onto the next deimension
-            dimensionsAligned++;
-            if (dimensionsAligned == 2) { // we have aligned ourselves to find the dimensions of the map
-                droneBrain.setStatus(Status.FIND_WIDTH_STATE);
-            } else {
-                // some kind of turn logic here-------------------------------------------------------
-                droneBrain.setStatus(Status.WIDTH_ALIGN_STATE);
-            }
-        } else {
-            if (actionCtr % 3 < 2 && groundFound) { // to check if there is ground while scanning
-                wasGroundFound = true;
-            }
-            else if (actionCtr % 3 == 2) { // reset was ground found at the move state
-                wasGroundFound = false;
-            }
-            droneBrain.setStatus(Status.WIDTH_ALIGN_STATE);
+        if(heading.getLastScanDirection()==Direction.E && !groundFound){
+            logger.info("East Clear");
+            eastClear=true;
         }
-        actionCtr++;
-        logger.info("actionCtr: " + actionCtr);
+        else if(heading.getLastScanDirection()==Direction.N && !groundFound){
+            logger.info("North Clear");
+            northClear=true;
+        }
+        else if(heading.getLastScanDirection()==Direction.W && !groundFound){
+            logger.info("West Clear");
+            westClear=true;
+        }
+        else if(heading.getLastScanDirection()==Direction.S && !groundFound){
+            logger.info("South Clear");
+            southClear=true;
+        }
+        logger.info("east"+eastClear+"west"+westClear);
+        if(westClear && eastClear){
+            logger.info("Moving to approach");
+            droneBrain.setStatus(Status.FIND_WIDTH_STATE);
+        }
     }
 
 
@@ -354,24 +361,19 @@ public class ResultsAcknowledger{
      */
     private void findWidthStateHandler(){
         if(heading.getLastScanDirection()==Direction.N){
-            logger.info("got to here 1");
             northDistance=range;
         }
         else if(heading.getLastScanDirection()==Direction.E){
-            logger.info("got to here 2");
             eastDistance=range;
         }
         else if(heading.getLastScanDirection()==Direction.S){
-            logger.info("got to here 3");
             southDistance=range;
         }
         else if(heading.getLastScanDirection()==Direction.W){
-            logger.info("got to here 4");
             westDistance=range;
         }
         if(eastDistance!=0 && westDistance!=0 && northDistance!=0 &&  southDistance!=0){
             if(XFound){
-                droneBrain.setStatus(Status.APPROACH_ISLAND_STATE);
                 mapArea.setMapY(northDistance+southDistance+1);
                 dronePosition.setRow(northDistance+1);
             }

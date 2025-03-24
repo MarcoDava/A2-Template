@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
+import ca.mcmaster.se2aa4.island.team012.DroneComponents.Photoscanner;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Radar;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
@@ -29,6 +30,8 @@ public class LengthAlignState implements State {
     private Radar radar;
     private Heading heading;
     private FlightSystem flightSystem;
+    private Photoscanner photoscanner;
+    int ctr=0;
 
     private final Logger logger = LogManager.getLogger();
 
@@ -41,6 +44,7 @@ public class LengthAlignState implements State {
         this.heading = heading;
         this.flightSystem = new FlightSystem(position, controller);
         this.radar = new Radar(controller);
+        this.photoscanner = new Photoscanner(controller);
     }
 
     /*
@@ -52,18 +56,23 @@ public class LengthAlignState implements State {
      */
     @Override
     public void handle(JSONObject decision) {
-        logger.info("Entering DimensionAlignState");
-        if (actionCtr % 3 == 0) {                   // scan left
-            radar.scanLeft(heading, decision);
-        } else if (actionCtr % 3 == 1) {            // scan right
-            radar.scanRight(heading, decision);
-        } else {                                    // move forward
-            updateCtr();
-            flightSystem.fly(heading, decision);
+        if(ctr%2==0){
+            photoscanner.scanBelow(decision);
         }
-        this.actionCtr++;
-        logger.info("Exiting DimensionAlignState");
-        
+        else{
+            logger.info("Entering DimensionAlignState");
+            if (actionCtr % 3 == 0) {                   // scan left
+                radar.scanLeft(heading, decision);
+            } else if (actionCtr % 3 == 1) {            // scan right
+                radar.scanRight(heading, decision);
+            } else {                                    // move forward
+                updateCtr();
+                flightSystem.fly(heading, decision);
+            }
+            this.actionCtr++;
+            logger.info("Exiting DimensionAlignState");
+        }
+        ctr++;
     }
 
     
@@ -83,12 +92,6 @@ public class LengthAlignState implements State {
         } else {
             this.southCtr++;
         }
-    }
-
-    // used to find starting position after mapArea is defined
-    public int[] getDirectionCtr(){
-        int[] ctr = {eastCtr, westCtr, northCtr, southCtr};
-        return ctr;
     }
 
 }

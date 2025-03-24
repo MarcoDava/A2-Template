@@ -112,16 +112,15 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
 
         // below may be replaced by above
         droneBrain.makeDecision(decision);
-        logger.info("here");
+        logger.info(decision.toString());
         return decision.toString();
 
     }
 
     @Override
     public void acknowledgeResults(String s){
-        
-        resultsAcknowledger.updateValues(s);
         logger.info("** Response received:\n"+s);
+        resultsAcknowledger.updateValues(s);
 
         // Integer cost = response.getInt("cost");
         // logger.info("The cost of the action was {}", cost);
