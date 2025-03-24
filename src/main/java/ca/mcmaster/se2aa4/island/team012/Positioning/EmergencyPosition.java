@@ -1,21 +1,25 @@
 package ca.mcmaster.se2aa4.island.team012.Positioning;
 
-public class EmergencyPosition extends Position {
 
-    private Position emergencyPosition;
-    private String emergencySiteID;
+public class EmergencyPosition extends Position {
+    private Position sitePosition; // Add this field
+    private String siteID;
 
     public EmergencyPosition(int row, int col) {
         super(row, col);
-        emergencyPosition = new Position(row, col);
+        this.sitePosition = new Position(row, col); // Initialize it
     }
 
-    public Position getEmergencyPosition() {
-        return emergencyPosition;
+    public int[] getEmergencyPosition() {
+        return new int[]{sitePosition.getRow(), sitePosition.getCol()};
     }
 
-    public void setEmergencyPosition(int row, int col,String siteID) {
-        emergencyPosition = new Position(row, col);
-        emergencySiteID = siteID;
+    public void setEmergencyPosition(int row, int col, String siteID) {
+        sitePosition = new Position(row, col);
+        this.siteID = siteID;
+    }
+    
+    public String getSiteID() {
+        return siteID;
     }
 }

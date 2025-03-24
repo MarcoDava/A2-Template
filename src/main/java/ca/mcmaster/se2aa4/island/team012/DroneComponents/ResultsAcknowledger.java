@@ -109,6 +109,7 @@ public class ResultsAcknowledger{
             logger.info("returning false, no site found");
             return false;
         }
+        logger.info("site found, returning true");
         emergencyPosition.setEmergencyPosition(dronePosition.getRow(),dronePosition.getCol(),emergencySite.getString(0));
         return false;
     }
@@ -155,6 +156,7 @@ public class ResultsAcknowledger{
                 // also save the UID of the creek because we need to return it at the end (we stop exectution when creek found)
             }
             logger.info("checking for sites");
+            logger.info("Emergency Site is at: "+emergencyPosition.getRow()+" "+emergencyPosition.getCol()+" "+emergencyPosition.getSiteID());
             if(extractSites(extraInfo)) { // check if we found any creeks
                 siteFound=true;
             }
@@ -171,6 +173,7 @@ public class ResultsAcknowledger{
                 case FIND_WIDTH_STATE:
                     findWidthStateHandler();
                     break;
+                    
                 case APPROACH_ISLAND_STATE:
                     approachIslandStateHandler();
                     break;

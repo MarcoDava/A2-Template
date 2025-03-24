@@ -82,7 +82,7 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         creekPosition=new CreekPosition(-1,-1);
         emergencyPosition=new EmergencyPosition(-1,-1);
         droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition, this.heading,this.controller, this.mapArea);
-        resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.mapArea, drone, dronePosition, creekPosition, emergencyPosition,this.droneBrain, this.controller);
+        resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.mapArea, this.drone, this.dronePosition, this.creekPosition, this.emergencyPosition,this.droneBrain, this.controller);
     }
 
     @Override
@@ -101,7 +101,6 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
          * // .remove() to dequeue
          * // .peek() to peek at first in queue
         */
-        
         /*
             // this is the implementation to go in this function -J
          * if (actionQueue.empty() = true) {
