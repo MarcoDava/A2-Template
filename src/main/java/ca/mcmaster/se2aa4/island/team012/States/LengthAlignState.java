@@ -6,10 +6,10 @@ import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
-import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Radar;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 
 
 /**
@@ -20,7 +20,7 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
  * point, the drone will have found an area where it can start the search and enter
  * FindLengthState.
  */
-public class DimensionAlignState implements State {
+public class LengthAlignState implements State {
     private int eastCtr;
     private int westCtr;
     private int northCtr;
@@ -32,7 +32,7 @@ public class DimensionAlignState implements State {
 
     private final Logger logger = LogManager.getLogger();
 
-    public DimensionAlignState(Heading heading, Control controller, DronePosition position) {
+    public LengthAlignState(Heading heading, Control controller, DronePosition position) {
         this.eastCtr = 0;
         this.westCtr = 0;
         this.northCtr = 0;

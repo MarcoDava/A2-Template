@@ -9,11 +9,11 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import ca.mcmaster.se2aa4.island.team012.Positioning.CreekPosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
+import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.EmergencyPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
-import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
-import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
 
 
@@ -187,12 +187,20 @@ public class ResultsAcknowledger{
         }
         
         switch (droneBrain.getStatus()) {
-                case DIMENSION_ALIGN_STATE:
-                    dimensionStateHandler();
+                case LENGTH_ALIGN_STATE:
+                    lengthStateHandler();
                     break;
 
                 case FIND_LENGTH_STATE:
                     findLengthStateHandler();
+                    break;
+
+                case LEFT_TURN_STATE:
+                    leftTurnStateHandler();
+                    break;
+
+                case WIDTH_ALIGN_STATE:
+                    widthStateHandler();
                     break;
 
                 case FIND_WIDTH_STATE:
@@ -225,14 +233,14 @@ public class ResultsAcknowledger{
      * 
      * if ground on either side, keep scanning until we find a spot with no ground
      */
-    private void dimensionStateHandler() {
+    private void lengthStateHandler() {
         if(actionCtr % 3 == 2 && !wasGroundFound) { // if no ground found after scanning, we can move onto the next deimension
             dimensionsAligned++;
             if (dimensionsAligned == 2) { // we have aligned ourselves to find the dimensions of the map
                 droneBrain.setStatus(Status.FIND_LENGTH_STATE);
             } else {
                 // some kind of turn logic here-------------------------------------------------------
-                droneBrain.setStatus(Status.DIMENSION_ALIGN_STATE);
+                droneBrain.setStatus(Status.LENGTH_ALIGN_STATE);
             }
         } else {
             if (actionCtr % 3 < 2 && groundFound) { // to check if there is ground while scanning
@@ -241,7 +249,7 @@ public class ResultsAcknowledger{
             else if (actionCtr % 3 == 2) { // reset was ground found at the move state
                 wasGroundFound = false;
             }
-            droneBrain.setStatus(Status.DIMENSION_ALIGN_STATE);
+            droneBrain.setStatus(Status.LENGTH_ALIGN_STATE);
         }
         actionCtr++;
         logger.info("actionCtr: " + actionCtr);
@@ -286,6 +294,32 @@ public class ResultsAcknowledger{
             droneBrain.setStatus(Status.FIND_LENGTH_STATE); // move to next state
         }
         logger.info("got to here");
+    }
+
+    private void leftTurnStateHandler(){
+        droneBrain.setStatus(Status.WIDTH_ALIGN_STATE);
+    }
+
+    private void widthStateHandler() {
+        if(actionCtr % 3 == 2 && !wasGroundFound) { // if no ground found after scanning, we can move onto the next deimension
+            dimensionsAligned++;
+            if (dimensionsAligned == 2) { // we have aligned ourselves to find the dimensions of the map
+                droneBrain.setStatus(Status.FIND_WIDTH_STATE);
+            } else {
+                // some kind of turn logic here-------------------------------------------------------
+                droneBrain.setStatus(Status.WIDTH_ALIGN_STATE);
+            }
+        } else {
+            if (actionCtr % 3 < 2 && groundFound) { // to check if there is ground while scanning
+                wasGroundFound = true;
+            }
+            else if (actionCtr % 3 == 2) { // reset was ground found at the move state
+                wasGroundFound = false;
+            }
+            droneBrain.setStatus(Status.WIDTH_ALIGN_STATE);
+        }
+        actionCtr++;
+        logger.info("actionCtr: " + actionCtr);
     }
 
 

@@ -5,16 +5,18 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
+import ca.mcmaster.se2aa4.island.team012.States.ApproachIslandState;
 import ca.mcmaster.se2aa4.island.team012.States.EndSearchState;
 import ca.mcmaster.se2aa4.island.team012.States.FindLengthState;
 import ca.mcmaster.se2aa4.island.team012.States.FindWidthState;
-import ca.mcmaster.se2aa4.island.team012.States.ApproachIslandState;
+import ca.mcmaster.se2aa4.island.team012.States.LeftTurnState;
+import ca.mcmaster.se2aa4.island.team012.States.LengthAlignState;
 import ca.mcmaster.se2aa4.island.team012.States.SpiralFromMiddleState;
 import ca.mcmaster.se2aa4.island.team012.States.State;
 import ca.mcmaster.se2aa4.island.team012.States.Status;
-import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
-import ca.mcmaster.se2aa4.island.team012.States.DimensionAlignState;
+import ca.mcmaster.se2aa4.island.team012.States.WidthAlignState;
 
 
 /**
@@ -23,8 +25,10 @@ import ca.mcmaster.se2aa4.island.team012.States.DimensionAlignState;
 public class SimpleDroneBrain extends DroneBrain {
     private Status currentStatus;
     private State currentState;
-    private State DimensionAlignState;
+    private State lengthAlignState;
     private State findLengthState;
+    private State leftTurnState;
+    private State widthAlignState;
     private State findWidthState;
     private State approachIslandState;
     private State spiralFromMiddleState;
@@ -59,10 +63,10 @@ public class SimpleDroneBrain extends DroneBrain {
         this.heading=heading;
         this.mapArea=mapArea;
 
-        currentStatus=Status.DIMENSION_ALIGN_STATE;
-
-        DimensionAlignState = new DimensionAlignState(this.heading,this.controller,this.dronePosition);
+        lengthAlignState = new LengthAlignState(this.heading,this.controller,this.dronePosition);
         findLengthState = new FindLengthState(this.heading,this.controller);
+        leftTurnState = new LeftTurnState(this.heading,this.controller,this.dronePosition);
+        widthAlignState = new WidthAlignState(this.heading,this.controller,this.dronePosition);
         findWidthState = new FindWidthState(this.heading,this.controller,this.dronePosition);
         approachIslandState = new ApproachIslandState(this.mapArea,this.dronePosition,this.heading,this.controller);
         spiralFromMiddleState = new SpiralFromMiddleState(this.mapArea,this.dronePosition,this.controller,this.heading);
@@ -85,14 +89,24 @@ public class SimpleDroneBrain extends DroneBrain {
         else { // process action based on state, as no risk
 
             switch (currentStatus) {
-                case DIMENSION_ALIGN_STATE:
-                    logger.info("STATE STATUS " + Status.DIMENSION_ALIGN_STATE);
-                    this.currentState = this.DimensionAlignState;
+                case LENGTH_ALIGN_STATE:
+                    logger.info("STATE STATUS " + Status.LENGTH_ALIGN_STATE);
+                    this.currentState = this.lengthAlignState;
                     break;
 
                 case FIND_LENGTH_STATE:
                     logger.info("STATUS " + Status.FIND_LENGTH_STATE);
                     this.currentState = this.findLengthState;
+                    break;
+
+                case LEFT_TURN_STATE:
+                    logger.info("STATUS " + Status.FIND_LENGTH_STATE);
+                    this.currentState = this.leftTurnState;
+                    break;
+
+                case WIDTH_ALIGN_STATE:
+                    logger.info("STATUS " + Status.WIDTH_ALIGN_STATE);
+                    this.currentState = this.widthAlignState;
                     break;
 
                 case FIND_WIDTH_STATE:
