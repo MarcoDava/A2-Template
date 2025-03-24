@@ -7,11 +7,12 @@ import org.json.JSONObject;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
+import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 
 public class EndSearchState implements State {
     private FlightSystem flightSystem;
     private static final Logger logger = LogManager.getLogger();
-    public EndSearchState(DronePosition dronePosition,Control controller){ {
+    public EndSearchState(DronePosition dronePosition,Control controller){ 
         flightSystem=new FlightSystem(dronePosition,controller);
     }
     @Override
