@@ -56,9 +56,9 @@ public class SimpleDroneBrain extends DroneBrain {
         this.heading=heading;
         this.mapArea=mapArea;
 
-        currentStatus=Status.FIND_LENGTH_STATE;
+        currentStatus=Status.DIMENSION_ALIGN_STATE;
 
-        DimensionAlignState = new DimensionAlignState(this.heading,this.controller);
+        DimensionAlignState = new DimensionAlignState(this.heading,this.controller,this.dronePosition);
         findLengthState = new FindLengthState(this.heading,this.controller);
         findWidthState = new FindWidthState(this.heading,this.controller);
         spiralSearchState = new SpiralSearchState(this.mapArea,this.dronePosition,this.controller,this.heading);
@@ -81,7 +81,7 @@ public class SimpleDroneBrain extends DroneBrain {
             logger.info("Got here 9");
             switch (currentStatus) {
                 case DIMENSION_ALIGN_STATE:
-                    logger.info("STATE STATUS " + Status.FIND_LENGTH_STATE);
+                    logger.info("STATE STATUS " + Status.DIMENSION_ALIGN_STATE);
                     this.currentState = this.DimensionAlignState;
                     break;
 

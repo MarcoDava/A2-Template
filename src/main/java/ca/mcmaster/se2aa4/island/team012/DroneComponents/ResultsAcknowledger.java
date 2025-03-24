@@ -223,7 +223,8 @@ public class ResultsAcknowledger{
             }
             droneBrain.setStatus(Status.DIMENSION_ALIGN_STATE);
         }
-
+        actionCtr++;
+        logger.info("actionCtr: " + actionCtr);
     }
 
 

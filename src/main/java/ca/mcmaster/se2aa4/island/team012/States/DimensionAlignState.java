@@ -9,6 +9,8 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Radar;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
+import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
+
 
 /**
  * This state is when the program just starts. In this state, we need to find an area
@@ -23,18 +25,21 @@ public class DimensionAlignState implements State {
     private int westCtr;
     private int northCtr;
     private int southCtr;
-    private int actionCtr=0;
+    private int actionCtr;
     private Radar radar;
     private Heading heading;
     private FlightSystem flightSystem;
 
     private final Logger logger = LogManager.getLogger();
 
-    public DimensionAlignState(Heading heading, Control controller) {
+    public DimensionAlignState(Heading heading, Control controller, DronePosition position) {
         this.eastCtr = 0;
         this.westCtr = 0;
         this.northCtr = 0;
         this.southCtr = 0;
+        this.actionCtr = 0;
+        this.heading = heading;
+        this.flightSystem = new FlightSystem(position, controller);
         this.radar = new Radar(controller);
     }
 
@@ -47,6 +52,7 @@ public class DimensionAlignState implements State {
      */
     @Override
     public String handle(JSONObject decision) {
+        logger.info("Entering DimensionAlignState");
         if (actionCtr % 3 == 0) {                   // scan left
             radar.scanLeft(heading, decision);
         } else if (actionCtr % 3 == 1) {            // scan right
@@ -56,6 +62,7 @@ public class DimensionAlignState implements State {
             flightSystem.fly(heading, decision);
         }
         this.actionCtr++;
+        logger.info("Exiting DimensionAlignState");
         return decision.toString();
     }
 
