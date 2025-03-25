@@ -1,7 +1,6 @@
 package ca.mcmaster.se2aa4.island.team012.States;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
@@ -19,7 +18,6 @@ public class ApproachIslandState implements State {
     private Heading heading;
     private FlightSystem flightSystem;
     private Photoscanner photoScanner;
-    private static final Logger logger = LogManager.getLogger();
 
 
 
@@ -37,11 +35,15 @@ public class ApproachIslandState implements State {
     
         if(dronePosition.getRow()!=mapCenterRow&&dronePosition.getRow()!=mapCenterRow-1&&dronePosition.getRow()!=mapCenterRow+1){//if the drone is not 1 above, 1 below or at the center row, it will execute the below code.
             //the reason for these particular conditions is that the drone will always be at the center row even when it turns, because a turn is one forward and one in the direction of the turn.
-            logger.info("Drone is facing "+heading.getHeading());
             if(dronePosition.getRow()-mapCenterRow<0){//this means that the droneposition is above the center row
-                logger.info("Drone is above the center row");
                 if(heading.compareHeading(Direction.N)){
-                    flightSystem.turnRight(heading, decision);
+                    if(dronePosition.getCol()-mapCenterCol<0){
+                        flightSystem.turnRight(heading, decision);
+                    }
+                    else{
+                        flightSystem.turnLeft(heading, decision);
+                    }
+                    
                 }
                 else if(heading.compareHeading(Direction.E)){
                     flightSystem.turnRight(heading, decision);
@@ -54,7 +56,6 @@ public class ApproachIslandState implements State {
                 }
             }
             else if(dronePosition.getRow()-mapCenterRow>0){//this means that the droneposition is below the center row
-                logger.info("Drone is below the center row");
                 if(heading.compareHeading(Direction.N)){
                     flightSystem.fly(heading, decision);
                 }
@@ -62,7 +63,12 @@ public class ApproachIslandState implements State {
                     flightSystem.turnLeft(heading, decision);
                 }
                 else if(heading.compareHeading(Direction.S)){
-                    flightSystem.turnLeft(heading, decision);
+                    if(dronePosition.getCol()-mapCenterCol<0){
+                        flightSystem.turnLeft(heading, decision);
+                    }
+                    else{
+                        flightSystem.turnRight(heading, decision);
+                    }
                 }
                 else if(heading.compareHeading(Direction.W)){
                     flightSystem.turnRight(heading, decision);
@@ -71,7 +77,6 @@ public class ApproachIslandState implements State {
         } 
         else{
             if(dronePosition.getCol()-mapCenterCol<0){//this means that the droneposition is to the left of the center col
-                logger.info("Drone is left of the center row");
                 if(heading.compareHeading(Direction.N)){
                     flightSystem.turnRight(heading, decision);
                 }
@@ -86,7 +91,6 @@ public class ApproachIslandState implements State {
                 }
             }
             else if(dronePosition.getCol()-mapCenterCol>0){//this means that the droneposition is to the right of the center col
-                logger.info("Drone is right of the center row");
                 if(heading.compareHeading(Direction.N)){
                     flightSystem.turnLeft(heading, decision);
                 }

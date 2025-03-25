@@ -2,8 +2,6 @@ package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
 import java.io.StringReader;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -11,6 +9,7 @@ import org.json.JSONTokener;
 import ca.mcmaster.se2aa4.island.team012.Positioning.CreekPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.StartingPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.EmergencyPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
@@ -23,7 +22,8 @@ public class ResultsAcknowledger{
     private MapArea mapArea;
     private Control controller;
     private Drone drone;
-    private SimpleDroneBrain droneBrain;
+    private DroneBrain droneBrain;
+    private StartingPosition startingPosition;
     private CreekPosition creekPosition;
     private EmergencyPosition emergencyPosition;
     private DronePosition dronePosition;
@@ -37,12 +37,13 @@ public class ResultsAcknowledger{
     private boolean westClear;
     private boolean northClear;
     private boolean southClear;
+    private int RowDisplacement;
+    private int ColDisplacement;
     private int range;
     private int southDistance;
     private int eastDistance;
     private int northDistance;
     private int westDistance;
-    private final Logger logger = LogManager.getLogger();
     
 
     /*
@@ -56,21 +57,25 @@ public class ResultsAcknowledger{
      * @param emergencyPosition the position of the emergency site
      * @param droneBrain the brain of the drone
      */
-    public ResultsAcknowledger(Battery battery, Heading heading, MapArea mapArea, Drone drone,DronePosition dronePosition,CreekPosition creekPosition,EmergencyPosition emergencyPosition, SimpleDroneBrain droneBrain, Control controller){
+    public ResultsAcknowledger(Battery battery, Heading heading, MapArea mapArea, Drone drone,DronePosition dronePosition,StartingPosition startingPosition, CreekPosition creekPosition,EmergencyPosition emergencyPosition, DroneBrain droneBrain, Control controller){
         this.battery = battery;
         this.heading = heading;
         this.mapArea = mapArea;
         this.drone = drone;
         this.dronePosition = dronePosition;
+        this.startingPosition = startingPosition;
         this.creekPosition = creekPosition;
         this.emergencyPosition = emergencyPosition;
         this.droneBrain=droneBrain;
         this.controller=controller;
 
-        southDistance=0;
-        eastDistance=0;
-        northDistance=0;
-        westDistance=0;
+        southDistance=-1;
+        eastDistance=-1;
+        northDistance=-1;
+        westDistance=-1;
+
+        RowDisplacement=0;
+        ColDisplacement=0;
 
         groundFound=false;
         creekFound=false;
@@ -103,7 +108,6 @@ public class ResultsAcknowledger{
      */
     public void extractBattery(JSONObject response){
         battery.useBattery(response.getInt("cost"));
-        logger.info("Battery level is: "+battery.getBattery());
     }
 
     /*
@@ -134,10 +138,8 @@ public class ResultsAcknowledger{
     private boolean extractSites(JSONObject extraInfo){
         JSONArray emergencySite = extraInfo.getJSONArray("sites");
         if(emergencySite.length()==0){
-            logger.info("returning false, no site found");
             return false;
         }
-        logger.info("site found, returning true");
         emergencyPosition.setEmergencyPosition(dronePosition.getRow(),dronePosition.getCol(),emergencySite.getString(0));
         return true;
     }
@@ -150,10 +152,9 @@ public class ResultsAcknowledger{
     private boolean extractCreeks(JSONObject extraInfo){
         JSONArray creek = extraInfo.getJSONArray("creeks");
         if(creek.length()==0){
-            logger.info("returning false, no creek found");
             return false;
         }
-        logger.info("creek found, returning true");
+ 
         creekPosition.setCreekPosition(dronePosition.getRow(), dronePosition.getCol(), creek.getString(0));
         return true;
     }
@@ -165,32 +166,20 @@ public class ResultsAcknowledger{
     public void updateValues(String s) { // called in every loop by Drone.acknowledgeResults() for processing
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s))); // converts the response from engine to JSON
         JSONObject extraInfo = response.getJSONObject("extras"); // extras contains actual information (always with battery)
-        logger.info("Map Area is: "+mapArea.getRows()+" "+mapArea.getCols());
-        logger.info("Current Position: ({}, {}), Center: ({}, {})", 
-    dronePosition.getRow(), dronePosition.getCol(), 
-    mapArea.getRows()/2, mapArea.getCols()/2);
         extractBattery(response); // extract and update battery
-        logger.info(creekPosition.getCreekPosition()[0]+" "+creekPosition.getCreekPosition()[1]+" "+creekPosition.getCreekID());
         if(controller.compareAction(Command.ECHO)){ // if we just used radar
             range=extractRange(extraInfo); // how far away did we scan
-            logger.info("SCAN was "+range+" units long");
             groundFound=extractGround(extraInfo); // check if radar found ground or went out of bounds
-            logger.info("Ground Found: "+groundFound);
         }
         else if (controller.compareAction(Command.SCAN)){ // if we just used photoscanner
-            logger.info("checking for creeks");
             if(extractCreeks(extraInfo)){ // check if we found any creeks
                 creekFound=true;
                 // save the position of the creek
                 // also save the UID of the creek because we need to return it at the end (we stop exectution when creek found)
             }
-            logger.info("checking for sites");
             if(extractSites(extraInfo)) { // check if we found any creeks
                 siteFound=true;
             }
-        }
-        else{
-            logger.info("Didnt scan or echo");
         }
         switch (droneBrain.getStatus()) {
                 case LENGTH_ALIGN_STATE:
@@ -257,6 +246,21 @@ public class ResultsAcknowledger{
         else if(heading.getLastScanDirection()==Direction.S && !groundFound){
             southClear=true;
         }
+        if(controller.compareAction(Command.MOVE)){
+            if(heading.compareHeading(Direction.E)){
+                ColDisplacement++;
+            }
+            else if(heading.compareHeading(Direction.W)){
+                ColDisplacement--;
+            }
+            else if(heading.compareHeading(Direction.N)){
+                RowDisplacement--;
+            }
+            else{
+                RowDisplacement++;
+            }
+
+        }
         if(northClear&&southClear){
             droneBrain.setStatus(Status.FIND_LENGTH_STATE);
         }
@@ -283,39 +287,39 @@ public class ResultsAcknowledger{
         else if(heading.getLastScanDirection()==Direction.W){
             westDistance=range;
         }
-        if(northDistance!=0 && southDistance!=0){
+        if(northDistance!=-1 && southDistance!=-1){
             if(northDistance>southDistance && heading.getHeading() == Direction.E){
-                droneBrain.setStatus(Status.LEFT_TURN_STATE);
+                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
             }
             else if (northDistance<southDistance && heading.getHeading() == Direction.E){
-                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+                droneBrain.setStatus(Status.LEFT_TURN_STATE);
             }
             else if (northDistance>southDistance && heading.getHeading() == Direction.W){
-                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+                droneBrain.setStatus(Status.LEFT_TURN_STATE);
             }
             else if (northDistance<southDistance && heading.getHeading() == Direction.W){
-                 droneBrain.setStatus(Status.LEFT_TURN_STATE);
-            }
-            logger.info(northDistance+" "+southDistance);
-            mapArea.setMapY(northDistance+southDistance+1);
-            dronePosition.setRow(northDistance+1);
-        }
-        else if(eastDistance!=0 && westDistance!=0){
-            if(eastDistance>westDistance && heading.getHeading() == Direction.N){
-                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
-            }
-            else if (eastDistance<westDistance && heading.getHeading() == Direction.N){
-                droneBrain.setStatus(Status.LEFT_TURN_STATE);
-            }
-            else if (eastDistance>westDistance && heading.getHeading() == Direction.S){
-                droneBrain.setStatus(Status.LEFT_TURN_STATE);
-            }
-            else if (eastDistance<westDistance && heading.getHeading() == Direction.S){
                  droneBrain.setStatus(Status.RIGHT_TURN_STATE);
             }
-            logger.info(eastDistance+" "+westDistance);
+            mapArea.setMapY(northDistance+southDistance+1);
+            dronePosition.setRow(northDistance+1);
+            startingPosition.setRow(northDistance-RowDisplacement+1);
+        }
+        else if(eastDistance!=-1 && westDistance!=-1){
+            if(eastDistance>westDistance && heading.getHeading() == Direction.N){
+                droneBrain.setStatus(Status.LEFT_TURN_STATE);
+            }
+            else if (eastDistance<westDistance && heading.getHeading() == Direction.N){
+                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+            }
+            else if (eastDistance>westDistance && heading.getHeading() == Direction.S){
+                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+            }
+            else if (eastDistance<westDistance && heading.getHeading() == Direction.S){
+                 droneBrain.setStatus(Status.LEFT_TURN_STATE);
+            }
             mapArea.setMapX(eastDistance+westDistance+1);
-            dronePosition.setCol(eastDistance+1);
+            dronePosition.setCol(westDistance+1);
+            startingPosition.setCol(westDistance-ColDisplacement+1);
             XFound=true;
         }
         else{
@@ -333,24 +337,33 @@ public class ResultsAcknowledger{
 
     private void widthStateHandler() {
         if(heading.getLastScanDirection()==Direction.E && !groundFound){
-            logger.info("East Clear");
             eastClear=true;
         }
         else if(heading.getLastScanDirection()==Direction.N && !groundFound){
-            logger.info("North Clear");
             northClear=true;
         }
         else if(heading.getLastScanDirection()==Direction.W && !groundFound){
-            logger.info("West Clear");
             westClear=true;
         }
         else if(heading.getLastScanDirection()==Direction.S && !groundFound){
-            logger.info("South Clear");
             southClear=true;
         }
-        logger.info("east"+eastClear+"west"+westClear);
+        if(controller.compareAction(Command.MOVE)){
+            if(heading.compareHeading(Direction.E)){
+                ColDisplacement++;
+            }
+            else if(heading.compareHeading(Direction.W)){
+                ColDisplacement--;
+            }
+            else if(heading.compareHeading(Direction.N)){
+                RowDisplacement--;
+            }
+            else{
+                RowDisplacement++;
+            }
+
+        }
         if(westClear && eastClear){
-            logger.info("Moving to approach");
             droneBrain.setStatus(Status.FIND_WIDTH_STATE);
         }
     }
@@ -372,14 +385,16 @@ public class ResultsAcknowledger{
         else if(heading.getLastScanDirection()==Direction.W){
             westDistance=range;
         }
-        if(eastDistance!=0 && westDistance!=0 && northDistance!=0 &&  southDistance!=0){
+        if(eastDistance!=-1 && westDistance!=-1 && northDistance!=-1 &&  southDistance!=-1){
             if(XFound){
                 mapArea.setMapY(northDistance+southDistance+1);
                 dronePosition.setRow(northDistance+1);
+                startingPosition.setRow(northDistance-RowDisplacement+1);
             }
             else{
                 mapArea.setMapX(eastDistance+westDistance+1);
                 dronePosition.setCol(westDistance+1);
+                startingPosition.setRow(westDistance-ColDisplacement+1);
             }
             droneBrain.setStatus(Status.APPROACH_ISLAND_STATE);
         }
@@ -389,8 +404,6 @@ public class ResultsAcknowledger{
     }
 
     private void approachIslandStateHandler(){
-        logger.info("Middle is at:");
-        logger.info(dronePosition.getRow()+" "+dronePosition.getCol());
         if(mapArea.getRows()/2==dronePosition.getRow() && mapArea.getCols()/2==dronePosition.getCol()){
             droneBrain.setStatus(Status.SPIRAL_FROM_MIDDLE_STATE);
         }

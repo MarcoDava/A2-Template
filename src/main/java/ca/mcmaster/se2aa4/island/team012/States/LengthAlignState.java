@@ -1,7 +1,5 @@
 package ca.mcmaster.se2aa4.island.team012.States;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
@@ -22,29 +20,17 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
  * FindLengthState.
  */
 public class LengthAlignState implements State {
-    private int eastCtr;
-    private int westCtr;
-    private int northCtr;
-    private int southCtr;
     private int actionCtr;
     private Radar radar;
     private Heading heading;
     private FlightSystem flightSystem;
-    private Photoscanner photoscanner;
-    int ctr=0;
 
-    private final Logger logger = LogManager.getLogger();
 
     public LengthAlignState(Heading heading, Control controller, DronePosition position) {
-        this.eastCtr = 0;
-        this.westCtr = 0;
-        this.northCtr = 0;
-        this.southCtr = 0;
         this.actionCtr = 0;
         this.heading = heading;
         this.flightSystem = new FlightSystem(position, controller);
         this.radar = new Radar(controller);
-        this.photoscanner = new Photoscanner(controller);
     }
 
     /*
@@ -56,42 +42,14 @@ public class LengthAlignState implements State {
      */
     @Override
     public void handle(JSONObject decision) {
-        if(ctr%2==0){
-            photoscanner.scanBelow(decision);
+        if (actionCtr % 3 == 0) {                   // scan left
+            radar.scanLeft(heading, decision);
+        } else if (actionCtr % 3 == 1) {            // scan right
+            radar.scanRight(heading, decision);
+        } else {                                    // move forward
+            flightSystem.fly(heading, decision);
         }
-        else{
-            logger.info("Entering DimensionAlignState");
-            if (actionCtr % 3 == 0) {                   // scan left
-                radar.scanLeft(heading, decision);
-            } else if (actionCtr % 3 == 1) {            // scan right
-                radar.scanRight(heading, decision);
-            } else {                                    // move forward
-                updateCtr();
-                flightSystem.fly(heading, decision);
-            }
-            this.actionCtr++;
-            logger.info("Exiting DimensionAlignState");
-        }
-        ctr++;
-    }
+        this.actionCtr++;
 
-    
-    /*
-     * This method is responsible for updating the counters for the directions
-     * that the drone has flown in.
-     * 
-     * @return void
-     */
-    private void updateCtr() {
-        if (heading.compareHeading(Direction.E)) {
-            this.eastCtr++;
-        } else if (heading.compareHeading(Direction.W)) {
-            this.westCtr++;
-        } else if (heading.compareHeading(Direction.N)) {
-            this.northCtr++;
-        } else {
-            this.southCtr++;
-        }
     }
-
 }

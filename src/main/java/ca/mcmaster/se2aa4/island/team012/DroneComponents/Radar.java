@@ -1,14 +1,11 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 
 public class Radar {
-    private static final Logger logger = LogManager.getLogger();
     private Control controller;
 
     public Radar(Control controller) {
@@ -69,22 +66,18 @@ public class Radar {
     public void scanNorth(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.N));
-        logger.info("Scanning North");
     }
     public void scanSouth(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.S));
-        logger.info("Scanning South");
     }
     public void scanEast(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.E));
-        logger.info("Scanning East");
     }
     public void scanWest(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.W));
-        logger.info("Scanning West");
     }
     
 

@@ -1,33 +1,31 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
+import ca.mcmaster.se2aa4.island.team012.Positioning.StartingPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 
 public class DroneRetrieval {
 
-    private static final Logger logger = LogManager.getLogger();
     private Heading heading;
     private FlightSystem flightSystem;
     private MapArea mapArea;
     private DronePosition dronePosition;
+    private StartingPosition startingPosition;
     private Battery battery;
     private final int MIN_ROW = 2;
     private final int MIN_COL = 2;
 
     
 
-    private final int RANGE_BORDER = 1;
-
-    public DroneRetrieval(MapArea mapArea, Battery battery,DronePosition dronePosition,Control controller,Heading heading) {
+    public DroneRetrieval(MapArea mapArea, Battery battery,DronePosition dronePosition, StartingPosition startingPosition, Control controller,Heading heading) {
         this.mapArea = mapArea;
         this.battery=battery;
         this.dronePosition = dronePosition;
+        this.startingPosition = startingPosition;
         this.heading = heading;
         flightSystem = new FlightSystem(dronePosition, controller);
     }
@@ -45,11 +43,9 @@ public class DroneRetrieval {
 
     public void handleDanger(JSONObject decision, DangerType dangerType){
         if(dangerType==DangerType.OUTOFRANGE){
-            logger.info("Drone is going out of range, Taking control to avoid going MIA");
             handleRangeDanger(decision);
         }
         else if(dangerType==DangerType.BATTERYLOW){
-            logger.info("Battery is low, stopping program now");
             flightSystem.stop(decision);
         }
     }
@@ -91,25 +87,27 @@ public class DroneRetrieval {
 
 
     private boolean rangeDanger() { // if going to go out of bounds, turn right or left based on where there is the most open map
-        if(dronePosition.getRow()==MIN_ROW && heading.compareHeading(Direction.N)){
-            return true;
-        }
-        else if(dronePosition.getRow()==mapArea.getRows()-MIN_ROW && heading.compareHeading(Direction.S)){
-            return true;
-        }
-        else if(dronePosition.getCol()==MIN_COL && heading.compareHeading(Direction.W)){
-            return true;
-        }
-        else if(dronePosition.getCol()==mapArea.getCols()-MIN_COL && heading.compareHeading(Direction.E)){
-            return true;
+        if(dronePosition.getRow()!=-1&&dronePosition.getCol()!=-1){
+            if(dronePosition.getRow()==MIN_ROW && heading.compareHeading(Direction.N)){
+                return true;
+            }
+            else if(dronePosition.getRow()==mapArea.getRows()-MIN_ROW && heading.compareHeading(Direction.S)){
+                return true;
+            }
+            else if(dronePosition.getCol()==MIN_COL && heading.compareHeading(Direction.W)){
+                return true;
+            }
+            else if(dronePosition.getCol()==mapArea.getCols()-MIN_COL && heading.compareHeading(Direction.E)){
+                return true;
+            }
         }
         return false;
     }
 
     public boolean batteryDanger() {  // run  out of battery --> stop the program
-    logger.info("Hello");
-        logger.info(Math.sqrt(dronePosition.getRow()*dronePosition.getRow()+dronePosition.getCol()*dronePosition.getCol()));
-        if (Math.sqrt(dronePosition.getRow()*dronePosition.getRow()+dronePosition.getCol()*dronePosition.getCol())>battery.getBattery()) {
+        int rowDistance = dronePosition.getRow()-startingPosition.getRow();
+        int colDistance = dronePosition.getCol()-startingPosition.getCol();
+        if (Math.sqrt(rowDistance*rowDistance+colDistance*colDistance)>battery.getBattery()) {
             return true;
         }
         return false;

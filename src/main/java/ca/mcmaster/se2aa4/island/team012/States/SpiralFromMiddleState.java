@@ -10,9 +10,6 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Photoscanner;
 
 public class SpiralFromMiddleState implements State {
-    private MapArea mapArea;
-    private Control controller;
-    private DronePosition dronePosition;
     private Heading heading;
     private FlightSystem flightSystem;
     private Photoscanner photoscanner;
@@ -23,10 +20,7 @@ public class SpiralFromMiddleState implements State {
     private boolean scanning;
     
     
-    public SpiralFromMiddleState(MapArea mapArea, DronePosition dronePosition, Control controller, Heading heading) { // contructor copied unchanged from spiralsearchstate
-        this.mapArea = mapArea;
-        this.controller = controller;
-        this.dronePosition = dronePosition;
+    public SpiralFromMiddleState(DronePosition dronePosition, Control controller, Heading heading) { // contructor copied unchanged from spiralsearchstate
         this.heading = heading;
         flightSystem = new FlightSystem(dronePosition,controller);
         photoscanner = new Photoscanner(controller);
