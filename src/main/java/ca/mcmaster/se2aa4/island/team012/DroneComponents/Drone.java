@@ -1,4 +1,3 @@
-
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
 import java.io.StringReader;
@@ -13,13 +12,13 @@ import ca.mcmaster.se2aa4.island.team012.Positioning.StartingPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.EmergencyPosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
-import ca.mcmaster.se2aa4.island.team012.States.Status;
 import eu.ace_design.island.bot.IExplorerRaid;
 
-
+/**
+ * Represents the main drone class that implements the IExplorerRaid interface.
+ * Handles initialization, decision-making, and result acknowledgment.
+ */
 public class Drone implements IExplorerRaid{//reduce the amount of times that the dron changes heading, rarely use scan. 
-//use echo to guide the drone. 
-    private Status currentStatus;
     private DroneBrain droneBrain;
     private Drone drone;
     private DronePosition dronePosition;
@@ -31,17 +30,12 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     private ResultsAcknowledger resultsAcknowledger;
     private MapArea mapArea;
     private Control controller;
-    // private FlightSystem flightSystem=new FlightSystem();
-    // private Photoscanner photoscanner=new Photoscanner();
 
-
-    // public Drone(){
-    //     currentStatus = Status.LOCATING_ISLAND_STATE;
-    //     droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition);
-    //     resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.mapArea, drone, dronePosition, creekPosition, emergencyPosition);
-    // }
-
-
+    /**
+     * Initializes the drone with the given configuration string.
+     * 
+     * @param s The configuration string in JSON format.
+     */
     @Override
     public void initialize(String s) {
         JSONObject info = new JSONObject(new JSONTokener(new StringReader(s)));
@@ -58,14 +52,6 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         }
 
         batteryLevel = new Battery(info.getInt("budget"));
-
-        // logger.info("** Initializing the Exploration Command Center");
-        // JSONObject info = new JSONObject(new JSONTokener(new StringReader(s)));
-        // logger.info("** Initialization info:\n {}", info.toString(2));
-        // String direction = info.getString("heading");
-        // Integer batteryLevel = info.getInt("budget");
-        // logger.info("The drone is facing {}", direction);
-        // logger.info("Battery level is {}", batteryLevel);
         this.controller=new Control(Command.NEUTRAL);
         this.mapArea=new MapArea(new int[]{-1,-1});  
         dronePosition=new DronePosition(-1,-1);
@@ -76,64 +62,37 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.heading, this.mapArea, this.drone, this.dronePosition, this.startingPosition, this.creekPosition, this.emergencyPosition,this.droneBrain, this.controller);
     }
 
+    /**
+     * Makes a decision for the drone's next action.
+     * 
+     * @return The decision as a string.
+     */
     @Override
     public String takeDecision() {
-        JSONObject decision = new JSONObject(); // unsure if these need to be created because of below logic
+        JSONObject decision = new JSONObject();
 
-        // **** assume actionQueue already set up as a queue of Strings in this (Drone) class with the below code -J****
-
-        /*
-         * import java.util.LinkedList;
-         * import java.util.Queue;
-         * 
-         * Queue<String> actionQueue = new LinkedList<>();
-         * // .add(String s) to enqueue
-         * // .remove() to dequeue
-         * // .peek() to peek at first in queue
-        */
-        /*
-            // this is the implementation to go in this function -J
-         * if (actionQueue.empty() = true) {
-         *      actionQueue = dronebrain.makedecision(actionQueue);
-         * }
-         * // do next action
-         *  String nextAction = actionQueue.remove();
-         * 
-         * return nextAction;
-         */
-
-        // below may be replaced by above
         droneBrain.makeDecision(decision);
         return decision.toString();
 
     }
 
+    /**
+     * Acknowledges the results of the last action taken by the drone.
+     * 
+     * @param s The result string in JSON format.
+     */
     @Override
     public void acknowledgeResults(String s){
         resultsAcknowledger.updateValues(s);
 
-        // Integer cost = response.getInt("cost");
-        // logger.info("The cost of the action was {}", cost);
-        // pass in cost, convert to int, etc, then return -J
-        // ex:
-        // barreryStorageDummy = battryStorageDummy - processCost(cost)
-
-        // String status = response.getString("status");
-        // logger.info("The status of the drone is {}", status);
-        // ?pass status into action status checker and do something if it was bad?
-        // depends on what status's there are beyond error if its required -J
-
-        // JSONObject extraInfo = response.getJSONObject("extras");
-        // logger.info("Additional information received: {}", extraInfo);
-
-        // storage may be formatted many ways, but something will exist to pass into and process that string'd JSON response -J
-        // ex:
-        // infoDummyStorage = updateInfo(infoDummyStorage, extraInfo)
-
-
         
     }
 
+    /**
+     * Delivers the final report of the drone's exploration.
+     * 
+     * @return The ID of the closest creek.
+     */
     @Override
     public String deliverFinalReport() {
         // return id of creek thats closest to 

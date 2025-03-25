@@ -5,6 +5,10 @@ import org.json.JSONObject;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
 
+/**
+ * Handles radar scanning functionality for the drone.
+ * Allows the drone to scan in different directions.
+ */
 public class Radar {
     private Control controller;
 
@@ -12,7 +16,13 @@ public class Radar {
         this.controller=controller;
     }
 
-    public void scanForward(Heading direction,JSONObject decision) {
+    /**
+     * Scans in the forward direction based on the drone's current heading.
+     * 
+     * @param direction The current heading of the drone.
+     * @param decision The JSON object to store the scan decision.
+     */
+    public void scanForward(Heading direction, JSONObject decision) {
         if (direction.compareHeading(Direction.N)) {
             scanNorth(decision);
             direction.setScanDirection(Direction.N);
@@ -29,7 +39,13 @@ public class Radar {
         controller.setCommand(Command.ECHO);
     }
 
-    public void scanLeft(Heading direction,JSONObject decision) {//resembles the heading the drone is currently headed
+    /**
+     * Scans to the left of the drone's current heading.
+     * 
+     * @param direction The current heading of the drone.
+     * @param decision The JSON object to store the scan decision.
+     */
+    public void scanLeft(Heading direction, JSONObject decision) {//resembles the heading the drone is currently headed
         if (direction.compareHeading(Direction.N)) {
             scanWest(decision);
             direction.setScanDirection(Direction.W);
@@ -46,7 +62,13 @@ public class Radar {
         controller.setCommand(Command.ECHO);
     }
 
-    public void scanRight(Heading direction,JSONObject decision) {
+    /**
+     * Scans to the right of the drone's current heading.
+     * 
+     * @param direction The current heading of the drone.
+     * @param decision The JSON object to store the scan decision.
+     */
+    public void scanRight(Heading direction, JSONObject decision) {
         if (direction.compareHeading(Direction.N)) {
             scanEast(decision);
             direction.setScanDirection(Direction.E);

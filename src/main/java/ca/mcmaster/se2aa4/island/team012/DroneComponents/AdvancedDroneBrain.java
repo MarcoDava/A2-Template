@@ -1,7 +1,5 @@
 package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
@@ -22,7 +20,8 @@ import ca.mcmaster.se2aa4.island.team012.States.WidthAlignState;
 
 
 /**
- * This class is responsible for the decision making of the drone
+ * Advanced implementation of the DroneBrain class.
+ * Responsible for making complex decisions for the drone.
  */
 public class AdvancedDroneBrain extends DroneBrain {
     private Status currentStatus;
@@ -37,29 +36,25 @@ public class AdvancedDroneBrain extends DroneBrain {
     private State spiralFromMiddleState;
     private State spiralFromSiteState;
     private State endSearchState;
-    private Drone drone;
     private MapArea mapArea;
     private DroneRetrieval droneRetriever;
     private Battery battery;
     private DronePosition dronePosition;
     private StartingPosition startingPosition;
-    private Command action;
     private Heading heading;
-    private AdvancedDroneBrain droneBrain;
     private Control controller;
 
-    /*
-     * This is the constructor for the SimpleDroneBrain class
+    /**
+     * Constructor to initialize the AdvancedDroneBrain with necessary components.
      * 
-     * @param drone the drone
-     * @param battery the battery of the drone
-     * @param dronePosition the position of the drone
-     * @param heading the heading of the drone
-     * @param controller the controller of the drone
-     * @param mapArea the mapArea of the drone
+     * @param battery The battery of the drone.
+     * @param dronePosition The current position of the drone.
+     * @param startingPosition The starting position of the drone.
+     * @param heading The heading direction of the drone.
+     * @param controller The controller for managing drone commands.
+     * @param mapArea The map area being explored.
      */
-    public AdvancedDroneBrain(Drone drone,Battery battery,DronePosition dronePosition,StartingPosition startingPosition, Heading heading,Control controller,MapArea mapArea) {
-        this.drone=drone;
+    public AdvancedDroneBrain(Battery battery,DronePosition dronePosition,StartingPosition startingPosition, Heading heading,Control controller,MapArea mapArea) {
         this.battery=battery;
         this.dronePosition=dronePosition;
         this.controller=controller;
@@ -67,7 +62,7 @@ public class AdvancedDroneBrain extends DroneBrain {
         this.mapArea=mapArea;
 
         currentStatus = Status.LENGTH_ALIGN_STATE;
-
+        //initializing all references
         lengthAlignState = new LengthAlignState(this.heading,this.controller,this.dronePosition);
         findLengthState = new FindLengthState(this.heading,this.controller);
         leftTurnState = new LeftTurnState(this.heading,this.controller,this.dronePosition);
@@ -81,11 +76,11 @@ public class AdvancedDroneBrain extends DroneBrain {
         droneRetriever= new DroneRetrieval(this.mapArea,this.battery,this.dronePosition, this.startingPosition,this.controller,this.heading);
     }
 
-    /*
-     * This function will make a decision for the drone
+    /**
+     * Makes a decision for the drone based on its current state and status.
      * 
-     * @param decision the decision to be made
-     * @return the decision to be made
+     * @param decision The JSON object to store the decision.
+     * @return The decision as a string.
      */
     @Override
     public String makeDecision(JSONObject decision) {
@@ -143,19 +138,19 @@ public class AdvancedDroneBrain extends DroneBrain {
         return decision.toString();
     }
     
-    /*
-     * This function will return the current status of the drone
+    /**
+     * Gets the current status of the drone.
      * 
-     * @return the current status of the drone
+     * @return The current status.
      */
     public Status getStatus(){
         return currentStatus;
     }
     
-    /*
-     * This function will set the current status of the drone
+    /**
+     * Sets the current status of the drone.
      * 
-     * @param status the status to be set
+     * @param status The new status to set.
      */
     public void setStatus(Status status){
         this.currentStatus=status;
