@@ -95,6 +95,10 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     @Override
     public String deliverFinalReport() {
         // return id of creek thats closest to 
+        if(creekPosition.getCreekID().isEmpty()){
+            return "could not find a creek";
+        }
+
         return this.creekPosition.getCreekID();
     }
     
