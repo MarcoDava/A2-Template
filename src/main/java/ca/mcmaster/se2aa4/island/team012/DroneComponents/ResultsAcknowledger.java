@@ -96,15 +96,6 @@ public class ResultsAcknowledger {
     }
 
     /**
-     * Returns the range of the drone.
-     * 
-     * @return The range of the drone.
-     */
-    private int returnRange() {
-        return range;
-    }
-
-    /**
      * Extracts the battery usage from the server response and updates the battery.
      * 
      * @param response The response from the server.

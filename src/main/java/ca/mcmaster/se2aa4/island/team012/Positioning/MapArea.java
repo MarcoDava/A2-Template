@@ -20,10 +20,6 @@ public class MapArea {
         return mapArea[1];
     }
 
-    public void setMapArea(int row, int col) {
-        mapArea = new int[]{row, col};
-    }
-
     public void setMapX(int row){
         mapArea[0]=row;
     }

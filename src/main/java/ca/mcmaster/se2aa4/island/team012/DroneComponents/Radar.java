@@ -85,19 +85,19 @@ public class Radar {
         controller.setCommand(Command.ECHO);
     }
 
-    public void scanNorth(JSONObject decision){
+    private void scanNorth(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.N));
     }
-    public void scanSouth(JSONObject decision){
+    private void scanSouth(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.S));
     }
-    public void scanEast(JSONObject decision){
+    private void scanEast(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.E));
     }
-    public void scanWest(JSONObject decision){
+    private void scanWest(JSONObject decision){
         decision.put("action", "echo");
         decision.put("parameters", new JSONObject().put("direction", Direction.W));
     }

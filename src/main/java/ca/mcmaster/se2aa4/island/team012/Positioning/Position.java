@@ -9,10 +9,6 @@ public class Position { // Class for storing (row, col) coordinates
         this.col = col;
     }
 
-    public int[] getPosition() {
-        return new int[] {row, col};
-    }
-
     public void setRow(int row){
         this.row=row;
     }

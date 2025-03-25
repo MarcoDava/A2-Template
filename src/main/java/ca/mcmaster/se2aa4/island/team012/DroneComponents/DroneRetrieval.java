@@ -104,7 +104,7 @@ public class DroneRetrieval {
         return false;
     }
 
-    public boolean batteryDanger() {  // run  out of battery --> stop the program
+    private boolean batteryDanger() {  // run  out of battery --> stop the program
         int rowDistance = dronePosition.getRow()-startingPosition.getRow();
         int colDistance = dronePosition.getCol()-startingPosition.getCol();
         if (Math.sqrt(rowDistance*rowDistance+colDistance*colDistance)>battery.getBattery()) {

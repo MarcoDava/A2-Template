@@ -75,19 +75,19 @@ public class FlightSystem {
         heading.updateHeading(Direction.N);
     }
 
-    public void turnEast(Heading heading, JSONObject decision) {
+    private void turnEast(Heading heading, JSONObject decision) {
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "E"));
         heading.updateHeading(Direction.E);
     }
 
-    public void turnSouth(Heading heading, JSONObject decision) {
+    private void turnSouth(Heading heading, JSONObject decision) {
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "S"));
         heading.updateHeading(Direction.S);
     }
 
-    public void turnWest(Heading heading, JSONObject decision) {
+    private void turnWest(Heading heading, JSONObject decision) {
         decision.put("action", "heading");
         decision.put("parameters", new JSONObject().put("direction", "W"));
         heading.updateHeading(Direction.W);
