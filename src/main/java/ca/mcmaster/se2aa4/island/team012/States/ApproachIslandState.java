@@ -5,7 +5,6 @@ import org.json.JSONObject;
 
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
-import ca.mcmaster.se2aa4.island.team012.DroneComponents.Photoscanner;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Direction;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
@@ -17,7 +16,7 @@ public class ApproachIslandState implements State {
     private DronePosition dronePosition;
     private Heading heading;
     private FlightSystem flightSystem;
-    private Photoscanner photoScanner;
+
 
 
 
@@ -26,7 +25,6 @@ public class ApproachIslandState implements State {
         this.dronePosition=dronePosition;
         this.heading=heading;
         flightSystem=new FlightSystem(this.dronePosition,controller);
-        photoScanner=new Photoscanner(controller);
     }
     @Override
     public void handle(JSONObject decision) {

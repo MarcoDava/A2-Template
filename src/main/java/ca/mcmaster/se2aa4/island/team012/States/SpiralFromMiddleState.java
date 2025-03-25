@@ -6,7 +6,6 @@ import ca.mcmaster.se2aa4.island.team012.DroneComponents.Control;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.FlightSystem;
 import ca.mcmaster.se2aa4.island.team012.Positioning.DronePosition;
 import ca.mcmaster.se2aa4.island.team012.Positioning.Heading;
-import ca.mcmaster.se2aa4.island.team012.Positioning.MapArea;
 import ca.mcmaster.se2aa4.island.team012.DroneComponents.Photoscanner;
 
 /**
