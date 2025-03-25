@@ -2,6 +2,8 @@ package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
 import java.io.StringReader;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -19,6 +21,7 @@ import eu.ace_design.island.bot.IExplorerRaid;
  * Handles initialization, decision-making, and result acknowledgment.
  */
 public class Drone implements IExplorerRaid{//reduce the amount of times that the dron changes heading, rarely use scan. 
+    private final Logger logger = LogManager.getLogger();
     private DroneBrain droneBrain;
     private Drone drone;
     private DronePosition dronePosition;
@@ -96,26 +99,8 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     @Override
     public String deliverFinalReport() {
         // return id of creek thats closest to 
-        return creekPosition.getCreekID();
+        logger.info(creekPosition.getCreekID());
+        return this.creekPosition.getCreekID();
     }
-
-
-    // non-required for interface, implemented by Marco:
-    // public Status getStatus(){
-    //     logger.info("Got here 10");
-    //     return currentStatus;
-    // }
-
-    // public void setStatus(Status status){
-    //     this.currentStatus=status;
-    // }
-
-    // public Command getCommand(){
-    //     return action;
-    // }
-
-    // public void setCommand(Command action){
-    //     this.action=action;
-    // }
     
 }

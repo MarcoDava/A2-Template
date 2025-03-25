@@ -32,6 +32,7 @@ public class FlightSystem {
 
     public void stop(JSONObject decision) {
         decision.put("action", "stop");
+        controller.setCommand(Command.STOP);
     }
 
     public void turnRight(Heading heading, JSONObject decision){

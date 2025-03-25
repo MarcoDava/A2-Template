@@ -20,6 +20,6 @@ public class CreekPosition extends Position {
     }
     
     public String getCreekID() {
-        return creekID;
+        return this.creekID;
     }
 }
