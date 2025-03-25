@@ -100,7 +100,7 @@ public class ResultsAcknowledger {
      * 
      * @return The range of the drone.
      */
-    public int returnRange() {
+    private int returnRange() {
         return range;
     }
 
@@ -109,7 +109,7 @@ public class ResultsAcknowledger {
      * 
      * @param response The response from the server.
      */
-    public void extractBattery(JSONObject response) {
+    private void extractBattery(JSONObject response) {
         battery.useBattery(response.getInt("cost"));
     }
 
@@ -119,7 +119,7 @@ public class ResultsAcknowledger {
      * @param extraInfo The JSONObject containing ground information.
      * @return True if ground is found, false otherwise.
      */
-    public boolean extractGround(JSONObject extraInfo) {
+    private boolean extractGround(JSONObject extraInfo) {
         String Ground = extraInfo.getString("found");
         return Ground.equals("GROUND");
     }
@@ -130,7 +130,7 @@ public class ResultsAcknowledger {
      * @param extraInfo The JSONObject containing range information.
      * @return The range value.
      */
-    public int extractRange(JSONObject extraInfo) {
+    private int extractRange(JSONObject extraInfo) {
         return extraInfo.getInt("range");
     }
 
@@ -274,26 +274,26 @@ public class ResultsAcknowledger {
         }
         if (northDistance != -1 && southDistance != -1) {
             if (northDistance > southDistance && heading.getHeading() == Direction.E) {
-                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+                droneBrain.setStatus(Status.LEFT_TURN_STATE);
             } else if (northDistance < southDistance && heading.getHeading() == Direction.E) {
-                droneBrain.setStatus(Status.LEFT_TURN_STATE);
-            } else if (northDistance > southDistance && heading.getHeading() == Direction.W) {
-                droneBrain.setStatus(Status.LEFT_TURN_STATE);
-            } else if (northDistance < southDistance && heading.getHeading() == Direction.W) {
                 droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+            } else if (northDistance > southDistance && heading.getHeading() == Direction.W) {
+                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
+            } else if (northDistance < southDistance && heading.getHeading() == Direction.W) {
+                droneBrain.setStatus(Status.LEFT_TURN_STATE);
             }
             mapArea.setMapY(northDistance + southDistance + 1);
             dronePosition.setRow(northDistance + 1);
             startingPosition.setRow(northDistance - RowDisplacement + 1);
         } else if (eastDistance != -1 && westDistance != -1) {
             if (eastDistance > westDistance && heading.getHeading() == Direction.N) {
-                droneBrain.setStatus(Status.LEFT_TURN_STATE);
+                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
             } else if (eastDistance < westDistance && heading.getHeading() == Direction.N) {
-                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
-            } else if (eastDistance > westDistance && heading.getHeading() == Direction.S) {
-                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
-            } else if (eastDistance < westDistance && heading.getHeading() == Direction.S) {
                 droneBrain.setStatus(Status.LEFT_TURN_STATE);
+            } else if (eastDistance > westDistance && heading.getHeading() == Direction.S) {
+                droneBrain.setStatus(Status.LEFT_TURN_STATE);
+            } else if (eastDistance < westDistance && heading.getHeading() == Direction.S) {
+                droneBrain.setStatus(Status.RIGHT_TURN_STATE);
             }
             mapArea.setMapX(eastDistance + westDistance + 1);
             dronePosition.setCol(westDistance + 1);
