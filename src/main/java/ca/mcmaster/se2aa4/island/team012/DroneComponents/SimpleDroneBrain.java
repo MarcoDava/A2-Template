@@ -37,15 +37,12 @@ public class SimpleDroneBrain extends DroneBrain {
     private State spiralFromMiddleState;
     private State spiralFromSiteState;
     private State endSearchState;
-    private Drone drone;
     private MapArea mapArea;
     private DroneRetrieval droneRetriever;
     private Battery battery;
     private DronePosition dronePosition;
     private StartingPosition startingPosition;
-    private Command action;
     private Heading heading;
-    private SimpleDroneBrain droneBrain;
     private Control controller;
 
     /**
@@ -59,9 +56,8 @@ public class SimpleDroneBrain extends DroneBrain {
      * @param controller The controller for managing drone commands.
      * @param mapArea The map area being explored.
      */
-    public SimpleDroneBrain(Drone drone, Battery battery, DronePosition dronePosition, StartingPosition startingPosition, Heading heading, Control controller, MapArea mapArea) {
+    public SimpleDroneBrain(Battery battery, DronePosition dronePosition, StartingPosition startingPosition, Heading heading, Control controller, MapArea mapArea) {
         // Initialize fields with provided parameters.
-        this.drone = drone;
         this.battery = battery;
         this.dronePosition = dronePosition;
         this.startingPosition = startingPosition;

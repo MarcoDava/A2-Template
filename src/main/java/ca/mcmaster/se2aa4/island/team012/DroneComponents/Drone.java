@@ -2,8 +2,6 @@ package ca.mcmaster.se2aa4.island.team012.DroneComponents;
 
 import java.io.StringReader;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -21,9 +19,7 @@ import eu.ace_design.island.bot.IExplorerRaid;
  * Handles initialization, decision-making, and result acknowledgment.
  */
 public class Drone implements IExplorerRaid{//reduce the amount of times that the dron changes heading, rarely use scan. 
-    private final Logger logger = LogManager.getLogger();
     private DroneBrain droneBrain;
-    private Drone drone;
     private DronePosition dronePosition;
     private CreekPosition creekPosition;
     private EmergencyPosition emergencyPosition;
@@ -61,8 +57,8 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
         startingPosition=new StartingPosition(-1,-1);
         creekPosition=new CreekPosition(-1,-1);
         emergencyPosition=new EmergencyPosition(-1,-1);
-        droneBrain = new SimpleDroneBrain(this.drone, this.batteryLevel, this.dronePosition, this.startingPosition, this.heading,this.controller, this.mapArea);
-        resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.heading, this.mapArea, this.drone, this.dronePosition, this.startingPosition, this.creekPosition, this.emergencyPosition,this.droneBrain, this.controller);
+        droneBrain = new SimpleDroneBrain( this.batteryLevel, this.dronePosition, this.startingPosition, this.heading,this.controller, this.mapArea);
+        resultsAcknowledger=new ResultsAcknowledger(this.batteryLevel, this.heading, this.mapArea, this.dronePosition, this.startingPosition, this.creekPosition, this.emergencyPosition,this.droneBrain, this.controller);
     }
 
     /**
@@ -99,7 +95,6 @@ public class Drone implements IExplorerRaid{//reduce the amount of times that th
     @Override
     public String deliverFinalReport() {
         // return id of creek thats closest to 
-        logger.info(creekPosition.getCreekID());
         return this.creekPosition.getCreekID();
     }
     

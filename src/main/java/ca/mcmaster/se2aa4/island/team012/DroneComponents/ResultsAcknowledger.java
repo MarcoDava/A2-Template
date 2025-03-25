@@ -27,7 +27,6 @@ public class ResultsAcknowledger {
     private Battery battery;
     private MapArea mapArea;
     private Control controller;
-    private Drone drone;
     private DroneBrain droneBrain;
     private StartingPosition startingPosition;
     private CreekPosition creekPosition;
@@ -36,8 +35,6 @@ public class ResultsAcknowledger {
     private boolean groundFound;
     private boolean creekFound;
     private boolean siteFound;
-    private boolean wasGroundFound;
-    private boolean XClear;
     private boolean XFound;
     private boolean eastClear;
     private boolean westClear;
@@ -51,7 +48,6 @@ public class ResultsAcknowledger {
     private int northDistance;
     private int westDistance;
 
-    private final Logger logger = LogManager.getLogger();
 
     /**
      * Constructor to initialize the ResultsAcknowledger with necessary components.
@@ -59,7 +55,6 @@ public class ResultsAcknowledger {
      * @param battery The battery of the drone.
      * @param heading The heading direction of the drone.
      * @param mapArea The map area being explored.
-     * @param drone The drone instance.
      * @param dronePosition The current position of the drone.
      * @param startingPosition The starting position of the drone.
      * @param creekPosition The position of the creek.
@@ -67,12 +62,11 @@ public class ResultsAcknowledger {
      * @param droneBrain The brain of the drone.
      * @param controller The controller for managing drone commands.
      */
-    public ResultsAcknowledger(Battery battery, Heading heading, MapArea mapArea, Drone drone, DronePosition dronePosition, StartingPosition startingPosition, CreekPosition creekPosition, EmergencyPosition emergencyPosition, DroneBrain droneBrain, Control controller) {
+    public ResultsAcknowledger(Battery battery, Heading heading, MapArea mapArea, DronePosition dronePosition, StartingPosition startingPosition, CreekPosition creekPosition, EmergencyPosition emergencyPosition, DroneBrain droneBrain, Control controller) {
         // Initialize fields with provided parameters.
         this.battery = battery;
         this.heading = heading;
         this.mapArea = mapArea;
-        this.drone = drone;
         this.dronePosition = dronePosition;
         this.startingPosition = startingPosition;
         this.creekPosition = creekPosition;
@@ -93,14 +87,12 @@ public class ResultsAcknowledger {
         creekFound = false;
         siteFound = false;
         XFound = false;
-        XClear = false;
 
         northClear = false;
         southClear = false;
         westClear = false;
         eastClear = false;
 
-        wasGroundFound = false;
     }
 
     /**
@@ -164,7 +156,6 @@ public class ResultsAcknowledger {
      * @return True if creeks are found, false otherwise.
      */
     private boolean extractCreeks(JSONObject extraInfo) {
-        logger.info(extraInfo);
         JSONArray creek = extraInfo.getJSONArray("creeks");
         
         if (creek.length() == 0) {
@@ -265,7 +256,6 @@ public class ResultsAcknowledger {
             droneBrain.setStatus(Status.FIND_LENGTH_STATE);
         } else if (westClear && eastClear) {
             droneBrain.setStatus(Status.FIND_LENGTH_STATE);
-            XClear = true;
         }
     }
 
